@@ -1,0 +1,26 @@
+{
+  "name": "template-parts",
+  "version": "0.0.1",
+  "description": "An implementation of the TemplateInstance proposal",
+  "bugs": {
+    "url": "https://github.com/spectjs/template-parts/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/spectjs/template-parts.git"
+  },
+  "license": "MIT",
+  "author": "Dmitry Iv.",
+  "type": "module",
+  "main": "template-parts.js",
+  "module": "template-parts.js",
+  "files": [
+    "template-parts.js",
+    "processor.js"
+  ],
+  "scripts": {
+    "test": "node test"
+  },
+  "devDependencies": {
+  }
+}
