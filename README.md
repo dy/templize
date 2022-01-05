@@ -1,12 +1,23 @@
-# tempeh
+# element-parts
 
-DOM template parts, based on [template-instantiation](https://github.com/w3c/webcomponents/blob/159b1600bab02fe9cd794825440a98537d53b389/proposals/Template-Instantiation.md), [dom-parts](https://github.com/WICG/webcomponents/blob/gh-pages/proposals/DOM-Parts.md) and related.
+Element template parts, inspired by [template-instantiation](https://github.com/w3c/webcomponents/blob/159b1600bab02fe9cd794825440a98537d53b389/proposals/Template-Instantiation.md) and [dom-parts](https://github.com/WICG/webcomponents/blob/gh-pages/proposals/DOM-Parts.md) and related.
+
+```html
+<div id="foo" class="foo {{y}}">{{x}} world</div>
+
+<script type="module">
+import params from 'element-params.js'
+
+const el = document.getElementById('foo')
+const el.params = params(el, { x: 'Hello', y: 'bar'})
+el.params.x = 'Goodbye'
+</script>
+```
 
 ## Motivation
 
-_Template Parts_ is awesome, but why templates, not any DOM?
-_DOM Parts_ is awesome and generic, but too low-level.
-_Tempeh_ takes natural _Template Parts_ convention and rebuilds on _DOM Parts_, hoping either of these proposals will come true.
+_Template Parts_ is limited to templates and complex. _DOM Parts_ is too low-level and even more complex.
+_Element-params_ takes simple hi-level convention, hoping either of these proposals will come true.
 
 - Single drop-in vanilla ESM file.
 - Improved [@github/template-parts](https://github.com/domenic/template-parts) parser.
@@ -20,9 +31,9 @@ _Tempeh_ takes natural _Template Parts_ convention and rebuilds on _DOM Parts_, 
 <div id="foo" class="foo {{y}}">{{x}} world</div>
 
 <script>
-import tph from 'tempeh.js'
+import params from 'element-params.js'
 
-const parts = tph(document.getElementById('foo'), { x: 'Hello', y: 'bar'})
+const parts = params(document.getElementById('foo'), { x: 'Hello', y: 'bar'})
 parts.update({ x: 'Goodbye' })
 </script>
 ```
@@ -36,7 +47,7 @@ Update happens when state changes:
 <div id="done">{{ done || '...' }}</div>
 <script>
   let done = new Promise(ok => setTimeout(() => ok('Done!'), 1000))
-  tph(document.querySelector('#done'), { done })
+  params(document.querySelector('#done'), { done })
 </script>
 ```
 
@@ -44,10 +55,10 @@ This way, for example, rxjs can be streamed directly to the template.
 
 ### Processor
 
-_Tempeh_ supports _Template-Parts_ compatible processor:
+_Element-params_ supports _Template-Parts_ compatible processor:
 
 ```js
-const parts = tph(element, params, {
+const parts = params(element, params, {
   // alias: createCallback
   create(instance, parts, state) {
     instance.update(state)
@@ -63,24 +74,24 @@ const parts = tph(element, params, {
 })
 ```
 
-Any external processor can be used with tempeh:
+Any external processor can be used with element-params:
 
 ```js
-import tph from 'tempeh.js'
+import params from 'element-params.js'
 import {propertyIdentityOrBooleanAttribute} from '@github/template-parts'
 
-const tpl = tph(document.getElementById('foo'), { x: 'Hello', hidden: false}, propertyIdentityOrBooleanAttribute)
+const params = params(document.getElementById('foo'), { x: 'Hello', hidden: false}, propertyIdentityOrBooleanAttribute)
 ```
 
 ### Default Processor
 
-_Tempeh_ by default provides common expression processor:
+_Element-params_ by default provides common expression processor:
 
 ```html
 <h1 id="title">{{ user.name }}</h1>Email: <a href="mailto:{{ user.email }}">{{ user.email }}</a>
 <script>
-  import tph from 'tempeh.js'
-  const title = tph(
+  import params from 'element-params.js'
+  const title = params(
     document.querySelector('#title'),
     { user: { name: 'Hare Krishna', email: 'krishn@hari.om' }}
   )
@@ -111,7 +122,7 @@ Default processor can be used with any other Template Parts library as:
 
 ```js
 import {TemplateInstance} from '@github/template-parts'
-import {processor} from 'tempeh.js'
+import {processor} from 'element-params.js'
 
 let instance = new TemplateInstance(document.querySelector('my-template'), {}, processor)
 ```

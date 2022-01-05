@@ -90,6 +90,9 @@
   * tpl-instantiate.js? tpl-instance.js? tmpl-instance.js?
   * tins.js? tinst.js?
   * template-inst.js? tmpl-inst.js? templ-inst.js?
+  * templ-parts.js? templ-instance.js?
+    - not as much about template though.
+    - parts are also not much relevant name https://github.com/WICG/webcomponents/issues/902
 
 * [ ] table tests
 
