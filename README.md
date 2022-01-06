@@ -25,16 +25,16 @@ Drop `element-parts.js` into project folder and:
 <script type="module">
 import Parts from './element-parts.js'
 
-const params = Parts(document.getElementById('foo'), { x: 'Hello', y: 'bar'})
+const state = Parts(document.getElementById('foo'), { x: 'Hello', y: 'bar'})
 // <div id="foo" class="foo bar">Hello world</div>
 
-params.x = 'Goodbye'
+state.x = 'Goodbye'
 // <div id="foo" class="foo bar">Goodbye world</div>
 </script>
 ```
-
-Initial params take either direct values or async types: _Promise_, _AsyncIterable_, _Observable_.<br/>
-Update happens when sync or async params change:
+<!--
+Initial state take either direct values or async types: _Promise_, _AsyncIterable_, _Observable_.<br/>
+Update happens when sync or async state change:
 
 ```html
 <div id="done">{{ done || '...' }}</div>
@@ -49,7 +49,7 @@ Update happens when sync or async params change:
 ```
 
 This way, for example, _rxjs_ can be streamed directly to element attribute or content.
-
+ -->
 ## Processor
 
 _Element-parts_ support any _template-parts_ compatible processor, eg. [@github/template-parts](https://github.com/github/template-parts):

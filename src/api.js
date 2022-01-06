@@ -25,7 +25,7 @@ export class AttrPart extends Part {
   }
   set booleanValue(value) {
     if (this.setter.parts.length === 1) this.value = '';
-    else throw new DOMException('Value is not fully templatized', 'NotSupportedError');
+    else throw new DOMException('Value is not fully templatized');
   }
 }
 

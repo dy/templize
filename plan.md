@@ -1,6 +1,17 @@
 # plan
 
-* [ ] name
+* [ ] table tests
+
+* [x] bundle & minify
+
+* [ ] expression processor
+
+* [ ] composable processors
+  . reactiveProcessor can handle observables
+  . expressionProcessor can handle expressions
+  . booleanProcessor can handle bool attribs
+
+* [x] name: element-parts
   ? what would be the name, sustainable for at least 10-15 years?
   ? what would be the name if no npm limitations?
   ? what would be the name radical, meaningful, short... reflecting spirit: tiny, fast, right?
@@ -20,6 +31,7 @@
     - doesn't reflect meaning
     + dom-parts/template-instance isn't stabilized
     + can apply to any node, not just template; or allows `<template immediate>`
+    - not serious, having fun more than serving
   * templ-in.js? templin.js? in-templ.js?
     + temple-in, like in temple, or "join temple"
     + template-in, like ... why not just that?
@@ -93,13 +105,5 @@
   * templ-parts.js? templ-instance.js?
     - not as much about template though.
     - parts are also not much relevant name https://github.com/WICG/webcomponents/issues/902
-
-* [ ] table tests
-
-* [ ] svg tests
-
-* [ ] bundle & minify
-
-* [ ] expression processor
-
-* [ ] test: multiple text nodes in node, how to parse
+  * element-parts
+    + same as template-parts, generalized

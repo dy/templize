@@ -13,16 +13,18 @@ defaultProcessor = {
 Parts = (node, params, processor=defaultProcessor) => {
   let parts = collectParts(node),
       create = processor.create || processor.createCallback,
-      process = processor.call ? processor : processor.process || processor.processCallback
+      process = processor.call ? processor : processor.process || processor.processCallback,
+      // throttled for batch update
+      planned,
+      update = () => !planned && (planned = Promise.resolve().then(() => (planned = null, process?.(node, parts, params))))
 
-  create?.(node, parts, params),
-  params && process?.(node, parts, params)
+  create?.(node, parts, params)
+  process?.(node, parts, params)
 
-  return {
-    parts,
-    params,
-    update: state => Object.assign(params, state) && process(node, parts, state)
-  }
+  return new Proxy(params,  {
+    set: (s, k, v, desc) => (s[k] = v, update()),
+    deleteProperty: (a,k) => (delete s[k], update())
+  })
 },
 
 collectParts = (element, parts=[]) => {
