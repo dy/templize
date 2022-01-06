@@ -33,7 +33,7 @@ fooParams.x = 'Goodbye'
 </script>
 ```
 
-Init state can take either direct values or async types: _Promise_, _AsyncIterable_, _Observable_.<br/>
+Initial state takes either direct values or async types: _Promise_, _AsyncIterable_, _Observable_.<br/>
 Update happens when async state changes:
 
 ```html
@@ -93,7 +93,7 @@ export default {
 
 Default processor supports only direct values.
 
-For expressions support _element-params_ provide **common expression processor** (based on [subscript](https://github.com/spectjs/subscript)):
+For expressions support there is **common expression processor** (based on [subscript](https://github.com/spectjs/subscript)):
 
 ```html
 <header id="title">
@@ -189,7 +189,7 @@ To optionally display an element, use `:if`-`:else-if`-`:else`:
 
 ## Neighbors
 
-* [@github/template-parts](https://github.com/github/template-parts) − viable Template Parts implementation, doesn't closely follow spec in secondary details, but provides reliable solution.
+* [@github/template-parts](https://github.com/github/template-parts) − viable Template Parts implementation, doesn't closely follow spec in secondary details, but provides reliable ground.
 * [template-instantiation-polyfill](https://github.com/bennypowers/template-instantiation-polyfill#readme) − closely follows the Template Instantiation spec algorithm, but [is not recommended](https://github.com/bennypowers/template-instantiation-polyfill/pull/2#issuecomment-1004110993) by author.
 * [PolymerLabs/template-instantiation](https://github.com/PolymerLabs/template-instantiation) − implementation from Google with TemplateAssembly, TemplateRule and other extensions.
 * [stampino](https://www.npmjs.com/package/stampino) − small HTML template system based on lit-html.
