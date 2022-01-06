@@ -10,8 +10,9 @@ _Element-params_ generalizes convention of _template parts_ to any elements.
 - Minimal implementation.
 - Improved [@github/template-parts](https://github.com/github/template-parts) parser.
 - Spec compatible API surface.
-- [`<table>{{ data }}</table>`](https://github.com/domenic/template-parts/issues/2), [`<svg width={{width}}>`](https://github.com/github/template-parts/issues/26) and other cases fixed.
-- Expression processors (based on [subscript](https://github.com/spectjs/subscript)).
+- [`<table>{{ data }}</table>`](https://github.com/domenic/template-parts/issues/2)
+<!-- - [`<svg width={{ width }}>`](https://github.com/github/template-parts/issues/26) and other cases fixed. -->
+- Expression processor.
 
 Once DOM-parts land, the API will be im
 
