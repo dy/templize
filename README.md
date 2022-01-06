@@ -36,8 +36,8 @@ params.x = 'Goodbye'
 
 ## Processor
 
-_Tmpl-parts_ support any [standard](https://github.com/WICG/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md#32-template-parts-and-custom-template-process-callback) template parts processor, eg. [@github/template-parts](https://github.com/github/template-parts):
-<!--
+_Tmpl-parts_ support any [standard](https://github.com/WICG/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md#32-template-parts-and-custom-template-process-callback) template parts processor:
+
 ```js
 const parts = params(element, params, {
   createCallback(el, parts, state) {
@@ -49,23 +49,10 @@ const parts = params(element, params, {
     for (const part of parts) part.evaluate(state)
   }
 })
-``` -->
-
-<!-- Any external processor can be used with template-parts, -->
-
-```js
-import Parts from 'tmpl-parts'
-import { propertyIdentityOrBooleanAttribute } from '@github/template-parts'
-
-const params = Parts(
-  document.getElementById('foo'),
-  { x: 'Hello', hidden: false },
-  propertyIdentityOrBooleanAttribute
-)
-params.hidden = true
 ```
 
-<!--
+Default processor supports only direct values:
+
 ```js
 export default {
   processCallback(instance, parts, state) {
@@ -73,9 +60,7 @@ export default {
     for (const part of parts) if (part.expression in state) part.value = state[part.expression]
   }
 }
-``` -->
-
-Default processor supports only direct values.
+```
 
 ### Expression processor
 
@@ -152,6 +137,22 @@ const params = Parts(el, {}, combine(expressions, reactivity))
 
 Each processor callback is called in sequence.
 
+### External processors
+
+Any external processor can be used with template-parts, eg. [@github/template-parts](https://github.com/github/template-parts):
+
+```js
+import Parts from 'tmpl-parts'
+import { propertyIdentityOrBooleanAttribute } from '@github/template-parts'
+
+const params = Parts(
+  document.getElementById('foo'),
+  { x: 'Hello', hidden: false },
+  propertyIdentityOrBooleanAttribute
+)
+params.hidden = true
+```
+
 Any _tmpl-parts_ processor can also be used with other template parts libraries as:
 
 ```js
@@ -160,7 +161,6 @@ import { expressions } from 'tmpl-parts'
 
 const instance = new TemplateInstance(document.querySelector('my-template'), {}, expressions)
 ```
-
 
 <!-- ## See also -->
 
