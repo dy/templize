@@ -114,16 +114,14 @@ It supports the following expressions:
 
 Part | Expression |  Note
 ---|---|---
-Value | `{{ foo }}` |
-Property | `{{ foo.bar }}` | Property access is path-safe and allows null-ish paths
-Function call | `{{ foo(bar) }}` |
-Method call | `{{ foo.bar(baz) }}` |
-Inversion | `{{ !foo }}` |
-Boolean operators | `{{ foo && bar \|\| baz }}` |
+Direct Value | `{{ foo }}` |
+Property | `{{ foo.bar }}`, `{{ foo['bar'] }}` | Property access is path-safe and allows null-ish paths
+Function call | `{{ foo(bar, baz) }}`, `{{ foo.bar(baz) }}` |
+Boolean operators | `{{ !foo }}`, `{{ foo && bar \|\| baz }}` |
 Ternary | `{{ foo ? bar : baz }}` |
 Primitives | `{{ 'foo' }}`, `{{ true }}`, `{{ 0.1 }}` |
-Comparison | `{{ foo == 1 }}` |
-Math operators | `{{ a * 2 + b / 3 }}` | Common operators, see [subscript](https://github.com/spectjs/subscript)
+Comparison | `{{ foo == 1 }}`, `{{ bar != 2 }}` |
+Math operators | `{{ a * 2 + b / 3 }}` | Common operators, see [subscript#operators](https://github.com/spectjs/subscript#design)
 Pipe | `{{ bar \| foo }}` | Same as `{{ foo(bar) }}`
 <!-- Loop | `{{ item, idx in list }}` | `params.d` | Used for `:for` directive only -->
 <!-- Spread | `{{ ...foo }}` | `params.foo` | Used to pass multiple attributes or nodes -->
