@@ -1,14 +1,14 @@
-# element-parts
+# template-parts
 
-> Element template parts
+> Templatizing element attributes or contents
 
 [Template Instantiation](https://github.com/w3c/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md) is limited to _\<template\>_,
 [DOM Parts](https://github.com/WICG/webcomponents/blob/gh-pages/proposals/DOM-Parts.md) lack hi-level convention and too early days.<br/>
-_Element-parts_ bring template parts to any elements.
+This library enables template parts for any element attributes or content.
 
 - Drop-in vanilla ESM, no tooling.
 - Improved [@github/template-parts](https://github.com/github/template-parts) parser.
-- Spec compatible minimal [API surface](./src/api.js).
+- Template Parts compatible [API surface](./src/api.js).
 - [`<table>{{ data }}</table>`](https://github.com/domenic/template-parts/issues/2) fixed.
 - Expression processor (based on [subscript](https://github.com/spectjs/subscript)).
 <!-- - [`<svg width={{ width }}>`](https://github.com/github/template-parts/issues/26) and other cases fixed. -->
@@ -17,13 +17,13 @@ If either proposal lands, API will be assimilated.
 
 ## Usage
 
-Drop `element-parts.js` into project folder and:
+Drop `template-parts.js` into project folder and:
 
 ```html
 <div id="foo" class="foo {{y}}">{{x}} world</div>
 
 <script type="module">
-import Parts from './element-parts.js'
+import Parts from './template-parts.js'
 
 const state = Parts(document.getElementById('foo'), { x: 'Hello', y: 'bar'})
 // <div id="foo" class="foo bar">Hello world</div>
@@ -40,7 +40,7 @@ Update happens when sync or async state change:
 <div id="done">{{ done || '...' }}</div>
 
 <script type="module">
-  import Parts from './element-parts.js'
+  import Parts from './template-parts.js'
   import processor from './processor.js'
 
   const done = new Promise(ok => setTimeout(() => ok('Done!'), 1000))
@@ -52,7 +52,7 @@ This way, for example, _rxjs_ can be streamed directly to element attribute or c
  -->
 ## Processor
 
-_Element-parts_ support any _template-parts_ compatible processor, eg. [@github/template-parts](https://github.com/github/template-parts):
+_Template-parts_ support any [standard](https://github.com/WICG/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md#32-template-parts-and-custom-template-process-callback) parts processor, eg. [@github/template-parts](https://github.com/github/template-parts):
 <!--
 ```js
 const parts = params(element, params, {
@@ -67,10 +67,10 @@ const parts = params(element, params, {
 })
 ``` -->
 
-<!-- Any external processor can be used with element-parts, -->
+<!-- Any external processor can be used with template-parts, -->
 
 ```js
-import Parts from 'element-parts'
+import Parts from 'template-parts'
 import { propertyIdentityOrBooleanAttribute } from '@github/template-parts'
 
 const params = Parts(
@@ -102,8 +102,8 @@ For expressions support there is **common expression processor** (based on [subs
 </header>
 
 <script>
-  import Parts from './element-parts.js'
-  import processor from './processor.js'
+  import Parts from './template-parts.js'
+  import processor from './expr-processor.js'
   const title = Parts(
     document.querySelector('#title'),
     { user: { name: 'Hare Krishna', email: 'krishn@hari.om' }},
@@ -135,7 +135,7 @@ Expression processor can be used with other template parts libraries as:
 
 ```js
 import {TemplateInstance} from '@github/template-parts'
-import expressionProcessor from 'element-parts/processor'
+import expressionProcessor from 'template-parts/processor'
 
 const instance = new TemplateInstance(document.querySelector('my-template'), {}, expressionProcessor)
 ```
@@ -181,13 +181,13 @@ To optionally display an element, use `:if`-`:else-if`-`:else`:
 -->
 
 
-## See also
+<!-- ## See also -->
 
-* [subscript](https://github.com/spectjs/subscript) − micro expression language.
-* [element-props](https://github.com/spectjs/element-props) − normalized access to element attributes / properties.
+<!-- * [subscript](https://github.com/spectjs/subscript) − micro expression language. -->
+<!-- * [element-props](https://github.com/spectjs/element-props) − normalized access to element attributes / properties. -->
 <!-- * [define-element](https://github.com/spectjs/define-element) − declarative custom elements. -->
 
-## Neighbors
+## Similar
 
 * [@github/template-parts](https://github.com/github/template-parts) − viable Template Parts implementation, doesn't closely follow spec in secondary details, but provides reliable ground.
 * [template-instantiation-polyfill](https://github.com/bennypowers/template-instantiation-polyfill#readme) − closely follows the Template Instantiation spec algorithm, but [is not recommended](https://github.com/bennypowers/template-instantiation-polyfill/pull/2#issuecomment-1004110993) by author.

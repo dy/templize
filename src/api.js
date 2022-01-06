@@ -38,7 +38,12 @@ export class NodePart extends Part {
   // FIXME: should we allow setting an array?
   set value(newValue) { this.replace(newValue) }
   replace(...nodes) { // replace current nodes with new nodes.
-    nodes = (nodes||[new Text]).map(node => typeof node === 'string' ? new Text(node) : node);
-    this.nodes = updateNodes(this.setter.parentNode, this.nodes, nodes, this.setter.nextSibling)
+    nodes = nodes.flat().map(node => typeof node === 'string' ? new Text(node) : node);
+    this.nodes = updateNodes(this.parentNode, this.nodes, nodes, this.nextSibling)
+  }
+  replaceHTML(html) {
+    const fragment = this.parentNode.cloneNode()
+    fragment.innerHTML = html;
+    this.replace(fragment.childNodes);
   }
 }

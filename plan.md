@@ -11,18 +11,34 @@
   . expressionProcessor can handle expressions
   . booleanProcessor can handle bool attribs
 
-* [x] name: element-parts
+* [ ] name: element-parts
   ? what would be the name, sustainable for at least 10-15 years?
   ? what would be the name if no npm limitations?
   ? what would be the name radical, meaningful, short... reflecting spirit: tiny, fast, right?
   ? matches spectjs style: common sense abbreviation, not too fancy
   ? what would be the right name
   * template-parts.js
+    + reflects generic name
+    + not directly points to the standard
+    + bold
+      - requires highest quality standard, can't base on github solution
     - confusable with github
-    - no personality
-    - no much point over github
+      → can provide reference
+    - confusion in readme with generic template parts
+    - ~~no personality~~ → not needed - it's humble templating solution
+    - ~~no much point over github~~ → point is generic element template parts
     - boring
-    - requires polyfill
+      + it should not be too fun, it's service
+    - ~~requires polyfill~~ → nope - it's not template instance
+    + plays well with `import Parts from 'template-parts'`
+    - can get obsolete if proposal gets renamed
+      → unlikely - would require renaming all deps; it's rather stalling
+  * element-parts
+    + same as template-parts, generalized
+    - a bit too far from templating, not obvious what parts, like, constituents or what?
+  * templatize.js, templatize-element.js, templatized.js, templatizer.js
+    - not fan of z in name
+  * templatize-element.js, templ-elem.js
   * tempeh.js
     + funny
     + easy to remember
@@ -105,5 +121,3 @@
   * templ-parts.js? templ-instance.js?
     - not as much about template though.
     - parts are also not much relevant name https://github.com/WICG/webcomponents/issues/902
-  * element-parts
-    + same as template-parts, generalized
