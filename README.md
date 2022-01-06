@@ -1,10 +1,10 @@
 # template-parts
 
-> Templatizing element attributes or contents
+> DOM template parts for any elements
 
-[Template Instantiation](https://github.com/w3c/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md) is limited to _\<template\>_,
+[Template Instantiation](https://github.com/w3c/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md) is limited to _\<template\>_ only;
 [DOM Parts](https://github.com/WICG/webcomponents/blob/gh-pages/proposals/DOM-Parts.md) lack hi-level convention and too early days.<br/>
-This library enables template parts for any element attributes or content.
+This library enables template parts for any elements.
 
 - Drop-in vanilla ESM, no tooling.
 - Improved [@github/template-parts](https://github.com/github/template-parts) parser.
@@ -17,13 +17,13 @@ If either proposal lands, API will be assimilated.
 
 ## Usage
 
-Drop `template-parts.js` into project folder and:
+Drop `tmpl-parts.js` into project folder and:
 
 ```html
 <div id="foo" class="foo {{y}}">{{x}} world</div>
 
 <script type="module">
-import Parts from './template-parts.js'
+import Parts from './tmpl-parts.js'
 
 const state = Parts(document.getElementById('foo'), { x: 'Hello', y: 'bar'})
 // <div id="foo" class="foo bar">Hello world</div>
@@ -40,7 +40,7 @@ Update happens when sync or async state change:
 <div id="done">{{ done || '...' }}</div>
 
 <script type="module">
-  import Parts from './template-parts.js'
+  import Parts from './tmpl-parts.js'
   import processor from './processor.js'
 
   const done = new Promise(ok => setTimeout(() => ok('Done!'), 1000))
@@ -102,7 +102,7 @@ For expressions support there is **common expression processor** (based on [subs
 </header>
 
 <script>
-  import Parts from './template-parts.js'
+  import Parts from './tmpl-parts.js'
   import processor from './expr-processor.js'
   const title = Parts(
     document.querySelector('#title'),

@@ -22,6 +22,7 @@
     + not directly points to the standard
     + bold
       - requires highest quality standard, can't base on github solution
+      - too loud
     - confusable with github
       → can provide reference
     - confusion in readme with generic template parts
@@ -33,6 +34,9 @@
     + plays well with `import Parts from 'template-parts'`
     - can get obsolete if proposal gets renamed
       → unlikely - would require renaming all deps; it's rather stalling
+  * tmpl-parts.js
+    + minimalistic flavor
+    + tmpl is one of the meanings
   * element-parts
     + same as template-parts, generalized
     - a bit too far from templating, not obvious what parts, like, constituents or what?
