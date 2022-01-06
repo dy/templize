@@ -116,7 +116,7 @@ It supports the following expressions:
 Part | Expression |  Note
 ---|---|---
 Direct Value | `{{ foo }}` |
-Property | `{{ foo.bar }}`,<br/>`{{ foo['bar'] }}` | Allows null-ish paths
+Property | `{{ foo.bar }}`, `{{ foo['bar'] }}` | Path-safe, allows null-ish paths
 Function call | `{{ foo(bar, baz) }}`, `{{ foo.bar(baz) }}` |
 Boolean operators | `{{ !foo }}`, `{{ foo && bar \|\| baz }}` |
 Ternary | `{{ foo ? bar : baz }}` |
