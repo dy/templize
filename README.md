@@ -93,7 +93,7 @@ export default {
 
 Default processor supports only direct values.
 
-For expressions support there is **common expression processor** (based on [subscript](https://github.com/spectjs/subscript)):
+For expressions support there is **expression processor** (based on [subscript](https://github.com/spectjs/subscript)):
 
 ```html
 <header id="title">
@@ -103,17 +103,17 @@ For expressions support there is **common expression processor** (based on [subs
 
 <script>
   import Parts from './tmpl-parts.js'
-  import processor from './expr-processor.js'
+  import expressionProcessor from './expr-processor.js'
   const title = Parts(
     document.querySelector('#title'),
     { user: { name: 'Hare Krishna', email: 'krishn@hari.om' }},
-    processor
+    expressionProcessor
   )
   title.user.name = 'Hare Rama'
 </script>
 ```
 
-It supports the following expressions:
+It supports the following common expressions:
 
 Part | Expression |  Note
 ---|---|---
@@ -130,8 +130,26 @@ Pipe | `{{ bar \| foo }}` | Same as `{{ foo(bar) }}`.
 <!-- Spread | `{{ ...foo }}` | `params.foo` | Used to pass multiple attributes or nodes -->
 <!-- Default fallback | `{{ foo || bar }}` | `params.foo`, `params.bar` | -->
 
+For reactive values there's also **reactive processor**.
 
-Expression processor can be used with other template parts libraries as:
+It allows initial state to take either direct values or async types: _Promise_, _AsyncIterable_, _Observable_.<br/>
+Update happens when sync or async state change:
+
+```html
+<div id="done">{{ done || '...' }}</div>
+
+<script type="module">
+  import Parts from './tmpl-parts.js'
+  import asyncProcessor from './async-processor.js'
+
+  const done = new Promise(ok => setTimeout(() => ok('Done!'), 1000))
+  Parts(document.querySelector('#done'), { done }, asyncProcessor)
+</script>
+```
+
+This way, for example, _rxjs_ can be streamed directly to element attribute or content.
+
+Any processor can be used with other template parts libraries as:
 
 ```js
 import {TemplateInstance} from '@github/template-parts'
