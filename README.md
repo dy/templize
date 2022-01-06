@@ -8,7 +8,7 @@ _Element-params_ bring template parts to any elements.
 - Improved [@github/template-parts](https://github.com/github/template-parts) parser.
 - Spec compatible minimal [API surface](./src/api.js).
 - [`<table>{{ data }}</table>`](https://github.com/domenic/template-parts/issues/2) fixed.
-- Expression processor.
+- Expression processor (based on [subscript](https://github.com/spectjs/subscript)).
 <!-- - [`<svg width={{ width }}>`](https://github.com/github/template-parts/issues/26) and other cases fixed. -->
 
 If either proposal lands, API will be assimilated.
