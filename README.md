@@ -112,19 +112,19 @@ For expressions support _element-params_ provide **common expression processor**
 
 It supports the following expressions:
 
-Part | Expression | Accessible as | Note
+Part | Expression |  Note
 ---|---|---|---
-Value | `{{ foo }}` | `params.foo` |
-Property | `{{ foo.bar }}` | `params.foo.bar` | Property access is path-safe and allows null-ish paths
-Function call | `{{ foo(bar) }}` | `params.foo`, `params.bar` |
-Method call | `{{ foo.bar(baz) }}` | `params.foo.bar` |
-Inversion | `{{ !foo }}` | `params.foo` |
-Boolean operators | `{{ foo && bar \|\| baz }}` | `params.foo`, `params.bar`, `params.baz` |
-Ternary | `{{ foo ? bar : baz }}` | `params.foo`, `params.bar`, `params.baz` |
-Primitives | `{{ 'foo' }}`, `{{ true }}`, `{{ 0.1 }}` | |
-Comparison | `{{ foo == 1 }}` | `params.foo` |
-Math operators | `{{ a * 2 + b / 3 }}` | `params.a`, `params.b` | Common operators, see [subscript](https://github.com/spectjs/subscript)
-Pipe | `{{ bar \| foo }}` | `params.foo`, `params.bar` | Same as `{{ foo(bar) }}`
+Value | `{{ foo }}` |
+Property | `{{ foo.bar }}` | Property access is path-safe and allows null-ish paths
+Function call | `{{ foo(bar) }}` |
+Method call | `{{ foo.bar(baz) }}` |
+Inversion | `{{ !foo }}` |
+Boolean operators | `{{ foo && bar \|\| baz }}` |
+Ternary | `{{ foo ? bar : baz }}` |
+Primitives | `{{ 'foo' }}`, `{{ true }}`, `{{ 0.1 }}` |
+Comparison | `{{ foo == 1 }}` |
+Math operators | `{{ a * 2 + b / 3 }}` | Common operators, see [subscript](https://github.com/spectjs/subscript)
+Pipe | `{{ bar \| foo }}` | Same as `{{ foo(bar) }}`
 <!-- Loop | `{{ item, idx in list }}` | `params.d` | Used for `:for` directive only -->
 <!-- Spread | `{{ ...foo }}` | `params.foo` | Used to pass multiple attributes or nodes -->
 <!-- Default fallback | `{{ foo || bar }}` | `params.foo`, `params.bar` | -->
