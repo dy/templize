@@ -32,22 +32,24 @@ fooParams.x = 'Goodbye'
 </script>
 ```
 
-Params can take async types: _Promise_, _AsyncIterable_, _Observable_. Update happens when state changes:
+Params can take either direct values or async types: _Promise_, _AsyncIterable_, _Observable_. Update happens when async state changes:
 
 ```html
 <div id="done">{{ done || '...' }}</div>
 <script type="module">
   import params from './element-params.js'
   import expr from './expr-processor.js'
-  let done = new Promise(ok => setTimeout(() => ok('Done!'), 1000))
+
+  const done = new Promise(ok => setTimeout(() => ok('Done!'), 1000))
   params(document.querySelector('#done'), { done }, expr)
 </script>
 ```
 
 This way, for example, rxjs can be streamed directly to element attribute or content.
 
-Element-params support any _template-parts_ compatible processor, eg. [@github/template-parts](https://github.com/github/template-parts) one:
-<!--
+## Processor
+
+Element-params support _template-parts_ compatible processor:
 ```js
 const parts = params(element, params, {
   createCallback(el, parts, state) {
@@ -61,8 +63,8 @@ const parts = params(element, params, {
 })
 ```
 
-Any external processor can be used with element-params:
- -->
+Any external processor can be used with element-params, eg. [@github/template-parts](https://github.com/github/template-parts):
+
 ```js
 import params from 'element-params'
 import {propertyIdentityOrBooleanAttribute} from '@github/template-parts'
@@ -74,21 +76,19 @@ const fooParams = params(
 )
 fooParams.hidden = true
 ```
-<!--
-Default processor just sets values directly without processing.
+
+Default processor just sets values directly:
 
 ```js
-{
+export default {
   processCallback(instance, parts, state) {
     if (!state) return
     for (const part of parts) if (part.expression in state) part.value = state[part.expression]
   }
 }
-``` -->
+```
 
-## Expression processor
-
-_Element-params_ provides common expression processor (based on [subscript](https://github.com/spectjs/subscript)):
+_Element-params_ also provides common expression processor (based on [subscript](https://github.com/spectjs/subscript)):
 
 ```html
 <h1 id="title">{{ user.name }}</h1>Email: <a href="mailto:{{ user.email }}">{{ user.email }}</a>
@@ -123,7 +123,7 @@ Pipe | `{{ bar \| foo }}` | `params.foo`, `params.bar` | Same as `{{ foo(bar) }}
 <!-- Default fallback | `{{ foo || bar }}` | `params.foo`, `params.bar` | -->
 
 
-Hint: expression-processor can be used with other Template Parts libraries as:
+Expression processor can be used with other template parts libraries as:
 
 ```js
 import {TemplateInstance} from '@github/template-parts'
