@@ -44,7 +44,7 @@ const params = Parts(element, initState, {
     // ... init parts / parse expressions
   },
   processCallback(el, parts, state) {
-    // ... update parts / evaluate expressions, eg.
+    // ... update parts / evaluate expressions
   }
 })
 ```
@@ -166,7 +166,7 @@ const instance = new TemplateInstance(document.querySelector('my-template'), {},
 <!-- * [element-props](https://github.com/spectjs/element-props) − normalized access to element attributes / properties. -->
 <!-- * [define-element](https://github.com/spectjs/define-element) − declarative custom elements. -->
 
-## Similar
+## Neighbors
 
 * [@github/template-parts](https://github.com/github/template-parts) − viable Template Parts implementation, doesn't closely follow spec in secondary details, but provides reliable ground.
 * [template-instantiation-polyfill](https://github.com/bennypowers/template-instantiation-polyfill#readme) − closely follows the Template Instantiation spec algorithm, but [is not recommended](https://github.com/bennypowers/template-instantiation-polyfill/pull/2#issuecomment-1004110993) by author.
