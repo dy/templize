@@ -4,7 +4,7 @@
 
 [Template Instantiation](https://github.com/w3c/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md) is limited to _\<template\>_ only;
 [DOM Parts](https://github.com/WICG/webcomponents/blob/gh-pages/proposals/DOM-Parts.md) lack hi-level convention and too early days.<br/>
-_Tmpl-parts_ brings template parts to any elements.
+_Tmpl-parts_ generalizes template parts to any elements.
 
 - Drop-in vanilla ESM, no tooling.
 - Improved [@github/template-parts](https://github.com/github/template-parts) parser.
