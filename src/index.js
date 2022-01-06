@@ -41,12 +41,7 @@ collectParts = (element, parts=[]) => {
   for (let node of element.childNodes) {
     if (node.nodeType === ELEMENT) collectParts(node, parts)
     else if (node.nodeType === TEXT && node.data.includes('{{')) {
-      let setter = {
-        parentNode: element,
-        previousSibling: node.previousSibling,
-        nextSibling: node.nextSibling,
-        parts: []
-      };
+      let setter = { parentNode: element, parts: [] };
       for (const [type, value] of parse(node.data.trim()))
         if (!type) value = new Text(value), setter.parts.push(value)
         else value = new NodePart(setter, value), setter.parts.push(value), parts.push(value)

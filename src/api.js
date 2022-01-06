@@ -30,16 +30,15 @@ export class AttrPart extends Part {
 }
 
 export class NodePart extends Part {
-  nodes = []
+  #nodes = []
   get parentNode() { return this.setter.parentNode; }
-  get nextSibling() { return this.nodes[this.nodes.length-1].nextSibling; }
-  get previousSibling() { return this.nodes[0].previousSibling; }
-  get value() { return this.nodes.map(node=>node.textContent).join(''); }
-  // FIXME: should we allow setting an array?
+  get nextSibling() { return this.#nodes[this.#nodes.length-1].nextSibling; }
+  get previousSibling() { return this.#nodes[0].previousSibling; }
+  get value() { return this.#nodes.map(node=>node.textContent).join(''); }
   set value(newValue) { this.replace(newValue) }
   replace(...nodes) { // replace current nodes with new nodes.
-    nodes = nodes.flat().map(node => typeof node === 'string' ? new Text(node) : node);
-    this.nodes = updateNodes(this.parentNode, this.nodes, nodes, this.nextSibling)
+    nodes = nodes.length ? nodes.flatMap(node => node.forEach ? [...node] : node.trim ? [new Text(node)] : [node]) : [new Text]
+    this.#nodes = updateNodes(this.parentNode, this.#nodes, nodes, this.nextSibling)
   }
   replaceHTML(html) {
     const fragment = this.parentNode.cloneNode()

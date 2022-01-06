@@ -1,10 +1,10 @@
 # tmpl-parts
 
-> Template parts for any elements
+> Element template parts
 
 [Template Instantiation](https://github.com/w3c/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md) is limited to _\<template\>_ only;
 [DOM Parts](https://github.com/WICG/webcomponents/blob/gh-pages/proposals/DOM-Parts.md) lack hi-level convention and too early days.<br/>
-_Tmpl-parts_ enables template parts for any elements.
+_Tmpl-parts_ brings template parts for any elements.
 
 - Drop-in vanilla ESM, no tooling.
 - Improved [@github/template-parts](https://github.com/github/template-parts) parser.
@@ -52,7 +52,7 @@ This way, for example, _rxjs_ can be streamed directly to element attribute or c
  -->
 ## Processor
 
-_Tmpl-parts_ support any [standard](https://github.com/WICG/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md#32-template-parts-and-custom-template-process-callback) parts processor, eg. [@github/template-parts](https://github.com/github/template-parts):
+_Tmpl-parts_ support any [standard](https://github.com/WICG/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md#32-template-parts-and-custom-template-process-callback) template parts processor, eg. [@github/template-parts](https://github.com/github/template-parts):
 <!--
 ```js
 const parts = params(element, params, {
@@ -70,7 +70,7 @@ const parts = params(element, params, {
 <!-- Any external processor can be used with template-parts, -->
 
 ```js
-import Parts from 'template-parts'
+import Parts from 'tmpl-parts'
 import { propertyIdentityOrBooleanAttribute } from '@github/template-parts'
 
 const params = Parts(
@@ -135,7 +135,7 @@ Expression processor can be used with other template parts libraries as:
 
 ```js
 import {TemplateInstance} from '@github/template-parts'
-import expressionProcessor from 'template-parts/processor'
+import expressionProcessor from 'tmpl-parts/expr-processor'
 
 const instance = new TemplateInstance(document.querySelector('my-template'), {}, expressionProcessor)
 ```

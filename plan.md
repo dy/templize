@@ -37,6 +37,9 @@
   * tmpl-parts.js
     + minimalistic flavor
     + tmpl is one of the meanings
+    - a bit too short.
+      ~ valid abbreviation though.
+  * templ-parts.js?
   * element-parts
     + same as template-parts, generalized
     - a bit too far from templating, not obvious what parts, like, constituents or what?
