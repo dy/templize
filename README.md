@@ -2,14 +2,14 @@
 
 > Template parts for elements.
 
-[_Template Instantiation_](https://github.com/w3c/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md) proposal is limited only to template elements.<br/>
-[_DOM Parts_](https://github.com/WICG/webcomponents/blob/gh-pages/proposals/DOM-Parts.md) proposal is missing hi-level convention and too early days.<br/>
+[Template Instantiation](https://github.com/w3c/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md) proposal is limited only to \<template\> elements.<br/>
+[DOM Parts](https://github.com/WICG/webcomponents/blob/gh-pages/proposals/DOM-Parts.md) proposal is missing hi-level convention and too early days (up to [changing the name](https://github.com/WICG/webcomponents/issues/902)).<br/>
 _Element-params_ takes convention of template parts and generalizes to any elements.
 
-## Features
+Difference from [@github/template-parts](https://github.com/github/template-parts):
 
 - Drop-in vanilla ESM, no tooling.
-- Improved [@github/template-parts](https://github.com/domenic/template-parts) parser.
+- Improved parser.
 - Spec compatible API surface.
 - [`<table>`](https://github.com/domenic/template-parts/issues/2), [`<svg>`](https://github.com/github/template-parts/issues/26) and other cases fixed.
 - Expression processors (based on [subscript](https://github.com/spectjs/subscript)).
