@@ -39,14 +39,12 @@ params.x = 'Goodbye'
 _Tmpl-parts_ support any [standard](https://github.com/WICG/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md#32-template-parts-and-custom-template-process-callback) template parts processor:
 
 ```js
-const parts = params(element, params, {
+const params = Parts(element, initState, {
   createCallback(el, parts, state) {
-    // ... init parts / parse expressions, eg.
-    for (const part of parts) part.evaluate = parse(part.expression)
+    // ... init parts / parse expressions
   },
   processCallback(el, parts, state) {
     // ... update parts / evaluate expressions, eg.
-    for (const part of parts) part.evaluate(state)
   }
 })
 ```
@@ -54,7 +52,7 @@ const parts = params(element, params, {
 Default processor supports only direct values:
 
 ```js
-export default {
+{
   processCallback(instance, parts, state) {
     if (!state) return
     for (const part of parts) if (part.expression in state) part.value = state[part.expression]
