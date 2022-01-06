@@ -47,7 +47,7 @@ Update happens when async state changes:
 </script>
 ```
 
-This way, for example, rxjs can be streamed directly to element attribute or content.
+This way, for example, _rxjs_ can be streamed directly to element attribute or content.
 
 ## Processor
 
@@ -90,8 +90,8 @@ export default {
 }
 ``` -->
 
-Default processor supports only direct values.
-For expressions support element-params provides **common expression processor** (based on [subscript](https://github.com/spectjs/subscript)):
+Default processor supports only direct values.<br/>
+For expressions support _element-params_ provide **common expression processor** (based on [subscript](https://github.com/spectjs/subscript)):
 
 ```html
 <header id="title">
