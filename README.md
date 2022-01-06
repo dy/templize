@@ -1,4 +1,4 @@
-# element-params
+# element-parts
 
 > Element template parts
 
@@ -17,13 +17,13 @@ If either proposal lands, API will be assimilated.
 
 ## Usage
 
-Drop `element-params.js` into project folder and:
+Drop `element-parts.js` into project folder and:
 
 ```html
 <div id="foo" class="foo {{y}}">{{x}} world</div>
 
 <script type="module">
-import params from './element-params.js'
+import params from './element-parts.js'
 
 const fooParams = params(document.getElementById('foo'), { x: 'Hello', y: 'bar'})
 // <div id="foo" class="foo bar">Hello world</div>
@@ -40,7 +40,7 @@ Update happens when async state changes:
 <div id="done">{{ done || '...' }}</div>
 
 <script type="module">
-  import params from './element-params.js'
+  import params from './element-parts.js'
   import processor from './processor.js'
 
   const done = new Promise(ok => setTimeout(() => ok('Done!'), 1000))
@@ -67,10 +67,10 @@ const parts = params(element, params, {
 })
 ``` -->
 
-<!-- Any external processor can be used with element-params, -->
+<!-- Any external processor can be used with element-parts, -->
 
 ```js
-import params from 'element-params'
+import params from 'element-parts'
 import { propertyIdentityOrBooleanAttribute } from '@github/template-parts'
 
 const fooParams = params(
@@ -102,7 +102,7 @@ For expressions support there is **common expression processor** (based on [subs
 </header>
 
 <script>
-  import params from './element-params.js'
+  import params from './element-parts.js'
   import processor from './processor.js'
   const title = params(
     document.querySelector('#title'),
@@ -135,7 +135,7 @@ Expression processor can be used with other template parts libraries as:
 
 ```js
 import {TemplateInstance} from '@github/template-parts'
-import expressionProcessor from 'element-params/processor'
+import expressionProcessor from 'element-parts/processor'
 
 const instance = new TemplateInstance(document.querySelector('my-template'), {}, expressionProcessor)
 ```
