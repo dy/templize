@@ -51,7 +51,8 @@ This way, for example, rxjs can be streamed directly to element attribute or con
 
 ## Processor
 
-Element-params support template-parts compatible processor:
+_Element-params_ support any _template-parts_ compatible processor, eg. [@github/template-parts](https://github.com/github/template-parts):
+<!--
 ```js
 const parts = params(element, params, {
   createCallback(el, parts, state) {
@@ -63,9 +64,9 @@ const parts = params(element, params, {
     for (const part of parts) part.evaluate(state)
   }
 })
-```
+``` -->
 
-Any external processor can be used with element-params, eg. [@github/template-parts](https://github.com/github/template-parts):
+<!-- Any external processor can be used with element-params, -->
 
 ```js
 import params from 'element-params'
@@ -79,7 +80,6 @@ const fooParams = params(
 fooParams.hidden = true
 ```
 
-Default processor just sets values directly and doesn't support expressions.
 <!--
 ```js
 export default {
@@ -90,7 +90,8 @@ export default {
 }
 ``` -->
 
-For that element-params provides **common expression processor** (based on [subscript](https://github.com/spectjs/subscript)):
+Default processor supports only direct values.
+For expressions support element-params provides **common expression processor** (based on [subscript](https://github.com/spectjs/subscript)):
 
 ```html
 <header id="title">
