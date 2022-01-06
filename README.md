@@ -13,18 +13,9 @@ _Element-Params_ generalizes convention of _Template Parts_ to any elements.
 - [`<table>{{ data }}</table>`](https://github.com/domenic/template-parts/issues/2), [`<svg width={{width}}>`](https://github.com/github/template-parts/issues/26) and other cases fixed.
 - Expression processors (based on [subscript](https://github.com/spectjs/subscript)).
 
-## Install
-
-Drop `element-params.min` into project folder and import that as
-
-```js
-import elParams from './element-params.js'
-```
-
 ## Usage
 
-Init params on any element as `params(element, init?)`, with `init` as optional initial state.<br/>
-Returned object is params state − changing its properties updates corresponding template fields.
+Drop `element-params.js` into project folder and:
 
 ```html
 <div id="foo" class="foo {{y}}">{{x}} world</div>
