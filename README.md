@@ -5,11 +5,10 @@
 _Element-params_ bring template parts to any elements.
 
 - Drop-in vanilla ESM, no tooling.
-- Minimal implementation.
 - Improved [@github/template-parts](https://github.com/github/template-parts) parser.
-- Spec compatible [API surface](./src/api.js).
+- Spec compatible minimal [API surface](./src/api.js).
 - [`<table>{{ data }}</table>`](https://github.com/domenic/template-parts/issues/2) fixed.
-- Expression processors (based on [subscript](https://github.com/spectjs/subscript)).
+- Expression processor.
 <!-- - [`<svg width={{ width }}>`](https://github.com/github/template-parts/issues/26) and other cases fixed. -->
 
 If either proposal lands, API will be assimilated.
@@ -22,7 +21,7 @@ Drop `element-params.js` into project folder and:
 <div id="foo" class="foo {{y}}">{{x}} world</div>
 
 <script type="module">
-import params from 'element-params.js'
+import params from './element-params.js'
 
 const fooParams = params(document.getElementById('foo'), { x: 'Hello', y: 'bar'})
 // <div id="foo" class="foo bar">Hello world</div>
@@ -40,10 +39,10 @@ Update happens when async state changes:
 
 <script type="module">
   import params from './element-params.js'
-  import exprProcessor from './expr-processor.js'
+  import processor from './processor.js'
 
   const done = new Promise(ok => setTimeout(() => ok('Done!'), 1000))
-  params(document.querySelector('#done'), { done }, exprProcessor)
+  params(document.querySelector('#done'), { done }, processor)
 </script>
 ```
 
@@ -70,11 +69,11 @@ const parts = params(element, params, {
 
 ```js
 import params from 'element-params'
-import {propertyIdentityOrBooleanAttribute} from '@github/template-parts'
+import { propertyIdentityOrBooleanAttribute } from '@github/template-parts'
 
 const fooParams = params(
   document.getElementById('foo'),
-  { x: 'Hello', hidden: false},
+  { x: 'Hello', hidden: false },
   propertyIdentityOrBooleanAttribute
 )
 fooParams.hidden = true
@@ -101,12 +100,13 @@ For expressions support _element-params_ provide **common expression processor**
 
 <script>
   import params from './element-params.js'
-  import expr from './expr-processor.js'
+  import processor from './processor.js'
   const title = params(
     document.querySelector('#title'),
-    { user: { name: 'Hare Krishna', email: 'krishn@hari.om' }}
+    { user: { name: 'Hare Krishna', email: 'krishn@hari.om' }},
+    processor
   )
-  title.update({ user: { name: 'Hare Rama', email: 'ram@hari.om' } })
+  title.user.name = 'Hare Rama'
 </script>
 ```
 
@@ -134,9 +134,9 @@ Expression processor can be used with other template parts libraries as:
 
 ```js
 import {TemplateInstance} from '@github/template-parts'
-import exprProcessor from 'element-params/expr-processor'
+import expressionProcessor from 'element-params/processor'
 
-const instance = new TemplateInstance(document.querySelector('my-template'), {}, exprProcessor)
+const instance = new TemplateInstance(document.querySelector('my-template'), {}, expressionProcessor)
 ```
 
 <!--
