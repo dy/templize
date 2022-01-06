@@ -4,7 +4,7 @@
 
 [Template Instantiation](https://github.com/w3c/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md) is limited to _\<template\>_ only;
 [DOM Parts](https://github.com/WICG/webcomponents/blob/gh-pages/proposals/DOM-Parts.md) lack hi-level convention and too early days.<br/>
-_Tmpl-parts_ brings template parts for any elements.
+_Tmpl-parts_ brings template parts to any elements.
 
 - Drop-in vanilla ESM, no tooling.
 - Improved [@github/template-parts](https://github.com/github/template-parts) parser.
@@ -50,6 +50,7 @@ Update happens when sync or async state change:
 
 This way, for example, _rxjs_ can be streamed directly to element attribute or content.
  -->
+
 ## Processor
 
 _Tmpl-parts_ support any [standard](https://github.com/WICG/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md#32-template-parts-and-custom-template-process-callback) template parts processor, eg. [@github/template-parts](https://github.com/github/template-parts):
@@ -130,10 +131,12 @@ Pipe | `{{ bar \| foo }}` | Same as `{{ foo(bar) }}`.
 <!-- Spread | `{{ ...foo }}` | `params.foo` | Used to pass multiple attributes or nodes -->
 <!-- Default fallback | `{{ foo || bar }}` | `params.foo`, `params.bar` | -->
 
-For reactive values there's also **reactive processor**.
+---
+
+There's also **reactive processor** for reactive values.
 
 It allows initial state to take either direct values or async types: _Promise_, _AsyncIterable_, _Observable_.<br/>
-Update happens when sync or async state change:
+Update happens when param changes:
 
 ```html
 <div id="done">{{ done || '...' }}</div>
@@ -143,7 +146,12 @@ Update happens when sync or async state change:
   import asyncProcessor from './async-processor.js'
 
   const done = new Promise(ok => setTimeout(() => ok('Done!'), 1000))
-  Parts(document.querySelector('#done'), { done }, asyncProcessor)
+
+  const state = Parts(document.querySelector('#done'), { done }, asyncProcessor)
+
+  // <div id="done">...</div>
+  // ... 1s after
+  // <div id="done">done</div>
 </script>
 ```
 

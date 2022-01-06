@@ -39,6 +39,7 @@
     + tmpl is one of the meanings
     - a bit too short.
       ~ valid abbreviation though.
+    - no confusion with github or in readme
   * templ-parts.js?
   * element-parts
     + same as template-parts, generalized
