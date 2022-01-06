@@ -113,7 +113,7 @@ For expressions support _element-params_ provide **common expression processor**
 It supports the following expressions:
 
 Part | Expression |  Note
----|---|---|---
+---|---|---
 Value | `{{ foo }}` |
 Property | `{{ foo.bar }}` | Property access is path-safe and allows null-ish paths
 Function call | `{{ foo(bar) }}` |
