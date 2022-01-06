@@ -120,7 +120,7 @@ Pipe | `{{ bar \| foo }}` | Same as `{{ foo(bar) }}`.
 There's also **reactive processor** for reactive values.
 
 It allows initial state to take either direct values or async types: _Promise_, _AsyncIterable_, _Observable_.<br/>
-Update happens when param changes:
+Update happens when any param changes:
 
 ```html
 <div id="done">{{ done || '...' }}</div>
@@ -142,7 +142,7 @@ This way, for example, _rxjs_ can be streamed directly to element attribute or c
 
 ### Combining processors
 
-To combine processors, use `combine` processor:
+To combine processors, use `combine`:
 
 ```js
 import Parts, { expressions, reactivity, combine } from './tmpl-parts.js'
@@ -152,7 +152,7 @@ const params = Parts(el, {}, combine(expressions, reactivity))
 
 Each processor callback is called in sequence.
 
-Any processor can be used with other template parts libraries as:
+Any _tmpl-parts_ processor can also be used with other template parts libraries as:
 
 ```js
 import { TemplateInstance } from '@github/template-parts'
