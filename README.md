@@ -11,6 +11,7 @@ _Tmpl-parts_ brings template parts to any elements.
 - Template Parts compatible [API surface](./src/api.js).
 - [`<table>{{ data }}</table>`](https://github.com/domenic/template-parts/issues/2) fixed.
 - Expression processor (based on [subscript](https://github.com/spectjs/subscript)).
+- Reactive processor.
 <!-- - [`<svg width={{ width }}>`](https://github.com/github/template-parts/issues/26) and other cases fixed. -->
 
 If either proposal lands, API will be assimilated.
@@ -87,11 +88,11 @@ For expressions support there is **expression processor** (based on [subscript](
 </header>
 
 <script>
-  import Parts, { expressionProcessor } from './tmpl-parts.js'
+  import Parts, { expressions } from './tmpl-parts.js'
   const title = Parts(
     document.querySelector('#title'),
     { user: { name: 'Hare Krishna', email: 'krishn@hari.om' }},
-    expressionProcessor
+    expressions
   )
   title.user.name = 'Hare Rama'
 </script>
@@ -125,11 +126,11 @@ Update happens when param changes:
 <div id="done">{{ done || '...' }}</div>
 
 <script type="module">
-  import Parts, { reactiveProcessor } from './tmpl-parts.js'
+  import Parts, { reactivity } from './tmpl-parts.js'
 
   const done = new Promise(ok => setTimeout(() => ok('Done!'), 1000))
 
-  const state = Parts(document.querySelector('#done'), { done }, reactiveProcessor)
+  const state = Parts(document.querySelector('#done'), { done }, reactivity)
 
   // <div id="done">...</div>
   // ... 1s after
@@ -141,12 +142,12 @@ This way, for example, _rxjs_ can be streamed directly to element attribute or c
 
 ### Combining processors
 
-To combine processors, pass an array of them.
+To combine processors, pass combination of them.
 
 ```js
-import Parts, { expressionProcessor, reactiveProcessor, combineProcessor } from './tmpl-parts.js'
+import Parts, { expressions, reactivity, combination } from './tmpl-parts.js'
 
-const params = Parts(el, {}, combineProcessor(expressionProcessor, reactiveProcessor))
+const params = Parts(el, {}, combination(expressions, reactivity))
 ```
 
 Each processor callback is called in sequence.
@@ -155,9 +156,9 @@ Any processor can be used with other template parts libraries as:
 
 ```js
 import { TemplateInstance } from '@github/template-parts'
-import { expressionProcessor } from 'tmpl-parts'
+import { expressions } from 'tmpl-parts'
 
-const instance = new TemplateInstance(document.querySelector('my-template'), {}, expressionProcessor)
+const instance = new TemplateInstance(document.querySelector('my-template'), {}, expressions)
 ```
 
 

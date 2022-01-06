@@ -2,19 +2,19 @@
 import parse from './lib/subscript.js'
 import { sube, observable } from './lib/sube.js'
 
-export const defaultProcessor = {
+export const directValues = {
   processCallback(instance, parts, state) {
     if (!state) return
     for (const part of parts) if (part.expression in state) part.value = state[part.expression]
   }
 },
 
-combineProcessor = (...processors) => ({
+combination = (...processors) => ({
   createCallback: (a,b,c) => processors.map(p => p.createCallback?.(a,b,c)),
   processCallback: (a,b,c) => processors.map(p => p.processCallback?.(a,b,c))
 }),
 
-expressionProcessor = {
+expressions = {
   createCallback(el, parts, state) {
     for (const part of parts) part.evaluate = parse(part.expression)
   },
@@ -23,7 +23,7 @@ expressionProcessor = {
   }
 },
 
-reactiveProcessor = {
+reactivity = {
   createCallback(el, parts, state, subs=[]) {
     // we have to convert reactive state values into real ones
     for (const k in state) if (observable(state[k])) subs.push(sube(state[k], v => state[k] = v)), state[k] = null
