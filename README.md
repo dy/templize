@@ -89,7 +89,8 @@ export default {
 }
 ``` -->
 
-Default processor supports only direct values.<br/>
+Default processor supports only direct values.
+
 For expressions support _element-params_ provide **common expression processor** (based on [subscript](https://github.com/spectjs/subscript)):
 
 ```html
@@ -115,13 +116,13 @@ It supports the following expressions:
 Part | Expression |  Note
 ---|---|---
 Direct Value | `{{ foo }}` |
-Property | `{{ foo.bar }}`, `{{ foo['bar'] }}` | Property access is path-safe and allows null-ish paths
+Property | `{{ foo.bar }}`,<br/>`{{ foo['bar'] }}` | Allows null-ish paths
 Function call | `{{ foo(bar, baz) }}`, `{{ foo.bar(baz) }}` |
 Boolean operators | `{{ !foo }}`, `{{ foo && bar \|\| baz }}` |
 Ternary | `{{ foo ? bar : baz }}` |
 Primitives | `{{ 'foo' }}`, `{{ true }}`, `{{ 0.1 }}` |
 Comparison | `{{ foo == 1 }}`, `{{ bar != 2 }}` |
-Math operators | `{{ a * 2 + b / 3 }}` | Common operators, see [subscript#operators](https://github.com/spectjs/subscript#design)
+Math operators | `{{ a * 2 + b / 3 }}` | [Common operators](https://github.com/spectjs/subscript#design)
 Pipe | `{{ bar \| foo }}` | Same as `{{ foo(bar) }}`
 <!-- Loop | `{{ item, idx in list }}` | `params.d` | Used for `:for` directive only -->
 <!-- Spread | `{{ ...foo }}` | `params.foo` | Used to pass multiple attributes or nodes -->
