@@ -7,12 +7,12 @@ _Element-params_ bring template parts to any elements.
 - Drop-in vanilla ESM, no tooling.
 - Minimal implementation.
 - Improved [@github/template-parts](https://github.com/github/template-parts) parser.
-- Spec compatible API surface.
-- [`<table>{{ data }}</table>`](https://github.com/domenic/template-parts/issues/2)
+- Spec compatible [API surface](./src/api.js).
+- [`<table>{{ data }}</table>`](https://github.com/domenic/template-parts/issues/2) fixed.
 - Expression processors (based on [subscript](https://github.com/spectjs/subscript)).
 <!-- - [`<svg width={{ width }}>`](https://github.com/github/template-parts/issues/26) and other cases fixed. -->
 
-If either of the proposals land, API will be assimilated.
+If either proposal lands, API will be assimilated.
 
 ## Usage
 
@@ -32,9 +32,7 @@ fooParams.x = 'Goodbye'
 </script>
 ```
 
-Params also support reactive or async types: _Promise_, _AsyncIterable_, _Observable_.
-This way, for example, rxjs can be streamed directly to element attribute or content.
-Update happens when state changes:
+Params can take async types: _Promise_, _AsyncIterable_, _Observable_. Update happens when state changes:
 
 ```html
 <div id="done">{{ done || '...' }}</div>
@@ -46,7 +44,9 @@ Update happens when state changes:
 </script>
 ```
 
-Element-params support any template parts compatible processor, eg. [@github/template-parts](https://github.com/github/template-parts) one:
+This way, for example, rxjs can be streamed directly to element attribute or content.
+
+Element-params support any _template-parts_ compatible processor, eg. [@github/template-parts](https://github.com/github/template-parts) one:
 <!--
 ```js
 const parts = params(element, params, {
@@ -86,15 +86,92 @@ Default processor just sets values directly without processing.
 }
 ``` -->
 
-## Processors
+## Expression processor
 
-### Default
+_Element-params_ provides common expression processor (based on [subscript](https://github.com/spectjs/subscript)):
 
-<!-- ### Liquid -->
+```html
+<h1 id="title">{{ user.name }}</h1>Email: <a href="mailto:{{ user.email }}">{{ user.email }}</a>
+<script>
+  import params from './element-params.js'
+  import expr from './expr-processor.js'
+  const title = params(
+    document.querySelector('#title'),
+    { user: { name: 'Hare Krishna', email: 'krishn@hari.om' }}
+  )
+  title.update({ user: { name: 'Hare Rama', email: 'ram@hari.om' } })
+</script>
+```
 
-### Expression
+It supports the following expressions:
 
-<!-- ### Justin -->
+Part | Expression | Accessible as | Note
+---|---|---|---
+Value | `{{ foo }}` | `params.foo` |
+Property | `{{ foo.bar }}` | `params.foo.bar` | Property access is path-safe and allows null-ish paths
+Function call | `{{ foo(bar) }}` | `params.foo`, `params.bar` |
+Method call | `{{ foo.bar() }}` | `params.foo.bar` |
+Inversion | `{{ !foo }}` | `params.foo` |
+Boolean operators | `{{ foo && bar \|\| baz }}` | `params.foo`, `params.bar`, `params.baz` |
+Ternary | `{{ foo ? bar : baz }}` | `params.foo`, `params.bar`, `params.baz` |
+Primitives | `{{ 'foo' }}`, `{{ true, false }}`, `{{ 0.1 }}` | |
+Comparison | `{{ foo == 1 }}` | `params.foo` |
+Loop | `{{ item, idx in list }}` | `params.d` | Used for `:for` directive only
+Math operators | `{{ a * 2 + b / 3 }}` | `params.a`, `params.b` | Common operators, see [subscript](https://github.com/spectjs/subscript)
+Pipe | `{{ bar \| foo }}` | `params.foo`, `params.bar` | Same as `{{ foo(bar) }}`
+<!-- Spread | `{{ ...foo }}` | `params.foo` | Used to pass multiple attributes or nodes -->
+<!-- Default fallback | `{{ foo || bar }}` | `params.foo`, `params.bar` | -->
+
+
+Hint: expression-processor can be used with other Template Parts libraries as:
+
+```js
+import {TemplateInstance} from '@github/template-parts'
+import exprProcessor from 'element-params/expr-processor'
+
+let instance = new TemplateInstance(document.querySelector('my-template'), {}, exprProcessor)
+```
+
+<!--
+### Loops
+
+Iteration is organized via `:for` directive:
+
+```html
+<ul>
+  <li :for="{{ item, index in items }}" id="item-{{ index }}">{{ item.text }}</li>
+</ul>
+```
+
+Note that `index` starts with `1`, not `0`.
+
+Cases:
+
+```html
+<li :for="{{ item, index in array }}">
+<li :for="{{ key, value, index in object }}">
+<li :for="{{ count in number }}">
+```
+
+### Conditions
+
+Conditionals can be organized either as ternary template part or via `:if`, `:else-if`, `:else` directives.
+
+For text variants ternary operator is shorter:
+
+```html
+<span>Status: {{ status === 0 ? 'Active' : 'Inactive' }}</span>
+```
+
+To optionally display an element, use `:if`-`:else-if`-`:else`:
+
+```html
+<span :if="{{ status === 0 }}">Inactive</span>
+<span :else-if="{{ status === 1 }}">Active</span>
+<span :else>Finished</span>
+```
+-->
+
 
 ## See also
 
