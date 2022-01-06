@@ -1,11 +1,10 @@
 # element-params
 
-> Template parts for elements.
+> Templating for elements.
 
-[Template Instantiation](https://github.com/w3c/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md) is limited only to _\<template\>_ elements.<br/>
-[DOM Parts](https://github.com/WICG/webcomponents/blob/gh-pages/proposals/DOM-Parts.md) is missing hi-level convention and [too early days](https://github.com/WICG/webcomponents/issues/902).
+[Template Instantiation](https://github.com/w3c/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md) is limited to _\<template\>_. [DOM Parts](https://github.com/WICG/webcomponents/blob/gh-pages/proposals/DOM-Parts.md) is too low-level and [early days](https://github.com/WICG/webcomponents/issues/902).
 
-_Element-params_ generalizes convention of _template parts_ to any elements with improvements:
+_Element-params_ generalizes convention of _template parts_ to any elements.
 
 - Drop-in vanilla ESM, no tooling.
 - Minimal implementation.
@@ -13,6 +12,8 @@ _Element-params_ generalizes convention of _template parts_ to any elements with
 - Spec compatible API surface.
 - [`<table>{{ data }}</table>`](https://github.com/domenic/template-parts/issues/2), [`<svg width={{width}}>`](https://github.com/github/template-parts/issues/26) and other cases fixed.
 - Expression processors (based on [subscript](https://github.com/spectjs/subscript)).
+
+Once DOM-parts land, the API will be im
 
 ## Usage
 
