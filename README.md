@@ -1,10 +1,8 @@
 # element-params
 
-> Template parts for elements.
-
 [Template Instantiation](https://github.com/w3c/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md) is limited to _\<template\>_.<br/>
 [DOM Parts](https://github.com/WICG/webcomponents/blob/gh-pages/proposals/DOM-Parts.md) lack hi-level convention and too early days.<br/>
-_Element-params_ generalize template parts to any elements.
+_Element-params_ bring template parts to any elements.
 
 - Drop-in vanilla ESM, no tooling.
 - Minimal implementation.
