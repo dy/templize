@@ -32,7 +32,8 @@ fooParams.x = 'Goodbye'
 </script>
 ```
 
-Params can take either direct values or async types: _Promise_, _AsyncIterable_, _Observable_. Update happens when async state changes:
+Init state can take either direct values or async types: _Promise_, _AsyncIterable_, _Observable_.<br/>
+Update happens when async state changes:
 
 ```html
 <div id="done">{{ done || '...' }}</div>
