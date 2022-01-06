@@ -32,24 +32,6 @@ state.x = 'Goodbye'
 // <div id="foo" class="foo bar">Goodbye world</div>
 </script>
 ```
-<!--
-Initial state take either direct values or async types: _Promise_, _AsyncIterable_, _Observable_.<br/>
-Update happens when sync or async state change:
-
-```html
-<div id="done">{{ done || '...' }}</div>
-
-<script type="module">
-  import Parts from './tmpl-parts.js'
-  import processor from './processor.js'
-
-  const done = new Promise(ok => setTimeout(() => ok('Done!'), 1000))
-  Parts(document.querySelector('#done'), { done }, processor)
-</script>
-```
-
-This way, for example, _rxjs_ can be streamed directly to element attribute or content.
- -->
 
 ## Processor
 
@@ -104,7 +86,7 @@ For expressions support there is **expression processor** (based on [subscript](
 
 <script>
   import Parts from './tmpl-parts.js'
-  import expressionProcessor from './expr-processor.js'
+  import { expressionProcessor } from './processor.js'
   const title = Parts(
     document.querySelector('#title'),
     { user: { name: 'Hare Krishna', email: 'krishn@hari.om' }},
@@ -143,11 +125,11 @@ Update happens when param changes:
 
 <script type="module">
   import Parts from './tmpl-parts.js'
-  import asyncProcessor from './async-processor.js'
+  import { reactiveProcessor } from './processor.js'
 
   const done = new Promise(ok => setTimeout(() => ok('Done!'), 1000))
 
-  const state = Parts(document.querySelector('#done'), { done }, asyncProcessor)
+  const state = Parts(document.querySelector('#done'), { done }, reactiveProcessor)
 
   // <div id="done">...</div>
   // ... 1s after
@@ -161,7 +143,7 @@ Any processor can be used with other template parts libraries as:
 
 ```js
 import {TemplateInstance} from '@github/template-parts'
-import expressionProcessor from 'tmpl-parts/expr-processor'
+import { expressionProcessor } from 'tmpl-parts/processor'
 
 const instance = new TemplateInstance(document.querySelector('my-template'), {}, expressionProcessor)
 ```
