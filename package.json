@@ -1,26 +1,31 @@
 {
-  "name": "template-parts",
+  "name": "element-parts",
   "version": "0.0.1",
-  "description": "An implementation of the TemplateInstance proposal",
+  "description": "Element template parts",
   "bugs": {
-    "url": "https://github.com/spectjs/template-parts/issues"
+    "url": "https://github.com/spectjs/element-parts/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/spectjs/template-parts.git"
+    "url": "git+https://github.com/spectjs/element-parts.git"
   },
   "license": "MIT",
   "author": "Dmitry Iv.",
   "type": "module",
-  "main": "template-parts.js",
-  "module": "template-parts.js",
+  "main": "element-parts.js",
+  "module": "element-parts.js",
   "files": [
-    "template-parts.js",
+    "element-parts.js",
+    "element-parts.min.js",
     "processor.js"
   ],
   "scripts": {
+    "build": "rollup src/index.js --file element-parts.js --format esm --name \"Element Parts\"",
+    "minify": "terser element-parts.js -o element-parts.min.js --module -c passes=3 -m",
     "test": "node test"
   },
   "devDependencies": {
+    "rollup": "^2.63.0",
+    "terser": "^5.10.0"
   }
 }
