@@ -4,7 +4,7 @@
 
 [Template Instantiation](https://github.com/w3c/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md) is limited to _\<template\>_,
 [DOM Parts](https://github.com/WICG/webcomponents/blob/gh-pages/proposals/DOM-Parts.md) lack hi-level convention and too early days.<br/>
-_Element-params_ bring template parts to any elements.
+_Element-parts_ bring template parts to any elements.
 
 - Drop-in vanilla ESM, no tooling.
 - Improved [@github/template-parts](https://github.com/github/template-parts) parser.
@@ -23,28 +23,28 @@ Drop `element-parts.js` into project folder and:
 <div id="foo" class="foo {{y}}">{{x}} world</div>
 
 <script type="module">
-import params from './element-parts.js'
+import Parts from './element-parts.js'
 
-const fooParams = params(document.getElementById('foo'), { x: 'Hello', y: 'bar'})
+const params = Parts(document.getElementById('foo'), { x: 'Hello', y: 'bar'})
 // <div id="foo" class="foo bar">Hello world</div>
 
-fooParams.x = 'Goodbye'
+params.x = 'Goodbye'
 // <div id="foo" class="foo bar">Goodbye world</div>
 </script>
 ```
 
-Initial state takes either direct values or async types: _Promise_, _AsyncIterable_, _Observable_.<br/>
-Update happens when async state changes:
+Initial params take either direct values or async types: _Promise_, _AsyncIterable_, _Observable_.<br/>
+Update happens when sync or async params change:
 
 ```html
 <div id="done">{{ done || '...' }}</div>
 
 <script type="module">
-  import params from './element-parts.js'
+  import Parts from './element-parts.js'
   import processor from './processor.js'
 
   const done = new Promise(ok => setTimeout(() => ok('Done!'), 1000))
-  params(document.querySelector('#done'), { done }, processor)
+  Parts(document.querySelector('#done'), { done }, processor)
 </script>
 ```
 
@@ -52,7 +52,7 @@ This way, for example, _rxjs_ can be streamed directly to element attribute or c
 
 ## Processor
 
-_Element-params_ support any _template-parts_ compatible processor, eg. [@github/template-parts](https://github.com/github/template-parts):
+_Element-parts_ support any _template-parts_ compatible processor, eg. [@github/template-parts](https://github.com/github/template-parts):
 <!--
 ```js
 const parts = params(element, params, {
@@ -70,15 +70,15 @@ const parts = params(element, params, {
 <!-- Any external processor can be used with element-parts, -->
 
 ```js
-import params from 'element-parts'
+import Parts from 'element-parts'
 import { propertyIdentityOrBooleanAttribute } from '@github/template-parts'
 
-const fooParams = params(
+const params = Parts(
   document.getElementById('foo'),
   { x: 'Hello', hidden: false },
   propertyIdentityOrBooleanAttribute
 )
-fooParams.hidden = true
+params.hidden = true
 ```
 
 <!--
@@ -102,9 +102,9 @@ For expressions support there is **common expression processor** (based on [subs
 </header>
 
 <script>
-  import params from './element-parts.js'
+  import Parts from './element-parts.js'
   import processor from './processor.js'
-  const title = params(
+  const title = Parts(
     document.querySelector('#title'),
     { user: { name: 'Hare Krishna', email: 'krishn@hari.om' }},
     processor
