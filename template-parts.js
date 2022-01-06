@@ -1,19 +1,23 @@
 const ELEMENT = 1, TEXT = 3, PART = 0
 
-const parts = (node, state, processor=defaultProcessor) => {
-  let parts = collectParts(node, []),
+const parts = (node, params, processor=defaultProcessor) => {
+  let parts = collectParts(node),
       create = processor.create || processor.createCallback,
-      proc = processor.process || processor.processCallback
+      process = processor.call ? processor : processor.process || processor.processCallback
 
-  create?.(instance, parts, state),
-  proc?.(instance, parts, state)
+  create?.(node, parts, params),
+  params && process?.(node, parts, params)
 
-  return { update: state => proc(instance, parts, state) }
+  return {
+    parts,
+    params,
+    update: state => Object.assign(params, state) && process(node, parts, state)
+  }
 }
 
 // this is simplified template instance algo
 // ref: https://github.com/WICG/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md#43-creating-template-parts
-const collectParts = (element, parts) => {
+const collectParts = (element, parts=[]) => {
   for (let attr of element.attributes) {
     if (attr.value.includes('{{')) {
       let setter = { element, attr, parts: [] }
@@ -39,6 +43,7 @@ const collectParts = (element, parts) => {
       node.replaceWith(...setter.parts)
     }
   }
+
   return parts
 }
 
