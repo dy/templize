@@ -1,3 +1,4 @@
+// parse string with template fields
 const mem = {}, STRING = 0, PART = 1
 export default (text) => {
   let value = '', open = 0, tokens = mem[text], i = 0, c

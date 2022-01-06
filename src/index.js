@@ -1,29 +1,21 @@
 import parse from './parse.js'
 import {NodePart, AttrPart} from './api.js'
+import { defaultProcessor } from './processor.js'
 
 const ELEMENT = 1, TEXT = 3,
 
-defaultProcessor = {
-  processCallback(instance, parts, state) {
-    if (!state) return
-    for (const part of parts) if (part.expression in state) part.value = state[part.expression]
-  }
-},
-
 Parts = (node, params, processor=defaultProcessor) => {
   let parts = collectParts(node),
-      create = processor.create || processor.createCallback,
-      process = processor.call ? processor : processor.process || processor.processCallback,
       // throttled for batch update
       planned,
-      update = () => !planned && (planned = Promise.resolve().then(() => (planned = null, process?.(node, parts, params))))
+      update = () => !planned && ( planned = Promise.resolve().then(() => (planned = null, processor.processCallback?.(node, parts, params))) )
 
-  create?.(node, parts, params)
-  process?.(node, parts, params)
+  processor.createCallback?.(node, parts, params)
+  processor.processCallback?.(node, parts, params)
 
   return new Proxy(params,  {
-    set: (s, k, v, desc) => (s[k] = v, update()),
-    deleteProperty: (a,k) => (delete s[k], update())
+    set: (state, k, v) => (state[k] = v, update()),
+    deleteProperty: (state,k) => (delete state[k], update())
   })
 },
 
@@ -53,3 +45,4 @@ collectParts = (element, parts=[]) => {
 }
 
 export default Parts
+export * from './processor.js'

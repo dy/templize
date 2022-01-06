@@ -1,5 +1,5 @@
 // minimal Template Instance API surface
-import updateNodes from './diff.js'
+import updateNodes from './lib/diff.js'
 
 export class Part {
   constructor(setter, expr) { this.setter = setter, this.expression = expr }

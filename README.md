@@ -76,6 +76,8 @@ export default {
 
 Default processor supports only direct values.
 
+### Expression processor
+
 For expressions support there is **expression processor** (based on [subscript](https://github.com/spectjs/subscript)):
 
 ```html
@@ -85,8 +87,7 @@ For expressions support there is **expression processor** (based on [subscript](
 </header>
 
 <script>
-  import Parts from './tmpl-parts.js'
-  import { expressionProcessor } from './processor.js'
+  import Parts, { expressionProcessor } from './tmpl-parts.js'
   const title = Parts(
     document.querySelector('#title'),
     { user: { name: 'Hare Krishna', email: 'krishn@hari.om' }},
@@ -113,7 +114,7 @@ Pipe | `{{ bar \| foo }}` | Same as `{{ foo(bar) }}`.
 <!-- Spread | `{{ ...foo }}` | `params.foo` | Used to pass multiple attributes or nodes -->
 <!-- Default fallback | `{{ foo || bar }}` | `params.foo`, `params.bar` | -->
 
----
+### Reactive processor
 
 There's also **reactive processor** for reactive values.
 
@@ -124,8 +125,7 @@ Update happens when param changes:
 <div id="done">{{ done || '...' }}</div>
 
 <script type="module">
-  import Parts from './tmpl-parts.js'
-  import { reactiveProcessor } from './processor.js'
+  import Parts, { reactiveProcessor } from './tmpl-parts.js'
 
   const done = new Promise(ok => setTimeout(() => ok('Done!'), 1000))
 
@@ -139,54 +139,26 @@ Update happens when param changes:
 
 This way, for example, _rxjs_ can be streamed directly to element attribute or content.
 
+### Combining processors
+
+To combine processors, pass an array of them.
+
+```js
+import Parts, { expressionProcessor, reactiveProcessor, combineProcessor } from './tmpl-parts.js'
+
+const params = Parts(el, {}, combineProcessor(expressionProcessor, reactiveProcessor))
+```
+
+Each processor callback is called in sequence.
+
 Any processor can be used with other template parts libraries as:
 
 ```js
-import {TemplateInstance} from '@github/template-parts'
-import { expressionProcessor } from 'tmpl-parts/processor'
+import { TemplateInstance } from '@github/template-parts'
+import { expressionProcessor } from 'tmpl-parts'
 
 const instance = new TemplateInstance(document.querySelector('my-template'), {}, expressionProcessor)
 ```
-
-<!--
-### Loops
-
-Iteration is organized via `:for` directive:
-
-```html
-<ul>
-  <li :for="{{ item, index in items }}" id="item-{{ index }}">{{ item.text }}</li>
-</ul>
-```
-
-Note that `index` starts with `1`, not `0`.
-
-Cases:
-
-```html
-<li :for="{{ item, index in array }}">
-<li :for="{{ key, value, index in object }}">
-<li :for="{{ count in number }}">
-```
-
-### Conditions
-
-Conditionals can be organized either as ternary template part or via `:if`, `:else-if`, `:else` directives.
-
-For text variants ternary operator is shorter:
-
-```html
-<span>Status: {{ status === 0 ? 'Active' : 'Inactive' }}</span>
-```
-
-To optionally display an element, use `:if`-`:else-if`-`:else`:
-
-```html
-<span :if="{{ status === 0 }}">Inactive</span>
-<span :else-if="{{ status === 1 }}">Active</span>
-<span :else>Finished</span>
-```
--->
 
 
 <!-- ## See also -->
