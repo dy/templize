@@ -4,6 +4,15 @@
 
 * [ ] tests
 
+* [ ] default processor:
+  1. default processor = expression + reactivity
+    + easy to get started not to think much
+    - overhead if use-case doesn't need expressions or reactivity
+    - not guaranteed if tree shakable
+  2. default processor = mininmal direct values
+    + expressions, reactivity are treeshakeable
+    - extra code / knowledge to connect
+
 * [x] bundle & minify
 
 * [x] expression processor
