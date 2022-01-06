@@ -37,12 +37,13 @@ Update happens when async state changes:
 
 ```html
 <div id="done">{{ done || '...' }}</div>
+
 <script type="module">
   import params from './element-params.js'
-  import expr from './expr-processor.js'
+  import exprProcessor from './expr-processor.js'
 
   const done = new Promise(ok => setTimeout(() => ok('Done!'), 1000))
-  params(document.querySelector('#done'), { done }, expr)
+  params(document.querySelector('#done'), { done }, exprProcessor)
 </script>
 ```
 
@@ -78,8 +79,8 @@ const fooParams = params(
 fooParams.hidden = true
 ```
 
-Default processor just sets values directly:
-
+Default processor just sets values directly and doesn't support expressions.
+<!--
 ```js
 export default {
   processCallback(instance, parts, state) {
@@ -87,9 +88,9 @@ export default {
     for (const part of parts) if (part.expression in state) part.value = state[part.expression]
   }
 }
-```
+``` -->
 
-_Element-params_ also provides common expression processor (based on [subscript](https://github.com/spectjs/subscript)):
+For that _element-params_ provides common expression processor (based on [subscript](https://github.com/spectjs/subscript)):
 
 ```html
 <h1 id="title">{{ user.name }}</h1>Email: <a href="mailto:{{ user.email }}">{{ user.email }}</a>
