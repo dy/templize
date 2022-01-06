@@ -3,8 +3,8 @@
 > Template parts for elements.
 
 [Template Instantiation](https://github.com/w3c/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md) is limited to _\<template\>_.<br/>
-[DOM Parts](https://github.com/WICG/webcomponents/blob/gh-pages/proposals/DOM-Parts.md) lacks hi-level conventions and too early days.<br/>
-_Element-params_ generalizes _template parts_ to any elements.
+[DOM Parts](https://github.com/WICG/webcomponents/blob/gh-pages/proposals/DOM-Parts.md) lack hi-level convention and too early days.<br/>
+_Element-params_ generalize template parts to any elements.
 
 - Drop-in vanilla ESM, no tooling.
 - Minimal implementation.
@@ -14,7 +14,7 @@ _Element-params_ generalizes _template parts_ to any elements.
 - Expression processors (based on [subscript](https://github.com/spectjs/subscript)).
 <!-- - [`<svg width={{ width }}>`](https://github.com/github/template-parts/issues/26) and other cases fixed. -->
 
-If either [DOM-parts](https://github.com/WICG/webcomponents/blob/gh-pages/proposals/DOM-Parts.md) or [Template In] lands, API will be assimilated.
+If either of the proposals land, API will be assimilated.
 
 ## Usage
 
