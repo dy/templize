@@ -51,7 +51,7 @@ This way, for example, rxjs can be streamed directly to element attribute or con
 
 ## Processor
 
-Element-params support _template-parts_ compatible processor:
+Element-params support template-parts compatible processor:
 ```js
 const parts = params(element, params, {
   createCallback(el, parts, state) {
@@ -90,10 +90,14 @@ export default {
 }
 ``` -->
 
-For that _element-params_ provides common expression processor (based on [subscript](https://github.com/spectjs/subscript)):
+For that element-params provides **common expression processor** (based on [subscript](https://github.com/spectjs/subscript)):
 
 ```html
-<h1 id="title">{{ user.name }}</h1>Email: <a href="mailto:{{ user.email }}">{{ user.email }}</a>
+<header id="title">
+  <h1>{{ user.name }}</h1>
+  Email: <a href="mailto:{{ user.email }}">{{ user.email }}</a>
+</header>
+
 <script>
   import params from './element-params.js'
   import expr from './expr-processor.js'
@@ -112,15 +116,15 @@ Part | Expression | Accessible as | Note
 Value | `{{ foo }}` | `params.foo` |
 Property | `{{ foo.bar }}` | `params.foo.bar` | Property access is path-safe and allows null-ish paths
 Function call | `{{ foo(bar) }}` | `params.foo`, `params.bar` |
-Method call | `{{ foo.bar() }}` | `params.foo.bar` |
+Method call | `{{ foo.bar(baz) }}` | `params.foo.bar` |
 Inversion | `{{ !foo }}` | `params.foo` |
 Boolean operators | `{{ foo && bar \|\| baz }}` | `params.foo`, `params.bar`, `params.baz` |
 Ternary | `{{ foo ? bar : baz }}` | `params.foo`, `params.bar`, `params.baz` |
-Primitives | `{{ 'foo' }}`, `{{ true, false }}`, `{{ 0.1 }}` | |
+Primitives | `{{ 'foo' }}`, `{{ true }}`, `{{ 0.1 }}` | |
 Comparison | `{{ foo == 1 }}` | `params.foo` |
-Loop | `{{ item, idx in list }}` | `params.d` | Used for `:for` directive only
 Math operators | `{{ a * 2 + b / 3 }}` | `params.a`, `params.b` | Common operators, see [subscript](https://github.com/spectjs/subscript)
 Pipe | `{{ bar \| foo }}` | `params.foo`, `params.bar` | Same as `{{ foo(bar) }}`
+<!-- Loop | `{{ item, idx in list }}` | `params.d` | Used for `:for` directive only -->
 <!-- Spread | `{{ ...foo }}` | `params.foo` | Used to pass multiple attributes or nodes -->
 <!-- Default fallback | `{{ foo || bar }}` | `params.foo`, `params.bar` | -->
 
@@ -131,7 +135,7 @@ Expression processor can be used with other template parts libraries as:
 import {TemplateInstance} from '@github/template-parts'
 import exprProcessor from 'element-params/expr-processor'
 
-let instance = new TemplateInstance(document.querySelector('my-template'), {}, exprProcessor)
+const instance = new TemplateInstance(document.querySelector('my-template'), {}, exprProcessor)
 ```
 
 <!--
