@@ -2,21 +2,29 @@
 
 > Template parts for elements.
 
-[Template Instantiation](https://github.com/w3c/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md) proposal is limited only to \<template\> elements.<br/>
-[DOM Parts](https://github.com/WICG/webcomponents/blob/gh-pages/proposals/DOM-Parts.md) proposal is missing hi-level convention and too early days (up to [changing the name](https://github.com/WICG/webcomponents/issues/902)).<br/>
-_Element-params_ takes convention of template parts and generalizes to any elements.
-
-Difference from [@github/template-parts](https://github.com/github/template-parts):
+[Template Instantiation](https://github.com/w3c/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md) proposal is limited only to `<template>` elements.<br/>
+[DOM Parts](https://github.com/WICG/webcomponents/blob/gh-pages/proposals/DOM-Parts.md) proposal is missing hi-level convention and too early days (even [name is not stabilized](https://github.com/WICG/webcomponents/issues/902)).<br/>
+_Element-Params_ generalizes convention of _Template Parts_ to any elements.
 
 - Drop-in vanilla ESM, no tooling.
-- Improved parser.
+- Minimal implementation.
+- Improved [@github/template-parts](https://github.com/github/template-parts) parser.
 - Spec compatible API surface.
-- [`<table>`](https://github.com/domenic/template-parts/issues/2), [`<svg>`](https://github.com/github/template-parts/issues/26) and other cases fixed.
+- [`<table>{{ data }}</table>`](https://github.com/domenic/template-parts/issues/2), [`<svg width={{width}}>`](https://github.com/github/template-parts/issues/26) and other cases fixed.
 - Expression processors (based on [subscript](https://github.com/spectjs/subscript)).
+
+## Install
+
+Drop `element-params.min` into project folder and import that as
+
+```js
+import elParams from './element-params.js'
+```
 
 ## Usage
 
-Init params on any element as `params(element, init?)`, where optional `init` is initial state. Returned object is params state, changing its properties updates corresponding parts.
+Init params on any element as `params(element, init?)`, with `init` as optional initial state.<br/>
+Returned object is params state − changing its properties updates corresponding template fields.
 
 ```html
 <div id="foo" class="foo {{y}}">{{x}} world</div>
@@ -28,43 +36,9 @@ const fooParams = params(document.getElementById('foo'), { x: 'Hello', y: 'bar'}
 
 {...fooParams} // { x, y }
 
-fooParams.x = 'Goodbye'
-// <div id="foo" class="foo bar">Goodbye world</div>
+fooParams.x = 'Goodbye' // <div id="foo" class="foo bar">Goodbye world</div>
 </script>
 ```
-
-### Processor
-
-_Element-params_ support _Template-Parts_ compatible processor:
-
-```js
-const parts = params(element, params, {
-  createCallback(el, parts, state) {
-    // ... init parts / parse expressions, eg.
-    for (const part of parts) part.evaluate = parse(part.expression)
-  },
-  processCallback(el, parts, state) {
-    // ... update parts / evaluate expressions, eg.
-    for (const part of parts) part.evaluate(state)
-  }
-})
-```
-
-Any external processor can be used with element-params:
-
-```js
-import params from 'element-params.js'
-import {propertyIdentityOrBooleanAttribute} from '@github/template-parts'
-
-const fooParams = params(document.getElementById('foo'), { x: 'Hello', hidden: false}, propertyIdentityOrBooleanAttribute)
-fooParams.hidden = true
-```
-
-Default processor just sets values directly without processing.
-
-See [expr-processor](https://github.com/spect/expr-processor) for list of available expression processors.
-
-### Reactivity
 
 Params also support reactive or async types: _Promise_, _AsyncIterable_, _Observable_.
 Update happens when state changes:
@@ -80,6 +54,48 @@ Update happens when state changes:
 ```
 
 This way, for example, rxjs can be streamed directly to element attribute or content.
+
+Element-params support any template parts compatible processor, eg.:
+<!--
+```js
+const parts = params(element, params, {
+  createCallback(el, parts, state) {
+    // ... init parts / parse expressions, eg.
+    for (const part of parts) part.evaluate = parse(part.expression)
+  },
+  processCallback(el, parts, state) {
+    // ... update parts / evaluate expressions, eg.
+    for (const part of parts) part.evaluate(state)
+  }
+})
+```
+
+Any external processor can be used with element-params:
+ -->
+```js
+import params from 'element-params.js'
+import {propertyIdentityOrBooleanAttribute} from '@github/template-parts'
+
+const fooParams = params(
+  document.getElementById('foo'),
+  { x: 'Hello', hidden: false},
+  propertyIdentityOrBooleanAttribute
+)
+fooParams.hidden = true
+```
+<!--
+Default processor just sets values directly without processing.
+
+```js
+{
+  processCallback(instance, parts, state) {
+    if (!state) return
+    for (const part of parts) if (part.expression in state) part.value = state[part.expression]
+  }
+}
+``` -->
+
+### Processors
 
 
 ## See also
