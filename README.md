@@ -1,18 +1,16 @@
 # element-params
 
-Element templating system, inspired by [template-instantiation](https://github.com/w3c/webcomponents/blob/159b1600bab02fe9cd794825440a98537d53b389/proposals/Template-Instantiation.md) and [dom-parts](https://github.com/WICG/webcomponents/blob/gh-pages/proposals/DOM-Parts.md).
+> Conventional template parts for elements.
 
-## Motivation
+[_Template Instantiation_](https://github.com/w3c/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md) is limited only to template elements.<br/>
+[_DOM Parts_](https://github.com/WICG/webcomponents/blob/gh-pages/proposals/DOM-Parts.md) is missing hi-level convention and too early days.<br/>
+_Element-params_ takes convention of template parts and generalizes to any elements.
 
-_Template Instantiation_ is limited only to template elements.
-_DOM Parts_ is missing hi-level convention, too complex/overengineered and very early days.
-_Element-Params_ takes convention of template parts and generalizes to any elements.
-
-- Single drop-in vanilla ESM file.
+- Drop-in vanilla ESM, no tooling.
 - Improved [@github/template-parts](https://github.com/domenic/template-parts) parser.
 - Spec compatible API surface.
 - [`<table>`](https://github.com/domenic/template-parts/issues/2), [`<svg>`](https://github.com/github/template-parts/issues/26) and other cases fixed.
-<!-- - Optional expression processor (based on [subscript](https://github.com/spectjs/subscript)). -->
+- Expression processors (based on [subscript](https://github.com/spectjs/subscript)).
 
 ## Usage
 
