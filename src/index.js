@@ -1,10 +1,10 @@
 import parse from './parse.js'
 import {NodePart, AttrPart} from './api.js'
-import { directValues } from './processor.js'
+import { direct } from './processor.js'
 
 const ELEMENT = 1, TEXT = 3,
 
-Parts = (node, params, processor=directValues) => {
+Parts = (node, params, processor=direct) => {
   let parts = collectParts(node),
       // throttled for batch update
       planned,

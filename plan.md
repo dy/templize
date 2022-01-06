@@ -1,17 +1,20 @@
 # plan
 
-* [ ] table tests
+* [ ] tables
+
+* [ ] tests
 
 * [x] bundle & minify
 
-* [ ] expression processor
+* [x] expression processor
 
-* [ ] composable processors
+* [x] composable processors
   . reactiveProcessor can handle observables
   . expressionProcessor can handle expressions
   . booleanProcessor can handle bool attribs
+  → combine method
 
-* [ ] name: element-parts
+* [x] name: tmpl-parts
   ? what would be the name, sustainable for at least 10-15 years?
   ? what would be the name if no npm limitations?
   ? what would be the name radical, meaningful, short... reflecting spirit: tiny, fast, right?
@@ -35,11 +38,13 @@
     - can get obsolete if proposal gets renamed
       → unlikely - would require renaming all deps; it's rather stalling
   * tmpl-parts.js
-    + minimalistic flavor
-    + tmpl is one of the meanings
+    + minimalistic scent
+    + temple is one of the meanings
     - a bit too short.
       ~ valid abbreviation though.
-    - no confusion with github or in readme
+    + no confusion with github or in readme
+    + matches shortening of other projects
+    + not nosey, doesn't stand out much
   * templ-parts.js?
   * element-parts
     + same as template-parts, generalized

@@ -26,10 +26,10 @@ Drop `tmpl-parts.js` into project folder and:
 <script type="module">
 import Parts from './tmpl-parts.js'
 
-const state = Parts(document.getElementById('foo'), { x: 'Hello', y: 'bar'})
+const params = Parts(document.getElementById('foo'), { x: 'Hello', y: 'bar'})
 // <div id="foo" class="foo bar">Hello world</div>
 
-state.x = 'Goodbye'
+params.x = 'Goodbye'
 // <div id="foo" class="foo bar">Goodbye world</div>
 </script>
 ```
@@ -89,12 +89,12 @@ For expressions support there is **expression processor** (based on [subscript](
 
 <script>
   import Parts, { expressions } from './tmpl-parts.js'
-  const title = Parts(
+  const titleParams = Parts(
     document.querySelector('#title'),
     { user: { name: 'Hare Krishna', email: 'krishn@hari.om' }},
     expressions
   )
-  title.user.name = 'Hare Rama'
+  titleParams.user.name = 'Hare Rama'
 </script>
 ```
 
@@ -130,7 +130,7 @@ Update happens when param changes:
 
   const done = new Promise(ok => setTimeout(() => ok('Done!'), 1000))
 
-  const state = Parts(document.querySelector('#done'), { done }, reactivity)
+  const params = Parts(document.querySelector('#done'), { done }, reactivity)
 
   // <div id="done">...</div>
   // ... 1s after
@@ -142,12 +142,12 @@ This way, for example, _rxjs_ can be streamed directly to element attribute or c
 
 ### Combining processors
 
-To combine processors, pass combination of them.
+To combine processors, use `combine` processor:
 
 ```js
-import Parts, { expressions, reactivity, combination } from './tmpl-parts.js'
+import Parts, { expressions, reactivity, combine } from './tmpl-parts.js'
 
-const params = Parts(el, {}, combination(expressions, reactivity))
+const params = Parts(el, {}, combine(expressions, reactivity))
 ```
 
 Each processor callback is called in sequence.

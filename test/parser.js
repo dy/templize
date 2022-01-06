@@ -1,5 +1,5 @@
 import test, {is} from './lib/tst.js'
-import {parse} from '../template-parts.js'
+import parse from '../src/parse.js'
 
 
 test('parse: extracts `{{}}` surrounding parts as part tokens', () => {

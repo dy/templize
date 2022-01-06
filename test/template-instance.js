@@ -1,5 +1,6 @@
 import test, {is} from './lib/tst.js'
-import {TemplateInstance, AttributeTemplatePart} from '../template-parts.js'
+import TemplateInstance from '../src/index.js'
+import {AttributeTemplatePart} from '../src/api.js'
 
 
 test('create: applies data to templated text nodes', () => {

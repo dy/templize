@@ -14,18 +14,22 @@
   "type": "module",
   "main": "tmpl-parts.js",
   "module": "tmpl-parts.js",
+  "browser": "tmpl-parts.js",
   "files": [
+    "src",
     "tmpl-parts.js",
-    "tmpl-parts.min.js",
-    "processor.js"
+    "tmpl-parts.min.js"
   ],
   "scripts": {
-    "build": "rollup src/index.js --file tmpl-parts.js --format esm --name \"Element Parts\"",
+    "build": "rollup src/index.js --file tmpl-parts.js --format esm",
     "minify": "terser tmpl-parts.js -o tmpl-parts.min.js --module -c passes=3 -m",
     "test": "node test"
   },
   "devDependencies": {
     "rollup": "^2.63.0",
     "terser": "^5.10.0"
+  },
+  "dependencies": {
+    "subscript": "^6.1.0"
   }
 }
