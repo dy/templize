@@ -1,10 +1,12 @@
 # element-params
 
-> Conventional template parts for elements.
+> Template parts for elements.
 
-[_Template Instantiation_](https://github.com/w3c/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md) is limited only to template elements.<br/>
-[_DOM Parts_](https://github.com/WICG/webcomponents/blob/gh-pages/proposals/DOM-Parts.md) is missing hi-level convention and too early days.<br/>
+[_Template Instantiation_](https://github.com/w3c/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md) proposal is limited only to template elements.<br/>
+[_DOM Parts_](https://github.com/WICG/webcomponents/blob/gh-pages/proposals/DOM-Parts.md) proposal is missing hi-level convention and too early days.<br/>
 _Element-params_ takes convention of template parts and generalizes to any elements.
+
+## Features
 
 - Drop-in vanilla ESM, no tooling.
 - Improved [@github/template-parts](https://github.com/domenic/template-parts) parser.
