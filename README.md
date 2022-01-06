@@ -1,10 +1,10 @@
-# template-parts
+# tmpl-parts
 
-> DOM template parts for any elements
+> Template parts for any elements
 
 [Template Instantiation](https://github.com/w3c/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md) is limited to _\<template\>_ only;
 [DOM Parts](https://github.com/WICG/webcomponents/blob/gh-pages/proposals/DOM-Parts.md) lack hi-level convention and too early days.<br/>
-This library enables template parts for any elements.
+_Tmpl-parts_ enables template parts for any elements.
 
 - Drop-in vanilla ESM, no tooling.
 - Improved [@github/template-parts](https://github.com/github/template-parts) parser.
@@ -52,7 +52,7 @@ This way, for example, _rxjs_ can be streamed directly to element attribute or c
  -->
 ## Processor
 
-_Template-parts_ support any [standard](https://github.com/WICG/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md#32-template-parts-and-custom-template-process-callback) parts processor, eg. [@github/template-parts](https://github.com/github/template-parts):
+_Tmpl-parts_ support any [standard](https://github.com/WICG/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md#32-template-parts-and-custom-template-process-callback) parts processor, eg. [@github/template-parts](https://github.com/github/template-parts):
 <!--
 ```js
 const parts = params(element, params, {
