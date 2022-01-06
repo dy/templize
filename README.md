@@ -2,8 +2,9 @@
 
 > Template parts for elements.
 
-[Template Instantiation](https://github.com/w3c/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md) is limited only to `<template>` elements. [DOM Parts](https://github.com/WICG/webcomponents/blob/gh-pages/proposals/DOM-Parts.md) is missing hi-level convention and too early days, even [name is not stabilized](https://github.com/WICG/webcomponents/issues/902)).
-_Element-Params_ generalizes convention of _Template Parts_ to any elements.
+[Template Instantiation](https://github.com/w3c/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md) is limited only to _\<template\>_ elements. [DOM Parts](https://github.com/WICG/webcomponents/blob/gh-pages/proposals/DOM-Parts.md) is missing hi-level convention and [too early days](https://github.com/WICG/webcomponents/issues/902).
+
+_Element-params_ generalizes convention of _template parts_ to any elements with improvements:
 
 - Drop-in vanilla ESM, no tooling.
 - Minimal implementation.
