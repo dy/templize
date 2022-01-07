@@ -43,7 +43,7 @@ params.x = 'Goodbye'
 
 _Tpl-Parts_ provide [spec surface](https://github.com/WICG/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md#32-template-parts-and-custom-template-process-callback):
 
-<details><summary>Show spec interface<summary>
+<details><summary>Show spec interface</summary>
 
 ```js
 callback TemplateProcessCallback = void (TemplateInstance, sequence<TemplatePart>, any state);
