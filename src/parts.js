@@ -1,7 +1,7 @@
 import { parse } from './parse.js'
-import { direct } from './processor.js'
+import { values } from './index.js'
 
-export default (node, params={}, processor=direct) => {
+export default (node, params={}, processor=values) => {
   let parts = parse(node),
       // throttled for batch update, but - first set is immediate, rest is throttled
       planned,

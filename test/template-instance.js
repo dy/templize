@@ -140,7 +140,7 @@ const propertyIdentityOrBooleanAttribute = {
           typeof value === 'boolean' &&
           part instanceof AttributeTemplatePart &&
           typeof part.element[part.attributeName] === 'boolean'
-        ) part.booleanValue = value, console.log(part, value)
+        ) part.booleanValue = value
         else part.value = value
       }
     }

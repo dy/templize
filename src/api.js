@@ -2,12 +2,18 @@
 // https://github.com/WICG/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md#32-template-parts-and-custom-template-process-callback
 import updateNodes from './lib/diff.js'
 import { parse } from './parse.js'
-import { direct } from './processor.js'
+
+export const values = {
+  processCallback(instance, parts, state) {
+    if (!state) return
+    for (const part of parts) if (part.expression in state) part.value = state[part.expression]
+  }
+}
 
 export class TemplateInstance extends DocumentFragment {
   #parts
   #processor
-  constructor(template, params, processor=direct) {
+  constructor(template, params, processor=values) {
     super()
     this.appendChild(template.content.cloneNode(true))
     this.#parts = parse(this)

@@ -23,6 +23,8 @@
   "scripts": {
     "build": "rollup src/index.js --file tpl-parts.js --format esm",
     "minify": "terser tpl-parts.js -o tpl-parts.min.js --module -c passes=3 -m",
+    "build-processor": "rollup src/processor.js --file processor.js --format esm",
+    "minify-processor": "terser processor.js -o processor.min.js --module -c passes=3 -m",
     "test": "node test"
   },
   "devDependencies": {

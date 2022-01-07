@@ -1,8 +1,15 @@
 # plan
 
+* [ ] externalize & share deps
+
 * [ ] tables
 
 * [ ] tests
+  * [ ] Parts test
+  * [ ] updated github-parts tests
+  * [ ] expression-processor
+  * [ ] combine-processor
+  * [ ] reactive processor
 
 * [ ] default processor:
   1. default processor = expression + reactivity

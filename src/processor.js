@@ -2,14 +2,7 @@
 import parse from './lib/subscript.js'
 import { sube, observable } from './lib/sube.js'
 
-export const direct = {
-  processCallback(instance, parts, state) {
-    if (!state) return
-    for (const part of parts) if (part.expression in state) part.value = state[part.expression]
-  }
-},
-
-combine = (...processors) => ({
+export const combine = (...processors) => ({
   createCallback: (a,b,c) => processors.map(p => p.createCallback?.(a,b,c)),
   processCallback: (a,b,c) => processors.map(p => p.processCallback?.(a,b,c))
 }),
