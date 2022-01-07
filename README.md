@@ -189,7 +189,8 @@ This way, for example, _rxjs_ can be streamed directly to element attribute or c
 To combine processors, use `combine`:
 
 ```js
-import Parts, { expressions, reactivity, combine } from './template-parts.js'
+import Parts from './template-parts.js'
+import { expressions, reactivity, combine } from './processor.js'
 
 const params = Parts(el, {}, combine(expressions, reactivity))
 ```
@@ -216,7 +217,7 @@ Any _template-parts_ processor can also be used with other template parts librar
 
 ```js
 import { TemplateInstance } from '@github/template-parts'
-import { expressions } from 'template-parts'
+import { expressions } from 'template-parts/processor'
 
 const instance = new TemplateInstance(document.querySelector('my-template'), {}, expressions)
 ```

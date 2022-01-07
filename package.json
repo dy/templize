@@ -1,28 +1,28 @@
 {
-  "name": "tpl-parts",
+  "name": "template-parts",
   "version": "0.0.1",
   "description": "Element template parts",
   "bugs": {
-    "url": "https://github.com/spectjs/tpl-parts/issues"
+    "url": "https://github.com/spectjs/template-parts/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/spectjs/tpl-parts.git"
+    "url": "git+https://github.com/spectjs/template-parts.git"
   },
   "license": "MIT",
   "author": "Dmitry Iv.",
   "type": "module",
-  "main": "tpl-parts.js",
-  "module": "tpl-parts.js",
-  "browser": "tpl-parts.js",
+  "main": "template-parts.js",
+  "module": "template-parts.js",
+  "browser": "template-parts.js",
   "files": [
     "src",
-    "tpl-parts.js",
-    "tpl-parts.min.js"
+    "template-parts.js",
+    "template-parts.min.js"
   ],
   "scripts": {
-    "build": "rollup src/index.js --file tpl-parts.js --format esm",
-    "minify": "terser tpl-parts.js -o tpl-parts.min.js --module -c passes=3 -m",
+    "build": "rollup src/index.js --file template-parts.js --format esm",
+    "minify": "terser template-parts.js -o template-parts.min.js --module -c passes=3 -m",
     "build-processor": "rollup src/processor.js --file processor.js --format esm",
     "minify-processor": "terser processor.js -o processor.min.js --module -c passes=3 -m",
     "test": "node test"

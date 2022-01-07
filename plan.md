@@ -19,7 +19,7 @@
   2. default processor = mininmal direct values
     + expressions, reactivity are treeshakeable
     - extra code / knowledge to connect
-    + allows separating into entry
+    + [x] allows separating into entry
       → full bundle is problematic without tooling
       → also see https://github.com/github/template-parts/issues/39
 
