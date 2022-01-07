@@ -8,7 +8,7 @@ _Template-parts_ provide generic template parts for any elements, same time acti
 
 Difference from [@github/template-parts](https://github.com/github/template-parts):
 
-- Template parts available to any elements, not just `<template>`.
+- Available to any elements, not just `<template>`.
 - Drop-in vanilla ESM, no tooling.
 - [Improved](https://github.com/github/template-parts/issues/38) parser.
 - More complete spec [API surface](./src/api.js).
@@ -39,9 +39,7 @@ params.x = 'Goodbye'
 </script>
 ```
 
-## API
-
-_Template-parts_ cover minimal [spec surface](https://github.com/WICG/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md#32-template-parts-and-custom-template-process-callback):
+_Template-parts_ also cover [spec surface](https://github.com/WICG/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md#32-template-parts-and-custom-template-process-callback) and can be used as _Template Instance_:
 
 ```js
 import { TemplateInstance, NodeTemplatePart, AttributeTemplatePart } from './template-parts.js'
