@@ -41,11 +41,22 @@ params.x = 'Goodbye'
 
 ## API
 
-_Tpl-Parts_ provide [spec surface](https://github.com/WICG/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md#32-template-parts-and-custom-template-process-callback):
-
-<details><summary>Show spec interface</summary>
+_Tpl-Parts_ provide minimal [spec surface](https://github.com/WICG/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md#32-template-parts-and-custom-template-process-callback):
 
 ```js
+import { TemplateInstance, NodeTemplatePart, AttributeTemplatePart } from './tpl-parts.js'
+
+let tpl = new TemplateInstance(templateElement, initParams, processor)
+tpl.update(newParams)
+```
+
+<details><summary>Spec API</summary>
+
+```js
+interface TemplateInstance : DocumentFragment {
+    void update(any state);
+};
+
 callback TemplateProcessCallback = void (TemplateInstance, sequence<TemplatePart>, any state);
 
 dictionary TemplateTypeInit {
@@ -80,6 +91,7 @@ interface NodeTemplatePart : TemplatePart {
 };
 ```
 </details>
+
 
 ## Processor
 
