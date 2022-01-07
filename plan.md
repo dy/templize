@@ -12,6 +12,9 @@
   2. default processor = mininmal direct values
     + expressions, reactivity are treeshakeable
     - extra code / knowledge to connect
+    + allows separating into entry
+      → full bundle is problematic without tooling
+      → also see https://github.com/github/template-parts/issues/39
 
 * [x] bundle & minify
 
@@ -46,6 +49,7 @@
     + plays well with `import Parts from 'template-parts'`
     - can get obsolete if proposal gets renamed
       → unlikely - would require renaming all deps; it's rather stalling
+    + someone else will implement subpar quality
   * tmpl-parts.js
     + minimalistic scent
     + temple is one of the meanings
