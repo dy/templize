@@ -1,28 +1,28 @@
 {
-  "name": "tmpl-parts",
+  "name": "tpl-parts",
   "version": "0.0.1",
   "description": "Element template parts",
   "bugs": {
-    "url": "https://github.com/spectjs/tmpl-parts/issues"
+    "url": "https://github.com/spectjs/tpl-parts/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/spectjs/tmpl-parts.git"
+    "url": "git+https://github.com/spectjs/tpl-parts.git"
   },
   "license": "MIT",
   "author": "Dmitry Iv.",
   "type": "module",
-  "main": "tmpl-parts.js",
-  "module": "tmpl-parts.js",
-  "browser": "tmpl-parts.js",
+  "main": "tpl-parts.js",
+  "module": "tpl-parts.js",
+  "browser": "tpl-parts.js",
   "files": [
     "src",
-    "tmpl-parts.js",
-    "tmpl-parts.min.js"
+    "tpl-parts.js",
+    "tpl-parts.min.js"
   ],
   "scripts": {
-    "build": "rollup src/index.js --file tmpl-parts.js --format esm",
-    "minify": "terser tmpl-parts.js -o tmpl-parts.min.js --module -c passes=3 -m",
+    "build": "rollup src/index.js --file tpl-parts.js --format esm",
+    "minify": "terser tpl-parts.js -o tpl-parts.min.js --module -c passes=3 -m",
     "test": "node test"
   },
   "devDependencies": {

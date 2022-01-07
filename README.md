@@ -1,10 +1,10 @@
-# tmpl-parts
+# tpl-parts
 
 > Generic element template parts
 
 [Template Instantiation](https://github.com/w3c/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md) is limited to _\<template\>_ only;
 [DOM Parts](https://github.com/WICG/webcomponents/blob/gh-pages/proposals/DOM-Parts.md) lack hi-level convention and too early days.<br/>
-_Tmpl-parts_ generalizes template parts to any elements.
+_Tpl-parts_ generalizes template parts to any elements.
 
 - Drop-in vanilla ESM, no tooling.
 - Improved [@github/template-parts](https://github.com/github/template-parts) parser.
@@ -18,13 +18,13 @@ If either proposal lands, API will be assimilated.
 
 ## Usage
 
-Drop `tmpl-parts.js` into project folder and:
+Drop `tpl-parts.js` into project folder and:
 
 ```html
 <div id="foo" class="foo {{y}}">{{x}} world</div>
 
 <script type="module">
-import Parts from './tmpl-parts.js'
+import Parts from './tpl-parts.js'
 
 const params = Parts(document.getElementById('foo'), { x: 'Hello', y: 'bar'})
 // <div id="foo" class="foo bar">Hello world</div>
@@ -36,7 +36,7 @@ params.x = 'Goodbye'
 
 ## Processor
 
-_Tmpl-parts_ support any [standard](https://github.com/WICG/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md#32-template-parts-and-custom-template-process-callback) template parts processor:
+_Tpl-parts_ support any [standard](https://github.com/WICG/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md#32-template-parts-and-custom-template-process-callback) template parts processor:
 
 ```js
 const params = Parts(element, initState, {
@@ -71,7 +71,7 @@ For expressions support there is **expression processor** (based on [subscript](
 </header>
 
 <script>
-  import Parts, { expressions } from './tmpl-parts.js'
+  import Parts, { expressions } from './tpl-parts.js'
   const titleParams = Parts(
     document.querySelector('#title'),
     { user: { name: 'Hare Krishna', email: 'krishn@hari.om' }},
@@ -109,7 +109,7 @@ Update happens when any param changes:
 <div id="done">{{ done || '...' }}</div>
 
 <script type="module">
-  import Parts, { reactivity } from './tmpl-parts.js'
+  import Parts, { reactivity } from './tpl-parts.js'
 
   const done = new Promise(ok => setTimeout(() => ok('Done!'), 1000))
 
@@ -128,7 +128,7 @@ This way, for example, _rxjs_ can be streamed directly to element attribute or c
 To combine processors, use `combine`:
 
 ```js
-import Parts, { expressions, reactivity, combine } from './tmpl-parts.js'
+import Parts, { expressions, reactivity, combine } from './tpl-parts.js'
 
 const params = Parts(el, {}, combine(expressions, reactivity))
 ```
@@ -140,7 +140,7 @@ Each processor callback is called in sequence.
 Any external processor can be used with template-parts, eg. [@github/template-parts](https://github.com/github/template-parts):
 
 ```js
-import Parts from 'tmpl-parts'
+import Parts from 'tpl-parts'
 import { propertyIdentityOrBooleanAttribute } from '@github/template-parts'
 
 const params = Parts(
@@ -151,11 +151,11 @@ const params = Parts(
 params.hidden = true
 ```
 
-Any _tmpl-parts_ processor can also be used with other template parts libraries as:
+Any _tpl-parts_ processor can also be used with other template parts libraries as:
 
 ```js
 import { TemplateInstance } from '@github/template-parts'
-import { expressions } from 'tmpl-parts'
+import { expressions } from 'tpl-parts'
 
 const instance = new TemplateInstance(document.querySelector('my-template'), {}, expressions)
 ```

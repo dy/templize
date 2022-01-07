@@ -55,6 +55,9 @@
     + matches shortening of other projects
     + not nosey, doesn't stand out much
     - still confusing: apparently tmpl-parts is short from template-parts, but the API is different from github/template-parts and from standard: why?
+  * tpl-parts.js?
+    + shorter
+    + same valid
   * templ-parts.js?
   * element-parts
     + same as template-parts, generalized
