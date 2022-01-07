@@ -9,11 +9,14 @@ _Template-parts_ provide generic template parts for any elements, same time acti
 Difference from [@github/template-parts](https://github.com/github/template-parts):
 
 - Drop-in vanilla ESM, no tooling.
-- Improved parser.
+- [Improved](https://github.com/github/template-parts/issues/38) parser.
 - More complete spec [API surface](./src/api.js).
 - [`<table>{{ data }}</table>`](https://github.com/domenic/template-parts/issues/2) fixed.
-- Expression processor (based on [subscript](https://github.com/spectjs/subscript)).
-- Reactive processor.
+- Generic template parts for any elements entry.
+- Separate processors entry:
+  - Expression processor (based on [subscript](https://github.com/spectjs/subscript)).
+  - Reactive processor.
+  - Combining processor.
 <!-- - [`<svg width={{ width }}>`](https://github.com/github/template-parts/issues/26) and other cases fixed. -->
 
 If either proposal lands, API will be assimilated.
@@ -35,6 +38,48 @@ params.x = 'Goodbye'
 // <div id="foo" class="foo bar">Goodbye world</div>
 </script>
 ```
+
+## API
+
+_Template-Parts_ provide [spec surface](https://github.com/WICG/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md#32-template-parts-and-custom-template-process-callback):
+
+<details><summary>Show spec interface<summary>
+
+```js
+callback TemplateProcessCallback = void (TemplateInstance, sequence<TemplatePart>, any state);
+
+dictionary TemplateTypeInit {
+    TemplateProcessCallback processCallback;
+    TemplateProcessCallback? createCallback;
+};
+
+partial interface Document {
+    void defineTemplateType(DOMString type, TemplateTypeInit typeInit);
+};
+
+interface TemplatePart {
+    readonly attribute DOMString expression;
+    attribute DOMString? value;
+    stringifier;
+};
+
+interface AttributeTemplatePart : TemplatePart {
+    readonly attribute Element element;
+    readonly attribute DOMString attributeName;
+    readonly attribute DOMString attributeNamespace;
+    attribute boolean booleanValue;
+};
+
+interface NodeTemplatePart : TemplatePart {
+    readonly attribute ContainerNode parentNode;
+    readonly attribute Node? previousSibling;
+    readonly attribute Node? nextSibling;
+    [NewObject] readonly NodeList replacementNodes;
+    void replace((Node or DOMString)... nodes);
+    void replaceHTML(DOMString html);
+};
+```
+</summary>
 
 ## Processor
 
