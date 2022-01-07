@@ -13,7 +13,7 @@ Difference from [@github/template-parts](https://github.com/github/template-part
 - More complete spec [API surface](./src/api.js).
 - [`<table>{{ data }}</table>`](https://github.com/domenic/template-parts/issues/2) fixed.
 - Generic template parts for any elements entry.
-- Separate processors entry:
+- Separate `processors.js` entry:
   - Expression processor (based on [subscript](https://github.com/spectjs/subscript)).
   - Reactive processor.
   - Combining processor.
