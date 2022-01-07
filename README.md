@@ -79,7 +79,7 @@ interface NodeTemplatePart : TemplatePart {
     void replaceHTML(DOMString html);
 };
 ```
-</summary>
+</details>
 
 ## Processor
 
