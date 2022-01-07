@@ -1,16 +1,21 @@
 // minimal Template Instance API surface
 // https://github.com/WICG/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md#32-template-parts-and-custom-template-process-callback
 import updateNodes from './lib/diff.js'
-import Parts from './index.js'
+import { parse } from './parse.js'
+import { direct } from './processor.js'
 
 export class TemplateInstance extends DocumentFragment {
-  #params
-  constructor(template, params, processor) {
+  #parts
+  #processor
+  constructor(template, params, processor=direct) {
     super()
     this.appendChild(template.content.cloneNode(true))
-    this.#params = Parts(this, params, processor)
+    this.#parts = parse(this)
+    this.#processor = processor
+    processor.createCallback?.(this, this.#parts, params)
+    processor.processCallback?.(this, this.#parts, params)
   }
-  update(params) { Object.assign(this.#params, params) }
+  update(params) { this.#processor.processCallback?.(this, this.#parts, params) }
 }
 
 export class TemplatePart {

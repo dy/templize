@@ -1,7 +1,7 @@
 import './parser.js'
-import './template-instance.js'
 import './attribute.js'
 import './processor.js'
+import './template-instance.js'
 import './table.js'
 
 
