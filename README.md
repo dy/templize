@@ -1,4 +1,4 @@
-# template-parts
+# tpl-parts
 
 > Generic element template parts
 
@@ -23,13 +23,13 @@ If either proposal lands, API will be assimilated.
 
 ## Usage
 
-Drop `template-parts.js` into project folder and:
+Drop `tpl-parts.js` into project folder and:
 
 ```html
 <div id="foo" class="foo {{y}}">{{x}} world</div>
 
 <script type="module">
-import Parts from './template-parts.js'
+import Parts from './tpl-parts.js'
 
 const params = Parts(document.getElementById('foo'), { x: 'Hello', y: 'bar'})
 // <div id="foo" class="foo bar">Hello world</div>
@@ -41,7 +41,7 @@ params.x = 'Goodbye'
 
 ## API
 
-_Template-Parts_ provide [spec surface](https://github.com/WICG/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md#32-template-parts-and-custom-template-process-callback):
+_Tpl-Parts_ provide [spec surface](https://github.com/WICG/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md#32-template-parts-and-custom-template-process-callback):
 
 <details><summary>Show spec interface<summary>
 
@@ -118,7 +118,7 @@ For expressions support there is **expression processor** (based on [subscript](
 </header>
 
 <script>
-  import Parts, { expressions } from './template-parts.js'
+  import Parts, { expressions } from './tpl-parts.js'
   const titleParams = Parts(
     document.querySelector('#title'),
     { user: { name: 'Hare Krishna', email: 'krishn@hari.om' }},
@@ -156,7 +156,7 @@ Update happens when any param changes:
 <div id="done">{{ done || '...' }}</div>
 
 <script type="module">
-  import Parts, { reactivity } from './template-parts.js'
+  import Parts, { reactivity } from './tpl-parts.js'
 
   const done = new Promise(ok => setTimeout(() => ok('Done!'), 1000))
 
@@ -175,7 +175,7 @@ This way, for example, _rxjs_ can be streamed directly to element attribute or c
 To combine processors, use `combine`:
 
 ```js
-import Parts, { expressions, reactivity, combine } from './template-parts.js'
+import Parts, { expressions, reactivity, combine } from './tpl-parts.js'
 
 const params = Parts(el, {}, combine(expressions, reactivity))
 ```
