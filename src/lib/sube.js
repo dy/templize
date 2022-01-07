@@ -11,7 +11,7 @@ export const sube = (target, next, stop) => (
     (
       target.then?.(v => !stop && next(v)) ||
       (async _ => { for await (target of target) { if (stop) return; next(target) } })()
-    ) && _ => stop=1
+    ) && (_ => stop=1)
   )
 ),
 

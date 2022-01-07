@@ -1,6 +1,5 @@
 import test, {is} from './lib/tst.js'
-import TemplateInstance from '../src/index.js'
-import {AttributeTemplatePart} from '../src/api.js'
+import {TemplateInstance, AttributeTemplatePart} from '../src/api.js'
 
 
 test('create: applies data to templated text nodes', () => {
@@ -73,7 +72,7 @@ test('create: it allows spaces inside template part identifiers', () => {
   root.appendChild(instance)
   is(root.innerHTML, `<div class="my-foo-state bar">baz</div>`)
 })
-test.only('create: never writes mustache syntax into an instantiated template even if no state given', () => {
+test('create: never writes mustache syntax into an instantiated template even if no state given', () => {
   const template = document.createElement('template')
   const originalHTML = `<div class="my-{{ x }}-state {{ y }}">{{ z }}</div>`
   template.innerHTML = originalHTML

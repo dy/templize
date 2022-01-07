@@ -1,10 +1,9 @@
 import test, {is} from './lib/tst.js'
-import {TemplateInstance} from '../template-parts.js'
+import {TemplateInstance} from '../src/api.js'
 
 const originalHTML = `Hello {{x}}!`
 const processor = {
   calls:0,
-
   createCallback() {
     return this.processCallback(...arguments)
   },
@@ -27,7 +26,7 @@ test('processor: creates a processor calling the given function when the param e
 
   processor.calls = 0
   const instance = new TemplateInstance(template, {x: 'world'}, processor)
-  is(processor.calls, 1)
+  is(processor.calls, 2)
   instance.update({x: 'foo'})
   is(processor.calls, 2)
   instance.update({})

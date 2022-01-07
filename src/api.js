@@ -1,12 +1,24 @@
 // minimal Template Instance API surface
+// https://github.com/WICG/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md#32-template-parts-and-custom-template-process-callback
 import updateNodes from './lib/diff.js'
+import Parts from './index.js'
 
-export class Part {
+export class TemplateInstance extends DocumentFragment {
+  #params
+  constructor(template, params, processor) {
+    super()
+    this.appendChild(template.content.cloneNode(true))
+    this.#params = Parts(this, params, processor)
+  }
+  update(params) { Object.assign(this.#params, params) }
+}
+
+export class TemplatePart {
   constructor(setter, expr) { this.setter = setter, this.expression = expr }
   toString() { return this.value; }
 }
 
-export class AttrPart extends Part {
+export class AttributeTemplatePart extends TemplatePart {
   #value = '';
   get attributeName() { return this.setter.attr.name; }
   get attributeNamespace() { return this.setter.attr.namespaceURI; }
@@ -29,8 +41,9 @@ export class AttrPart extends Part {
   }
 }
 
-export class NodePart extends Part {
-  #nodes = []
+export class NodeTemplatePart extends TemplatePart {
+  #nodes = [new Text]
+  get replacementNodes() { return this.#nodes }
   get parentNode() { return this.setter.parentNode; }
   get nextSibling() { return this.#nodes[this.#nodes.length-1].nextSibling; }
   get previousSibling() { return this.#nodes[0].previousSibling; }

@@ -23,7 +23,7 @@
   . booleanProcessor can handle bool attribs
   → combine method
 
-* [x] name: tmpl-parts
+* [ ] name: tmpl-parts
   ? what would be the name, sustainable for at least 10-15 years?
   ? what would be the name if no npm limitations?
   ? what would be the name radical, meaningful, short... reflecting spirit: tiny, fast, right?
@@ -54,12 +54,16 @@
     + no confusion with github or in readme
     + matches shortening of other projects
     + not nosey, doesn't stand out much
+    - still confusing: apparently tmpl-parts is short from template-parts, but the API is different from github/template-parts and from standard: why?
   * templ-parts.js?
   * element-parts
     + same as template-parts, generalized
     - a bit too far from templating, not obvious what parts, like, constituents or what?
-  * templatize.js, templatize-element.js, templatized.js, templatizer.js
-    - not fan of z in name
+  * element-template? element-templatize?
+  * element-template-parts?
+  * templatize-element.js? templatize.js? templatized.js? templatizer.js?
+    - harsh z in name
+    - templatize is taken
   * templatize-element.js, templ-elem.js
   * tempeh.js
     + funny

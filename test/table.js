@@ -1,6 +1,6 @@
 
 import test, {is} from './lib/tst.js'
-import {TemplateInstance} from '../template-parts.js'
+import {TemplateInstance} from '../src/api.js'
 
 test('table: default HTML behavior', () => {
   let tpl = document.createElement('template')
