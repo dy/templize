@@ -8,11 +8,11 @@ _Template-parts_ provide generic template parts for any elements, same time acti
 
 Difference from [@github/template-parts](https://github.com/github/template-parts):
 
+- Generic template parts for any elements.
 - Drop-in vanilla ESM, no tooling.
 - [Improved](https://github.com/github/template-parts/issues/38) parser.
 - More complete spec [API surface](./src/api.js).
 - [`<table>{{ data }}</table>`](https://github.com/domenic/template-parts/issues/2) fixed.
-- Generic template parts for any elements entry.
 - Separate `processors.js` entry:
   - Expression processor (based on [subscript](https://github.com/spectjs/subscript)).
   - Reactive processor.
