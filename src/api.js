@@ -33,7 +33,7 @@ export class AttributeTemplatePart extends TemplatePart {
     this.#value = newValue
     const { attr, element, parts } = this.setter;
     if (parts.length === 1) { // fully templatized
-      if (parts[0].value === null) element.removeAttributeNS(attr.namespaceURI, attr.name);
+      if (newValue == null) element.removeAttributeNS(attr.namespaceURI, attr.name);
       else element.setAttributeNS(attr.namespaceURI, attr.name, newValue);
     } else element.setAttributeNS(attr.namespaceURI, attr.name, parts.join(''));
   }
@@ -41,7 +41,7 @@ export class AttributeTemplatePart extends TemplatePart {
     this.setter.element.hasAttribute(this.setter.attr.name);
   }
   set booleanValue(value) {
-    if (this.setter.parts.length === 1) this.value = '';
+    if (this.setter.parts.length === 1) this.value = value ? '' : null;
     else throw new DOMException('Value is not fully templatized');
   }
 }

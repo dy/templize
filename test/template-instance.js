@@ -140,7 +140,7 @@ const propertyIdentityOrBooleanAttribute = {
           typeof value === 'boolean' &&
           part instanceof AttributeTemplatePart &&
           typeof part.element[part.attributeName] === 'boolean'
-        ) part.booleanValue = value
+        ) part.booleanValue = value, console.log(part, value)
         else part.value = value
       }
     }
@@ -154,8 +154,10 @@ test('update: allows attributes to be toggled on and off', () => {
   const root = document.createElement('div')
   root.appendChild(instance)
   is(root.innerHTML, `<div hidden=""></div>`)
+
   instance.update({hidden: false})
   is(root.innerHTML, `<div></div>`)
+
   instance.update({hidden: 'hidden'})
   is(root.innerHTML, `<div hidden="hidden"></div>`)
 })
