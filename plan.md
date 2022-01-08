@@ -6,12 +6,12 @@
 
 * [ ] tests
   * [ ] Parts test
-  * [ ] updated github-parts tests
+  * [x] updated github-parts tests
   * [ ] expression-processor
   * [ ] combine-processor
   * [ ] reactive processor
 
-* [ ] default processor:
+* [x] default processor:
   1. default processor = expression + reactivity
     + easy to get started not to think much
     - overhead if use-case doesn't need expressions or reactivity

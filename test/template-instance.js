@@ -245,3 +245,78 @@ test('update: replaces an empty replace() call with an empty text node', () => {
   root.appendChild(instance)
   is(root.innerHTML, `<div></div>`)
 })
+
+
+test('createCallback: is called once on construction, if present', () => {
+  const template = document.createElement('template')
+  template.innerHTML = `<div>{{a}}</div>`
+  let createCallCount = 0
+  new TemplateInstance(
+    template,
+    {a: true},
+    {
+      createCallback() {
+        createCallCount += 1
+      },
+      processCallback() {
+        return
+      }
+    }
+  )
+  is(createCallCount, 1)
+})
+
+test('createCallback: is not called on update', () => {
+  const template = document.createElement('template')
+  template.innerHTML = `<div>{{a}}</div>`
+  let createCallCount = 0
+  const instance = new TemplateInstance(
+    template,
+    {a: true},
+    {
+      createCallback() {
+        createCallCount += 1
+      },
+      processCallback() {
+        return
+      }
+    }
+  )
+  is(createCallCount, 1)
+  instance.update({a: false})
+  is(createCallCount, 1)
+})
+
+test('processCallback: is called on construction', () => {
+  const template = document.createElement('template')
+  template.innerHTML = `<div>{{a}}</div>`
+  let processCallCount = 0
+  new TemplateInstance(
+    template,
+    {a: true},
+    {
+      processCallback() {
+        processCallCount += 1
+      }
+    }
+  )
+  is(processCallCount, 1)
+})
+
+test('processCallback: is called on update', () => {
+  const template = document.createElement('template')
+  template.innerHTML = `<div>{{a}}</div>`
+  let processCallCount = 0
+  const instance = new TemplateInstance(
+    template,
+    {a: true},
+    {
+      processCallback() {
+        processCallCount += 1
+      }
+    }
+  )
+  is(processCallCount, 1)
+  instance.update({a: false})
+  is(processCallCount, 2)
+})
