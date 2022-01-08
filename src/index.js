@@ -1,5 +1,5 @@
 import { parse } from './parse.js'
-import { values } from './index.js'
+import { values } from './api.js'
 
 export default (node, params={}, processor=values) => {
   let parts = parse(node),
