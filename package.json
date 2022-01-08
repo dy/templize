@@ -17,6 +17,8 @@
   "browser": "template-parts.js",
   "files": [
     "src",
+    "processor.js",
+    "processor.min.js",
     "template-parts.js",
     "template-parts.min.js"
   ],
