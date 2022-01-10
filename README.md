@@ -1,4 +1,4 @@
-# template-parts
+# element-parts
 
 > Generic DOM template parts
 
