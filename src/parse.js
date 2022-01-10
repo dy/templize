@@ -30,10 +30,13 @@ export const parse = (element, parts=[]) => {
       // logic: for every empty node in a table there is meant to be part before the table.
       if ((table = node.nextSibling)?.tagName === 'TABLE') {
         for (slot of table.matches(':empty') ? [table] : table.querySelectorAll('*:empty')) {
+          console.group(table.cloneNode(true).innerHTML, slot.cloneNode(true).innerHTML)
           if (setter.parts[setter.parts.length - 1] instanceof NodeTemplatePart)
             parts.pop(),
             slot.appendChild(new Text(`{{ ${ setter.parts.pop().expression } }}`)),
-            setter.parts.push(new Text) // we have to stub removed field to keep children count
+            setter.parts.push(new Text), // we have to stub removed field to keep children count
+            console.log('eventually',slot)
+          console.groupEnd()
         }
       }
 
@@ -51,23 +54,17 @@ tokenize = (text) => {
   if (tokens) return tokens; else tokens = []
 
   for (; c=text[i]; i++) {
-    if (c === '{' && text[i+1] === '{' && text[i-1] !== '\\' && text[i+2]) {
-      if (++open===1) {
-        if (value) tokens.push([STRING, value ]);
-        value = '';
-        i += 2;
-      }
+    if (c === '{' && text[i+1] === '{' && text[i-1] !== '\\' && text[i+2] && ++open==1) {
+      if (value) tokens.push([STRING, value ]);
+      value = '';
+      i ++;
     }
-    else if (c === '}' && text[i+1] === '}' && text[i-1] !== '\\') {
-      if (!--open) {
-        open = false;
-        tokens.push([PART, value.trim() ]);
-        value = '';
-        i += 2;
-      }
+    else if (c === '}' && text[i+1] === '}' && text[i-1] !== '\\' && !--open) {
+      tokens.push([PART, value.trim() ]);
+      value = '';
+      i ++;
     }
-
-    value += text[i] || ''; // text[i] is undefined if i+=2 caught
+    else value += text[i] || ''; // text[i] is undefined if i+=2 caught
   }
   if (value) tokens.push([STRING, value ]);
 

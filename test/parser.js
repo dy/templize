@@ -54,3 +54,11 @@ test('parse: ignores internal parens', () => {
     [STRING, ' world'],
   ])
 })
+
+test('parse: parses sequence of inserts', () => {
+  is(Array.from(tokenize('{{a}}{{b}}{{c}}')), [
+    [PART,'a'],
+    [PART,'b'],
+    [PART,'c']
+  ])
+})
