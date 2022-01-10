@@ -1,10 +1,10 @@
 # element-parts
 
-> Generic DOM template parts
+> DOM template parts for any elements
 
 [Template Instantiation](https://github.com/w3c/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md) is limited to _\<template\>_ only;
 [DOM Parts](https://github.com/WICG/webcomponents/blob/gh-pages/proposals/DOM-Parts.md) lack hi-level convention and too early days.<br/>
-_Template-parts_ provide generic template parts for any elements, same time acting as spec ponyfill.
+_Element-parts_ provide generic template parts for any elements, same time acting as spec ponyfill.
 
 Difference from [@github/template-parts](https://github.com/github/template-parts):
 
@@ -23,13 +23,13 @@ If either proposal lands, API will be assimilated.
 
 ## Usage
 
-Drop `template-parts.js` into project folder and:
+Drop `element-parts.js` into project folder and:
 
 ```html
 <div id="foo" class="foo {{y}}">{{x}} world</div>
 
 <script type="module">
-import Parts from './template-parts.js'
+import Parts from './element-parts.js'
 
 const params = Parts(document.getElementById('foo'), { x: 'Hello', y: 'bar'})
 // <div id="foo" class="foo bar">Hello world</div>
@@ -39,10 +39,10 @@ params.x = 'Goodbye'
 </script>
 ```
 
-_Template-parts_ also cover [spec surface](https://github.com/WICG/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md#32-template-parts-and-custom-template-process-callback) and can be used as _Template Instance_:
+_Element-parts_ also cover [spec surface](https://github.com/WICG/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md#32-template-parts-and-custom-template-process-callback) and can be used as _Template Instance_:
 
 ```js
-import { TemplateInstance, NodeTemplatePart, AttributeTemplatePart } from './template-parts.js'
+import { TemplateInstance, NodeTemplatePart, AttributeTemplatePart } from './element-parts.js'
 
 let tpl = new TemplateInstance(templateElement, initParams, processor)
 tpl.update(newParams)
@@ -93,7 +93,7 @@ interface NodeTemplatePart : TemplatePart {
 
 ## Processor
 
-_Tpl-parts_ support any [standard](https://github.com/WICG/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md#32-template-parts-and-custom-template-process-callback) template parts processor:
+_Element-parts_ support any [standard](https://github.com/WICG/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md#32-template-parts-and-custom-template-process-callback) template parts processor:
 
 ```js
 const params = Parts(element, initState, {
@@ -128,7 +128,7 @@ For expressions support there is **expression processor** (based on [subscript](
 </header>
 
 <script>
-  import Parts from './template-parts.js'
+  import Parts from './element-parts.js'
   import { expressions } from './processor.js'
   const titleParams = Parts(
     document.querySelector('#title'),
@@ -167,7 +167,7 @@ Update happens when any param changes:
 <div id="done">{{ done || '...' }}</div>
 
 <script type="module">
-  import Parts from './template-parts.js'
+  import Parts from './element-parts.js'
   import { reactivity } from './processor.js'
 
   const done = new Promise(ok => setTimeout(() => ok('Done!'), 1000))
@@ -187,7 +187,7 @@ This way, for example, _rxjs_ can be streamed directly to element attribute or c
 To combine processors, use `combine`:
 
 ```js
-import Parts from './template-parts.js'
+import Parts from './element-parts.js'
 import { expressions, reactivity, combine } from './processor.js'
 
 const params = Parts(el, {}, combine(expressions, reactivity))
@@ -197,10 +197,10 @@ Each processor callback is called in sequence.
 
 ### External processors
 
-Any external processor can be used with template-parts, eg. [@github/template-parts](https://github.com/github/template-parts):
+Any external processor can be used with element-parts, eg. [@github/template-parts](https://github.com/github/template-parts):
 
 ```js
-import Parts from 'template-parts'
+import Parts from 'element-parts'
 import { propertyIdentityOrBooleanAttribute } from '@github/template-parts'
 
 const params = Parts(
@@ -211,11 +211,11 @@ const params = Parts(
 params.hidden = true
 ```
 
-Any _template-parts_ processor can also be used with other template parts libraries as:
+Any _element-parts_ processor can also be used with other template parts libraries as:
 
 ```js
 import { TemplateInstance } from '@github/template-parts'
-import { expressions } from 'template-parts/processor'
+import { expressions } from 'element-parts/processor'
 
 const instance = new TemplateInstance(document.querySelector('my-template'), {}, expressions)
 ```
