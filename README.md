@@ -1,6 +1,6 @@
 # element-parts
 
-> DOM template parts for any elements
+> Template parts for any elements
 
 [Template Instantiation](https://github.com/w3c/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md) is limited to _\<template\>_ only;
 [DOM Parts](https://github.com/WICG/webcomponents/blob/gh-pages/proposals/DOM-Parts.md) lack hi-level convention and too early days.<br/>
@@ -10,9 +10,9 @@ Difference from [@github/template-parts](https://github.com/github/template-part
 
 - Available to any elements, not just `<template>`.
 - Drop-in vanilla ESM, no tooling.
-- [Improved](https://github.com/github/template-parts/issues/38) parser.
+- Improved parser ([#38](https://github.com/github/template-parts/issues/38), [#44](https://github.com/github/template-parts/issues/44)).
 - More complete spec [API surface](./src/api.js).
-- [`<table>{{ data }}</table>`](https://github.com/domenic/template-parts/issues/2) is fixed.
+- `<table>{{ data }}</table>` support ([#24](https://github.com/domenic/template-parts/issues/2)).
 - Separate `processors.js` entry:
   - Expression processor (based on [subscript](https://github.com/spectjs/subscript)).
   - Reactive processor.
