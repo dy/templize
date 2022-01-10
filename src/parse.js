@@ -28,12 +28,15 @@ export const parse = (element, parts=[]) => {
       // AD-HOC: {{rows}}<table></table> → <table>{{ rows }}</table>
       // tabulars: caption, colgroup, col, thead, tbody, tfoot, tr, td, th
       // logic: for every empty node in a table there is meant to be part before the table.
-      if ((table = node.nextSibling)?.tagName === 'TABLE')
-        for (slot of table.hasChildNodes() ? table.querySelectorAll('*:empty') : [table])
+      if ((table = node.nextSibling)?.tagName === 'TABLE') {
+        for (slot of table.matches(':empty') ? [table] : table.querySelectorAll('*:empty')) {
           if (setter.parts[setter.parts.length - 1] instanceof NodeTemplatePart)
             parts.pop(),
             slot.appendChild(new Text(`{{ ${ setter.parts.pop().expression } }}`)),
             setter.parts.push(new Text) // we have to stub removed field to keep children count
+        }
+      }
+
       node.replaceWith(...setter.parts.flatMap(part => part.replacementNodes || [part]))
     }
   }
