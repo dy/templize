@@ -5,7 +5,7 @@ const ELEMENT = 1, TEXT = 3, STRING = 0, PART = 1,
 
 // collect element parts
 export const parse = (element, parts=[]) => {
-  let attr, node, setter, type, value, table, outParts, slot
+  let attr, node, setter, type, value, table, lastParts, slot, slots
 
   for (attr of element.attributes || []) {
     if (attr.value.includes('{{')) {
@@ -29,14 +29,16 @@ export const parse = (element, parts=[]) => {
       // tabulars: caption, colgroup, col, thead, tbody, tfoot, tr, td, th
       // logic: for every empty node in a table there is meant to be part before the table.
       if ((table = node.nextSibling)?.tagName === 'TABLE') {
-        for (slot of table.matches(':empty') ? [table] : table.querySelectorAll('*:empty')) {
-          console.group(table.cloneNode(true).innerHTML, slot.cloneNode(true).innerHTML)
-          if (setter.parts[setter.parts.length - 1] instanceof NodeTemplatePart)
-            parts.pop(),
-            slot.appendChild(new Text(`{{ ${ setter.parts.pop().expression } }}`)),
-            setter.parts.push(new Text), // we have to stub removed field to keep children count
-            console.log('eventually',slot)
-          console.groupEnd()
+        slots = table.matches(':empty') ? [table] : table.querySelectorAll('*:empty')
+
+        for (lastParts = []; lastParts.length < slots.length && setter.parts[setter.parts.length - 1] instanceof NodeTemplatePart;)
+          lastParts.push(setter.parts.pop())
+
+        for (slot of slots) {
+          if (lastParts.length)
+            parts.pop(), setter.parts.pop(),
+            slot.appendChild(new Text(`{{ ${ lastParts.pop().expression } }}`)),
+            setter.parts.push(new Text) // we have to stub removed field to keep children count
         }
       }
 
