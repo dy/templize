@@ -47,16 +47,19 @@
       - too loud
     - confusable with github
       → can provide reference
+        - still, confusable
     - confusion in readme with generic template parts
     - ~~no personality~~ → not needed - it's humble templating solution
     - ~~no much point over github~~ → point is generic element template parts
     - boring
       + it should not be too fun, it's service
+        - not just boring, closish association
     - ~~requires polyfill~~ → nope - it's not template instance
     + plays well with `import Parts from 'template-parts'`
     - can get obsolete if proposal gets renamed
       → unlikely - would require renaming all deps; it's rather stalling
     + someone else will implement subpar quality
+    - can be thought as ponyfill, but that's not the main point
   * tmpl-parts.js
     + minimalistic scent
     + temple is one of the meanings
@@ -73,6 +76,8 @@
   * element-parts
     + same as template-parts, generalized
     - a bit too far from templating, not obvious what parts, like, constituents or what?
+      + what? exactly what you'd imagine: parts of element looking at template, marked with `{{ a }}`
+    + element is better name
   * element-template? element-templatize?
   * element-template-parts?
   * templatize-element.js? templatize.js? templatized.js? templatizer.js?
