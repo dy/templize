@@ -1,27 +1,39 @@
 import { NodeTemplatePart, AttributeTemplatePart } from './api.js'
 
-const ELEMENT = 1, TEXT = 3,
-      mem = {}, STRING = 0, PART = 1
+const ELEMENT = 1, TEXT = 3, STRING = 0, PART = 1,
+      mem = {}
 
 // collect element parts
 export const parse = (element, parts=[]) => {
-  for (let attr of element.attributes || []) {
+  let attr, node, setter, type, value, table, outParts, slot
+
+  for (attr of element.attributes || []) {
     if (attr.value.includes('{{')) {
-      let setter = { element, attr, parts: [] }
-      for (let [type, value] of tokenize(attr.value))
+      setter = { element, attr, parts: [] }
+      for ([type, value] of tokenize(attr.value))
         if (!type) setter.parts.push(value)
         else value = new AttributeTemplatePart(setter, value), setter.parts.push(value), parts.push(value)
       attr.value = setter.parts.join('')
     }
   }
 
-  for (let node of element.childNodes) {
+  for (node of element.childNodes) {
     if (node.nodeType === ELEMENT) parse(node, parts)
     else if (node.nodeType === TEXT && node.data.includes('{{')) {
-      let setter = { parentNode: element, parts: [] }
-      for (let [type, value] of tokenize(node.data.trim()))
+      setter = { parentNode: element, parts: [] }
+      for ([type, value] of tokenize(node.data.trim()))
         if (!type) setter.parts.push(new Text(value))
         else value = new NodeTemplatePart(setter, value), setter.parts.push(value), parts.push(value)
+
+      // AD-HOC: {{rows}}<table></table> → <table>{{ rows }}</table>
+      // tabulars: caption, colgroup, col, thead, tbody, tfoot, tr, td, th
+      // logic: for every empty node in a table there is meant to be part before the table.
+      if ((table = node.nextSibling)?.tagName === 'TABLE')
+        for (slot of table.hasChildNodes() ? table.querySelectorAll('*:empty') : [table])
+          if (setter.parts[setter.parts.length - 1] instanceof NodeTemplatePart)
+            parts.pop(),
+            slot.appendChild(new Text(`{{ ${ setter.parts.pop().expression } }}`)),
+            setter.parts.push(new Text) // we have to stub removed field to keep children count
       node.replaceWith(...setter.parts.flatMap(part => part.replacementNodes || [part]))
     }
   }
