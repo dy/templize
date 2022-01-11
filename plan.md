@@ -4,6 +4,7 @@
   + js-familiar
   + 1 cost for easy errors detection benefit
   + reduced divergence with default subscript features
+  + allows extending subscript _for real_
 
 * [ ] make pipe a `|>` operator?
   + full js intuition

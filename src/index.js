@@ -7,15 +7,15 @@ export default (node, params={}, processor=values) => {
       // throttled for batch update
       update = () => {
         if (!planned) {
-          processor.processCallback?.(node, parts, params) // first set is immediate
+          processor.processCallback(node, parts, params) // first set is immediate
           planned = Promise.resolve().then(() => (
-            planned = null, processor.processCallback?.(node, parts, params)
+            planned = null, processor.processCallback(node, parts, params)
           )) // rest is throttled
         }
       }
 
   processor.createCallback?.(node, parts, params)
-  processor.processCallback?.(node, parts, params)
+  processor.processCallback(node, parts, params)
 
   return new Proxy(params,  {
     set: (state, k, v) => (state[k] = v, update(), 1),

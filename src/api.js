@@ -19,9 +19,9 @@ export class TemplateInstance extends DocumentFragment {
     this.#parts = parse(this)
     this.#processor = processor
     processor.createCallback?.(this, this.#parts, params)
-    processor.processCallback?.(this, this.#parts, params)
+    processor.processCallback(this, this.#parts, params)
   }
-  update(params) { this.#processor.processCallback?.(this, this.#parts, params) }
+  update(params) { this.#processor.processCallback(this, this.#parts, params) }
 }
 
 export class TemplatePart {
