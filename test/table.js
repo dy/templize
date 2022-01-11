@@ -2,7 +2,7 @@
 import test, {is, any} from './lib/tst.js'
 import {TemplateInstance} from '../src/api.js'
 
-test('table: default HTML behavior', () => {
+test.browser('table: default HTML behavior', () => {
   let tpl = document.createElement('template')
   tpl.innerHTML = `<table>123</table>`
   let instance = new TemplateInstance(tpl)
@@ -12,7 +12,7 @@ test('table: default HTML behavior', () => {
   is(el.innerHTML, `123<table></table>`)
 })
 
-test('table: <table>{{ rows }}</table>', () => {
+test.browser('table: <table>{{ rows }}</table>', () => {
   let tpl = document.createElement('template')
   tpl.innerHTML = `<table>{{ rows }}</table>`
   let instance = new TemplateInstance(tpl)
@@ -30,7 +30,7 @@ test('table: <table>{{ rows }}</table>', () => {
   ])
 })
 
-test('table: <table><!-- -->{{ rows }}</table>', () => {
+test.browser('table: <table><!-- -->{{ rows }}</table>', () => {
   let tpl = document.createElement('template')
   tpl.innerHTML = `<table><!-- -->{{ rows }}</table>`
   let instance = new TemplateInstance(tpl)
@@ -48,7 +48,7 @@ test('table: <table><!-- -->{{ rows }}</table>', () => {
   ])
 })
 
-test('table: <tbody>{{ rows }}</tbody>', () => {
+test.browser('table: <tbody>{{ rows }}</tbody>', () => {
   let tpl = document.createElement('template')
   tpl.innerHTML = `<table><tbody>{{ rows }}</tbody></table>`
   let instance = new TemplateInstance(tpl)
@@ -63,7 +63,7 @@ test('table: <tbody>{{ rows }}</tbody>', () => {
   is(el.innerHTML, `<table><tbody><tr><td>1</td><td>a</td></tr><tr><td>2</td><td>b</td></tr></tbody></table>`)
 })
 
-test('table: {{text}}<table><tr><td>1</td></tr></table>', () => {
+test.browser('table: {{text}}<table><tr><td>1</td></tr></table>', () => {
   let tpl = document.createElement('template')
   tpl.innerHTML = `{{ text }}<table><tr><td>1</td></tr></table>`
   let instance = new TemplateInstance(tpl, {text:'abc'})
@@ -76,7 +76,7 @@ test('table: {{text}}<table><tr><td>1</td></tr></table>', () => {
   ])
 })
 
-test('table: <table><thead>{{ rows }}</thead></table>', () => {
+test.browser('table: <table><thead>{{ rows }}</thead></table>', () => {
   // NOTE: thead, see next
   let tpl = document.createElement('template')
   tpl.innerHTML = `<table><thead>{{ thead }}</thead><tr>{{ tcontent }}</tr></table>`
@@ -97,7 +97,7 @@ test('table: <table><thead>{{ rows }}</thead></table>', () => {
   ])
 })
 
-test('table: {{ a }}<table><tr><td></td></tr></table>', () => {
+test.browser('table: {{ a }}<table><tr><td></td></tr></table>', () => {
   let tpl = document.createElement('template')
   tpl.innerHTML = `{{ a }}<table><tr><td></td></tr></table>`
 
@@ -111,7 +111,7 @@ test('table: {{ a }}<table><tr><td></td></tr></table>', () => {
   ])
 })
 
-test('table: <table><thead><tr>{{ a }}</tr></thead><tr>{{ b }}</tr></table>', () => {
+test.browser('table: <table><thead><tr>{{ a }}</tr></thead><tr>{{ b }}</tr></table>', () => {
   let tpl = document.createElement('template')
   tpl.innerHTML = `<table><thead><tr>{{ a }}</tr></thead><tr>{{ b }}</tr></table>`
 
