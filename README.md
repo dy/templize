@@ -137,18 +137,18 @@ For expressions support there is **expression processor** (based on [subscript](
 
 It supports the following common expressions:
 
-Part | Expression |  Note
+Part | Expression
 ---|---|---
-Direct Value | `{{ foo }}` |
-Property | `{{ foo.bar }}`, `{{ foo?.bar }}`, `{{ foo['bar'] }}` |
-Function call | `{{ foo(bar, baz) }}`, `{{ foo.bar(baz) }}` |
-Boolean operators | `{{ !foo }}`, `{{ foo && bar \|\| baz }}` |
-Ternary | `{{ foo ? bar : baz }}` |
-Primitives | `{{ 'foo' }}`, `{{ true }}`, `{{ 0.1 }}` |
-Comparison | `{{ foo == 1 }}`, `{{ bar != 2 }}` |
-Math operators | `{{ a * 2 + b / 3 }}` | See [common operators](https://github.com/spectjs/subscript#design).
-Pipe | `{{ bar \|> foo }}` | Same as `{{ foo(bar) }}`.
-Default fallback | `{{ foo ?? bar }}` |  |
+Value | `{{ foo }}`
+Property | `{{ foo.bar }}`, `{{ foo?.bar }}`, `{{ foo['bar'] }}`
+Call | `{{ foo(bar, baz) }}`, `{{ foo.bar(baz) }}`
+Boolean | `{{ !foo }}`, `{{ foo && bar \|\| baz }}`
+Ternary | `{{ foo ? bar : baz }}`
+Primitives | `{{ 'foo' }}`, `{{ true }}`, `{{ 0.1 }}`
+Comparison | `{{ foo == 1 }}`, `{{ bar != 2 }}`, `{{ bar > 2 }}`
+Math | `{{ a * 2 + b / 3 }}`
+Pipe | `{{ bar \|> foo }}`
+Defaults | `{{ foo ?? bar }}`
 <!-- Loop | `{{ item, idx in list }}` | `params.d` | Used for `:for` directive only -->
 <!-- Spread | `{{ ...foo }}` | `params.foo` | Used to pass multiple attributes or nodes -->
 
@@ -156,7 +156,7 @@ Default fallback | `{{ foo ?? bar }}` |  |
 
 There's also **reactive processor** for reactive values.
 
-It allows initial state to take either direct values or async types: _Promise_, _AsyncIterable_, _Observable_.<br/>
+It allows initial state to take async types: _Promise_/_Thenable_, _AsyncIterable_, _Observable_/_Subject_. <!-- see sube --><br/>
 Update happens when any param changes:
 
 ```html
@@ -216,16 +216,12 @@ import { expressions } from 'templize/processor'
 const instance = new TemplateInstance(document.querySelector('my-template'), {}, expressions)
 ```
 
-<!-- ## See also -->
-
-<!-- * [subscript](https://github.com/spectjs/subscript) − micro expression language. -->
-<!-- * [element-props](https://github.com/spectjs/element-props) − normalized access to element attributes / properties. -->
-<!-- * [define-element](https://github.com/spectjs/define-element) − declarative custom elements. -->
-
 ## See also
 
 * [subscript](https://github.com/spectjs/subscript) − composable template processor language.
 * [subscribable-things](https://github.com/chrisguttandin/subscribable-things) − reactive wrappers for various APIs.
+* [element-props](https://github.com/spectjs/element-props) − normalized access to element attributes / properties.
+<!-- * [define-element](https://github.com/spectjs/define-element) − declarative custom elements. -->
 
 ## Neighbors
 
