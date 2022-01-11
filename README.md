@@ -140,12 +140,12 @@ It supports the following common expressions:
 Part | Expression
 ---|---
 Value | `{{ foo }}`
-Property | `{{ foo.bar }}`, `{{ foo?.bar }}`, `{{ foo['bar'] }}`
-Call | `{{ foo(bar, baz) }}`, `{{ foo.bar(baz) }}`
-Boolean | `{{ !foo }}`, `{{ foo && bar \|\| baz }}`
+Property | `{{ foo.bar['baz']?.qux }}`
+Call | `{{ foo.bar(baz, qux) }}`
+Boolean | `{{ !foo && bar \|\| baz }}`
 Ternary | `{{ foo ? bar : baz }}`
 Primitives | `{{ 'foo' }}`, `{{ true }}`, `{{ 0.1 }}`
-Comparison | `{{ foo == 1 }}`, `{{ bar != 2 }}`, `{{ bar > 2 }}`
+Comparison | `{{ foo == 1, bar != 2 }}`
 Math | `{{ a * 2 + b / 3 }}`
 Pipe | `{{ bar \|> foo }}`
 Defaults | `{{ foo ?? bar }}`
