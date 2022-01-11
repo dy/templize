@@ -140,7 +140,7 @@ It supports the following common expressions:
 Part | Expression
 ---|---
 Value | `{{ foo }}`
-Property | `{{ foo.bar }}`, `{{ foo['bar'] }}`, `{{ foo?.bar }}`
+Property | `{{ foo.bar?.baz }}`, `{{ foo['bar'] }}`
 Call | `{{ foo.bar(baz, qux) }}`
 Boolean | `{{ !foo && bar \|\| baz }}`
 Ternary | `{{ foo ? bar : baz }}`
