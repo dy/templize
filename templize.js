@@ -44,10 +44,11 @@ class TemplateInstance extends DocumentFragment {
     this.appendChild(template.content.cloneNode(true));
     this.#parts = parse(this);
     this.#processor = processor;
+    params ||= {};
     processor.createCallback?.(this, this.#parts, params);
-    processor.processCallback?.(this, this.#parts, params);
+    processor.processCallback(this, this.#parts, params);
   }
-  update(params) { this.#processor.processCallback?.(this, this.#parts, params); }
+  update(params) { this.#processor.processCallback(this, this.#parts, params); }
 }
 
 class TemplatePart {
@@ -84,11 +85,12 @@ class NodeTemplatePart extends TemplatePart {
   get parentNode() { return this.setter.parentNode; }
   get nextSibling() { return this.#nodes[this.#nodes.length-1].nextSibling; }
   get previousSibling() { return this.#nodes[0].previousSibling; }
+  // FIXME: not sure why do we need string serialization here
   get value() { return this.#nodes.map(node=>node.textContent).join(''); }
   set value(newValue) { this.replace(newValue); }
   replace(...nodes) { // replace current nodes with new nodes.
     nodes = nodes.length ? nodes.flatMap(node =>
-      !node ? new Text :
+      !node ? [new Text(node)] :
       node.forEach ? [...node] :
       node.nodeType ? [node] :
       [new Text(node)]
@@ -177,21 +179,23 @@ tokenize = (text) => {
   return mem[text] = tokens
 };
 
-var index = (node, params={}, processor=values) => {
+var index = (node, params, processor=values) => {
   let parts = parse(node),
       planned,
       // throttled for batch update
       update = () => {
         if (!planned) {
-          processor.processCallback?.(node, parts, params); // first set is immediate
+          processor.processCallback(node, parts, params); // first set is immediate
           planned = Promise.resolve().then(() => (
-            planned = null, processor.processCallback?.(node, parts, params)
+            planned = null, processor.processCallback(node, parts, params)
           )); // rest is throttled
         }
       };
 
+  params ||= {};
+
   processor.createCallback?.(node, parts, params);
-  processor.processCallback?.(node, parts, params);
+  processor.processCallback(node, parts, params);
 
   return new Proxy(params,  {
     set: (state, k, v) => (state[k] = v, update(), 1),
