@@ -58,19 +58,14 @@ interface TemplateInstance : DocumentFragment {
 
 callback TemplateProcessCallback = void (TemplateInstance, sequence<TemplatePart>, any state);
 
-dictionary TemplateTypeInit {
+dictionary TemplateProcessor {
     TemplateProcessCallback processCallback;
     TemplateProcessCallback? createCallback;
-};
-
-partial interface Document {
-    void defineTemplateType(DOMString type, TemplateTypeInit typeInit);
 };
 
 interface TemplatePart {
     readonly attribute DOMString expression;
     attribute DOMString? value;
-    stringifier;
 };
 
 interface AttributeTemplatePart : TemplatePart {
