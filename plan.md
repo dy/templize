@@ -78,11 +78,25 @@
     - a bit too far from templating, not obvious what parts, like, constituents or what?
       + what? exactly what you'd imagine: parts of element looking at template, marked with `{{ a }}`
     + element is better name
-  * element-template? element-templatize?
-  * element-template-parts?
-  * templatize-element.js? templatize.js? templatized.js? templatizer.js?
+  * element-template.js?
+    + mention of template, mention of element
+    + no mention of `parts`, which is confusable with element.part from shadow-dom
+    - too generic?
+    - confusable with template element?
+  * element-templatize.js? element-templated.js?
+  * element-template-parts.js?
+  * templatize-element.js? templatize.js?
     - harsh z in name
     - templatize is taken
+  * templatized.js? templatizer.js? templated-element.js?
+  * tplize? tmplize? tpliz?
+  * tplr?
+  * templize?
+    + temple
+    + templatize
+    + template
+    + free
+    + spirit of spect naming
   * templatize-element.js, templ-elem.js
   * tempeh.js
     + funny

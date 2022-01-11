@@ -97,29 +97,55 @@ test('table: <table><thead>{{ rows }}</thead></table>', () => {
   ])
 })
 
+test('table: {{ a }}<table><tr><td></td></tr></table>', () => {
+  let tpl = document.createElement('template')
+  tpl.innerHTML = `{{ a }}<table><tr><td></td></tr></table>`
+
+  let instance = new TemplateInstance(tpl, {a: 123})
+
+  const el = document.createElement('div')
+  el.appendChild(instance)
+  any(el.innerHTML, [
+    `123<table><tr><td></td></tr></table>`,
+    `123<table><tbody><tr><td></td></tr></tbody></table>`
+  ])
+})
+
+test('table: <table><thead><tr>{{ a }}</tr></thead><tr>{{ b }}</tr></table>', () => {
+  let tpl = document.createElement('template')
+  tpl.innerHTML = `<table><thead><tr>{{ a }}</tr></thead><tr>{{ b }}</tr></table>`
+
+  let instance = new TemplateInstance(tpl, {a: 123, b:456})
+
+  const el = document.createElement('div')
+  el.appendChild(instance)
+  any(el.innerHTML, [
+    `<table><thead><tr>123</tr></thead><tr>456</tr></table>`,
+    `<table><thead><tr>123</tr></thead><tbody><tr>456</tr></tbody></table>`
+  ])
+})
+
+
 test.todo('table: {{ thead }}{{ tbody }}<table><thead></thead></table>', () => {
   // NOTE: if you wrap content into <thead> - also wrap into <tbody>
 })
 
 test.todo('table: <table>{{a}}<tbody></tbody>{{b}}</table> → {{a}}{{b}}<table><tbody></tbody></table>', () => {
+  // NOTE: same.
 })
 
 test.todo('table: <table>{{a}}{{b}}<tbody></tbody></table> → {{a}}{{b}}<table><tbody></tbody></table>', () => {
+  // NOTE: same
 })
 
-test.todo('table: <table><tr>{{ a }}</tr></table>', () => {
+test.todo('table: {{ prefix }}<table><thead>{{ thead }}</thead>{{ tbody }}</table>', () => {
+  // NOTE: same
 })
 
 test.todo('table: <table>{{ a }}<tr></tr></table>', () => {
 })
 
 test.todo('table: <table><tr></tr>{{ a }}</table>', () => {
-})
-
-test.todo('table: <table><thead><tr>{{ a }}</tr></thead><tr>{{ b }}</tr></table>', () => {
-})
-
-test.todo('table: {{ prefix }}<table><thead>{{ thead }}</thead>{{ tbody }}</table>', () => {
 })
 
 test.todo('table: <table>{{thead}}<tbody><!-- ... --></tbody></table>', () => {

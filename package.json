@@ -1,30 +1,30 @@
 {
-  "name": "element-parts",
+  "name": "templize",
   "version": "0.0.1",
   "description": "Element template parts",
   "bugs": {
-    "url": "https://github.com/spectjs/element-parts/issues"
+    "url": "https://github.com/spectjs/templize/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/spectjs/element-parts.git"
+    "url": "git+https://github.com/spectjs/templize.git"
   },
   "license": "MIT",
   "author": "Dmitry Iv.",
   "type": "module",
-  "main": "element-parts.js",
-  "module": "element-parts.js",
-  "browser": "element-parts.js",
+  "main": "templize.js",
+  "module": "templize.js",
+  "browser": "templize.js",
   "files": [
     "src",
     "processor.js",
     "processor.min.js",
-    "element-parts.js",
-    "element-parts.min.js"
+    "templize.js",
+    "templize.min.js"
   ],
   "scripts": {
-    "build": "rollup src/index.js --file element-parts.js --format esm",
-    "minify": "terser element-parts.js -o element-parts.min.js --module -c passes=3 -m",
+    "build": "rollup src/index.js --file templize.js --format esm",
+    "minify": "terser templize.js -o templize.min.js --module -c passes=3 -m",
     "build-processor": "rollup src/processor.js --file processor.js --format esm",
     "minify-processor": "terser processor.js -o processor.min.js --module -c passes=3 -m",
     "test": "node test"
