@@ -4,12 +4,12 @@
 
 [Template Instantiation](https://github.com/w3c/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md) is limited to _\<template\>_ only;
 [DOM Parts](https://github.com/WICG/webcomponents/blob/gh-pages/proposals/DOM-Parts.md) lack hi-level convention and too early days.<br/>
-_Templize_ provides generic template parts for any elements, same time ponyfilling minimal spec surface.
+_Templize_ provides generic template parts for any elements, same time covering minimal spec surface.
 
 Difference from [@github/template-parts](https://github.com/github/template-parts):
 
-- Works with any elements, not only `<template>`.
-- Drop-in vanilla ESM, no tooling.
+- Works with any elements.
+- Single vanilla ESM, no tooling.
 - Improved parser ([#38](https://github.com/github/template-parts/issues/38), [#44](https://github.com/github/template-parts/issues/44)).
 - More complete spec [API surface](./src/api.js).
 - `<table>{{ data }}</table>` support ([#24](https://github.com/domenic/template-parts/issues/2)).
@@ -29,9 +29,9 @@ Drop `templize.js` into project folder and:
 <div id="foo" class="foo {{y}}">{{x}} world</div>
 
 <script type="module">
-import Parts from './templize.js'
+import templize from './templize.js'
 
-const params = Parts(document.getElementById('foo'), { x: 'Hello', y: 'bar'})
+const params = templize(document.getElementById('foo'), { x: 'Hello', y: 'bar'})
 // <div id="foo" class="foo bar">Hello world</div>
 
 params.x = 'Goodbye'
@@ -39,7 +39,7 @@ params.x = 'Goodbye'
 </script>
 ```
 
-_Templize_ also cover [spec surface](https://github.com/WICG/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md#32-template-parts-and-custom-template-process-callback) and can be used as _Template Instance_:
+_Templize_ also covers [spec surface](https://github.com/WICG/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md#32-template-parts-and-custom-template-process-callback) and can be used as _Template Instance_:
 
 ```js
 import { TemplateInstance, NodeTemplatePart, AttributeTemplatePart } from './templize.js'
@@ -48,7 +48,7 @@ let tpl = new TemplateInstance(templateElement, initParams, processor)
 tpl.update(newParams)
 ```
 
-<details><summary>Spec</summary>
+<details><summary>Spec surface</summary>
 
 ```js
 interface TemplateInstance : DocumentFragment {
@@ -96,7 +96,7 @@ interface NodeTemplatePart : TemplatePart {
 _Templize_ support any [standard](https://github.com/WICG/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md#32-template-parts-and-custom-template-process-callback) template parts processor:
 
 ```js
-const params = Parts(element, initState, {
+const params = templize(element, initState, {
   createCallback(el, parts, state) {
     // ... init parts / parse expressions
   },
@@ -128,9 +128,9 @@ For expressions support there is **expression processor** (based on [subscript](
 </header>
 
 <script>
-  import Parts from './templize.js'
+  import templize from './templize.js'
   import { expressions } from './processor.js'
-  const titleParams = Parts(
+  const titleParams = templize(
     document.querySelector('#title'),
     { user: { name: 'Hare Krishna', email: 'krishn@hari.om' }},
     expressions
@@ -167,12 +167,12 @@ Update happens when any param changes:
 <div id="done">{{ done || '...' }}</div>
 
 <script type="module">
-  import Parts from './templize.js'
+  import templize from './templize.js'
   import { reactivity } from './processor.js'
 
   const done = new Promise(ok => setTimeout(() => ok('Done!'), 1000))
 
-  const params = Parts(document.querySelector('#done'), { done }, reactivity)
+  const params = templize(document.querySelector('#done'), { done }, reactivity)
 
   // <div id="done">...</div>
   // ... 1s after
@@ -187,10 +187,10 @@ This way, for example, _rxjs_ can be streamed directly to element attribute or c
 To combine processors, use `combine`:
 
 ```js
-import Parts from './templize.js'
+import templize from './templize.js'
 import { expressions, reactivity, combine } from './processor.js'
 
-const params = Parts(el, {}, combine(expressions, reactivity))
+const params = templize(el, {}, combine(expressions, reactivity))
 ```
 
 Each processor callback is called in sequence.
@@ -200,10 +200,10 @@ Each processor callback is called in sequence.
 Any external processor can be used with templize, eg. [@github/template-parts](https://github.com/github/template-parts):
 
 ```js
-import Parts from 'templize'
+import templize from 'templize'
 import { propertyIdentityOrBooleanAttribute } from '@github/template-parts'
 
-const params = Parts(
+const params = templize(
   document.getElementById('foo'),
   { x: 'Hello', hidden: false },
   propertyIdentityOrBooleanAttribute
