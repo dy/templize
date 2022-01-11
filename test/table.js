@@ -1,5 +1,5 @@
 
-import test, {is, any} from './lib/tst.js'
+import test, {is, any} from '../node_modules/tst/tst.js'
 import {TemplateInstance} from '../src/api.js'
 
 test.browser('table: default HTML behavior', () => {

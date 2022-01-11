@@ -18,6 +18,7 @@ export class TemplateInstance extends DocumentFragment {
     this.appendChild(template.content.cloneNode(true))
     this.#parts = parse(this)
     this.#processor = processor
+    params ||= {}
     processor.createCallback?.(this, this.#parts, params)
     processor.processCallback(this, this.#parts, params)
   }
@@ -58,6 +59,7 @@ export class NodeTemplatePart extends TemplatePart {
   get parentNode() { return this.setter.parentNode; }
   get nextSibling() { return this.#nodes[this.#nodes.length-1].nextSibling; }
   get previousSibling() { return this.#nodes[0].previousSibling; }
+  // FIXME: not sure why do we need string serialization here
   get value() { return this.#nodes.map(node=>node.textContent).join(''); }
   set value(newValue) { this.replace(newValue) }
   replace(...nodes) { // replace current nodes with new nodes.

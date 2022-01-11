@@ -1,5 +1,18 @@
 # plan
 
+* [ ] externalize & share deps
+* [ ] tests
+  * [ ] Parts test
+  * [x] updated github-parts tests
+  * [x] expression-processor
+  * [ ] combine-processor
+  * [ ] reactive processor
+
+* [x] Join reactivity, combo into single processor?
+  + less cognitive load to understand
+  + shorter readme
+  + combo of reactivity with generic other processor is hard if possible
+
 * [x] ~~detect missing arguments in params for expr processor, like {{a}}, {b:1}~~
   → maybe not: subscript is unable to reliably detect all ids, eg. a?.b it detects `b` as param, whereas it's not.
   → overall not much benefit.
@@ -20,21 +33,12 @@
   - `|` is valid safe common syntactical operator, we only override it
   - `|` has better sense of R pipes for templates, unlike Hacky `|>`
 
-* [ ] externalize & share deps
-
 * [x] make subscript packed dep
 
 * [x] ci
 
 * [x] tables
   * [ ] detect by insertion
-
-* [ ] tests
-  * [ ] Parts test
-  * [x] updated github-parts tests
-  * [x] expression-processor
-  * [ ] combine-processor
-  * [ ] reactive processor
 
 * [x] default processor:
   1. default processor = expression + reactivity
@@ -58,7 +62,7 @@
   . booleanProcessor can handle bool attribs
   → combine method
 
-* [ ] name: tmpl-parts
+* [x] name: templize
   ? what would be the name, sustainable for at least 10-15 years?
   ? what would be the name if no npm limitations?
   ? what would be the name radical, meaningful, short... reflecting spirit: tiny, fast, right?
@@ -78,9 +82,9 @@
     - ~~no much point over github~~ → point is generic element template parts
     - boring
       + it should not be too fun, it's service
-        - not just boring, closish association
+        - not just boring, closish boredom association
     - ~~requires polyfill~~ → nope - it's not template instance
-    + plays well with `import Parts from 'template-parts'`
+    + plays well as `import Parts from 'template-parts'`
     - can get obsolete if proposal gets renamed
       → unlikely - would require renaming all deps; it's rather stalling
     + someone else will implement subpar quality
@@ -102,6 +106,7 @@
     + same as template-parts, generalized
     - a bit too far from templating, not obvious what parts, like, constituents or what?
       + what? exactly what you'd imagine: parts of element looking at template, marked with `{{ a }}`
+        - nah, still needs template mention
     + element is better name
   * element-template.js?
     + mention of template, mention of element

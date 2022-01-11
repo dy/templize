@@ -42,10 +42,12 @@
   "devDependencies": {
     "jsdom": "^19.0.0",
     "rollup": "^2.63.0",
+    "spect": "^23.1.1",
     "terser": "^5.10.0",
+    "tst": "^7.0.0",
     "wait-please": "^3.1.0"
   },
   "dependencies": {
-    "subscript": "^6.1.0"
+    "subscript": "^6.2.0"
   }
 }

@@ -1,4 +1,4 @@
-import test, {is} from './lib/tst.js'
+import test, {is} from '../node_modules/tst/tst.js'
 import { tokenize } from '../src/parse.js'
 
 const STRING = 0, PART = 1

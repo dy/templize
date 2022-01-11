@@ -1,5 +1,4 @@
-// expression processor
-import parse from './lib/subscript.js'
+import parse from '../node_modules/subscript/subscript.min.js'
 import { sube, observable } from './lib/sube.js'
 
 // extend default subscript
@@ -17,24 +16,33 @@ parse.set('?.',18, (a,b,aid,bid) => a?.[bid])
 // a | b - pipe overload
 parse.set('|', 6, (a,b) => b(a))
 
-
-export const expressions = {
+// expressions processor
+const _state = Symbol(), _init = Symbol()
+export default {
   createCallback(el, parts, state) {
+    el[_state] = state
+
     for (const part of parts) (part.evaluate = parse(part.expression))
-  },
-  processCallback(el, parts, state) {
-    for (const part of parts) part.value = part.evaluate(state)
-  }
-},
 
-reactivity = {
-  createCallback(el, parts, state, subs=[]) {
     // we have to convert reactive state values into real ones
-    for (const k in state) if (observable(state[k])) subs.push(sube(state[k], v => state[k] = v)), state[k] = null
-  }
-},
+    let unsub = [], source
 
-combine = (...processors) => ({
-  createCallback: (a,b,c) => processors.map(p => p.createCallback?.(a,b,c)),
-  processCallback: (a,b,c) => processors.map(p => p.processCallback?.(a,b,c))
-})
+    for (const k in state) if (observable(source = state[k])) {
+      state[k] = '',
+      unsub.push(sube(source, v => (
+          this.processCallback(el, parts, {[k]: v})
+        )
+      ))
+    }
+
+    el[_init] = true
+  },
+
+  processCallback(el, parts, state) {
+    // reactive parts can update only fraction of state
+    // we also allow modifying state during the init stage, but apply parts only after init
+    Object.assign(el[_state], state)
+    if (!el[_init]) return
+    for (const part of parts) part.value = part.evaluate(el[_state])
+  }
+}

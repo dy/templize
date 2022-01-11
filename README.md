@@ -125,17 +125,17 @@ For expressions support there is **expression processor** based on [subscript](h
 
 <script>
   import templize from './templize.js'
-  import { expressions } from './processor.js'
+  import processor from './processor.js'
   const titleParams = templize(
     document.querySelector('#title'),
     { user: { name: 'Hare Krishna', email: 'krishn@hari.om' }},
-    expressions
+    processor
   )
   titleParams.user.name = 'Hare Rama'
 </script>
 ```
 
-It supports the following fields with common expresion syntax:
+It supports the following fields with common expression syntax:
 
 Part | Expression
 ---|---
@@ -152,11 +152,10 @@ Pipe | `{{ bar \| foo }}` → `{{ foo(bar) }}`
 <!-- Loop | `{{ item, idx in list }}` | `params.d` | Used for `:for` directive only -->
 <!-- Spread | `{{ ...foo }}` | `params.foo` | Used to pass multiple attributes or nodes -->
 
-### Reactive processor
+### Reactivity
 
-There's also **reactive processor** for reactive values.
+Initial state for expression processor can async/reactive values: _Promise_/_Thenable_, _AsyncIterable_, _Observable_/_Subject_. <!-- see sube --><br/>
 
-It allows initial state to take async types: _Promise_/_Thenable_, _AsyncIterable_, _Observable_/_Subject_. <!-- see sube --><br/>
 Update happens when any param changes:
 
 ```html
@@ -164,11 +163,11 @@ Update happens when any param changes:
 
 <script type="module">
   import templize from './templize.js'
-  import { reactivity } from './processor.js'
+  import processor from './processor.js'
 
   const done = new Promise(ok => setTimeout(() => ok('Done!'), 1000))
 
-  const params = templize(document.querySelector('#done'), { done }, reactivity)
+  const params = templize(document.querySelector('#done'), { done }, processor)
 
   // <div id="done">...</div>
   // ... 1s after
@@ -178,18 +177,6 @@ Update happens when any param changes:
 
 This way, for example, _rxjs_ can be streamed directly to element attribute or content.
 
-### Combining processors
-
-To combine processors, use `combine`:
-
-```js
-import templize from './templize.js'
-import { expressions, reactivity, combine } from './processor.js'
-
-const params = templize(el, {}, combine(expressions, reactivity))
-```
-
-Each processor callback is called in sequence.
 
 ### External processors
 
@@ -211,9 +198,9 @@ Any templize processor can also be used with other template parts libraries as:
 
 ```js
 import { TemplateInstance } from '@github/template-parts'
-import { expressions } from 'templize/processor'
+import processor from 'templize/processor'
 
-const instance = new TemplateInstance(document.querySelector('my-template'), {}, expressions)
+const instance = new TemplateInstance(document.querySelector('my-template'), {}, processor)
 ```
 
 ## See also

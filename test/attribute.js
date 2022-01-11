@@ -1,4 +1,4 @@
-import test, {is} from './lib/tst.js'
+import test, {is} from '../node_modules/tst/tst.js'
 import {AttributeTemplatePart} from '../src/api.js'
 
 test('attr: updates the given attribute from partList when updateParent is called', () => {
