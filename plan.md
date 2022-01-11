@@ -5,6 +5,10 @@
   + 1 cost for easy errors detection benefit
   + reduced divergence with default subscript features
 
+* [ ] make pipe a `|>` operator?
+  + full js intuition
+  + allows original meaning of |
+
 * [ ] externalize & share deps
 
 * [x] ci
