@@ -62,7 +62,7 @@ export class NodeTemplatePart extends TemplatePart {
   set value(newValue) { this.replace(newValue) }
   replace(...nodes) { // replace current nodes with new nodes.
     nodes = nodes.length ? nodes.flatMap(node =>
-      !node ? new Text :
+      !node ? [new Text(node)] :
       node.forEach ? [...node] :
       node.nodeType ? [node] :
       [new Text(node)]

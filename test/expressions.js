@@ -44,12 +44,76 @@ test('expressions: {{ foo(bar, baz) }}', async () => {
   is(el.innerHTML, '<p>abc</p>')
 })
 
-// Boolean operators | `{{ !foo }}`, `{{ foo && bar \|\| baz }}` |
-// Ternary | `{{ foo ? bar : baz }}` |
-// Primitives | `{{ 'foo' }}`, `{{ true }}`, `{{ 0.1 }}` |
-// Comparison | `{{ foo == 1 }}`, `{{ bar != 2 }}` |
-// Math operators | `{{ a * 2 + b / 3 }}` | See [common operators](https://github.com/spectjs/subscript#design).
-// Pipe | `{{ bar \| foo }}` | Same as `{{ foo(bar) }}`.
+test('expressions: {{ !foo && bar || baz }}', async () => {
+  let el = document.createElement('div')
+  el.innerHTML = `<p>{{ !foo && bar || baz }}</p>`
+
+  const params = templize(el, { foo: 0, bar: '', baz: 1 }, expressions)
+  is(el.innerHTML, '<p>1</p>')
+})
+
+test('expressions: {{ !foo ? bar : baz }}', async () => {
+  let el = document.createElement('div')
+  el.innerHTML = `<p>{{ !foo ? bar : baz }}</p>`
+
+  const params = templize(el, { foo: 0, bar: 1, baz: 2 }, expressions)
+  is(el.innerHTML, '<p>1</p>')
+})
+
+test('expressions: literals', async () => {
+  let el = document.createElement('div')
+  el.innerHTML = `<p>{{ true }}</p>`
+
+  templize(el, null, expressions)
+  is(el.innerHTML, '<p>true</p>')
+
+
+  let el2 = document.createElement('div')
+  el2.innerHTML = `<p>{{ "abc" }}</p>`
+
+  templize(el2, null, expressions)
+  is(el2.innerHTML, '<p>abc</p>')
+
+
+  let el3 = document.createElement('div')
+  el3.innerHTML = `<p>{{ -1e-2 }}</p>`
+
+  templize(el3, null, expressions)
+  is(el3.innerHTML, '<p>-0.01</p>')
+})
+
+test('expressions: {{ foo == bar }}', async () => {
+  let el = document.createElement('div')
+  el.innerHTML = `<p>{{ foo == bar }}</p>`
+
+  const params = templize(el, { foo: 0, bar: 0 }, expressions)
+  is(el.innerHTML, '<p>true</p>')
+})
+
+test('expressions: {{ a * 2 + b / 3 }}', async () => {
+  let el = document.createElement('div')
+  el.innerHTML = `<p>{{ a * 2 + b / 3 }}</p>`
+
+  const params = templize(el, { a: 2, b: 3 }, expressions)
+  is(el.innerHTML, '<p>5</p>')
+})
+
+test('expressions: {{ bar | foo }}', async () => {
+  let el = document.createElement('div')
+  el.innerHTML = `<p>{{ bar | foo }}</p>`
+
+  const params = templize(el, { foo: a => a.toUpperCase(), bar: 'abc' }, expressions)
+  is(el.innerHTML, '<p>ABC</p>')
+})
+
+test.only('expressions: missing args', async () => {
+  let el = document.createElement('div')
+  el.innerHTML = `<p>{{ boo }}</p>`
+
+  templize(el, { foo: 1 }, expressions)
+  is(el.innerHTML, '<p></p>')
+})
+
 // <!-- Loop | `{{ item, idx in list }}` | `params.d` | Used for `:for` directive only -->
 // <!-- Spread | `{{ ...foo }}` | `params.foo` | Used to pass multiple attributes or nodes -->
 // <!-- Default fallback | `{{ foo || bar }}` | `params.foo`, `params.bar` | -->

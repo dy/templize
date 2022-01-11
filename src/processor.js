@@ -1,6 +1,22 @@
 // expression processor
-import parse from './lib/expressions.js'
+import parse from './lib/subscript.js'
 import { sube, observable } from './lib/sube.js'
+
+// extend default subscript
+// ?:
+parse.set(':', 3.1, (a,b) => [a,b])
+parse.set('?', 3, (a,b) => a ? b[0] : b[1])
+
+// literals
+parse.set('true', a => { if (a) throw new SyntaxError('Unexpected'); return ()=>true })
+parse.set('false', a => { if (a) throw new SyntaxError('Unexpected'); return ()=>false })
+
+// a?.b - optional chain operator
+parse.set('?.',18, (a,b,aid,bid) => a?.[bid])
+
+// a | b - pipe overload
+parse.set('|', 6, (a,b) => b(a))
+
 
 export const expressions = {
   createCallback(el, parts, state) {

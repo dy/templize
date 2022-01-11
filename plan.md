@@ -1,5 +1,7 @@
 # plan
 
+* [ ] detect missing arguments in params for expr processor, like {{a}}, {b:1}
+
 * [x] should we disallow safe-path prop getter and instead enforce ?. notation?
   + js-familiar
   + 1 cost for easy errors detection benefit
@@ -8,7 +10,7 @@
   - diverges from unopinionated expression style towards javascript
     ~ many languages support it https://en.wikipedia.org/wiki/Safe_navigation_operator
 
-* [ ] make pipe a `|>` operator?
+* [x] ~~make pipe a `|>` operator?~~
   + full js intuition
   + allows original meaning of |
   - nope: proposal is not stabilized
@@ -28,7 +30,7 @@
 * [ ] tests
   * [ ] Parts test
   * [x] updated github-parts tests
-  * [ ] expression-processor
+  * [x] expression-processor
   * [ ] combine-processor
   * [ ] reactive processor
 

@@ -17,7 +17,7 @@ export default (node, params={}, processor=values) => {
   processor.createCallback?.(node, parts, params)
   processor.processCallback(node, parts, params)
 
-  return new Proxy(params,  {
+  return new Proxy(params||{},  {
     set: (state, k, v) => (state[k] = v, update(), 1),
     deleteProperty: (state,k) => (delete state[k], update())
   })
