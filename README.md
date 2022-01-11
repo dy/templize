@@ -147,8 +147,8 @@ Ternary | `{{ foo ? bar : baz }}` |
 Primitives | `{{ 'foo' }}`, `{{ true }}`, `{{ 0.1 }}` |
 Comparison | `{{ foo == 1 }}`, `{{ bar != 2 }}` |
 Math operators | `{{ a * 2 + b / 3 }}` | See [common operators](https://github.com/spectjs/subscript#design).
-Pipe | `{{ bar \|\> foo }}` | Same as `{{ foo(bar) }}`.
-Default fallback | `{{ foo ?? bar }}` | `params.foo`, `params.bar` |
+Pipe | `{{ bar \|> foo }}` | Same as `{{ foo(bar) }}`.
+Default fallback | `{{ foo ?? bar }}` |  |
 <!-- Loop | `{{ item, idx in list }}` | `params.d` | Used for `:for` directive only -->
 <!-- Spread | `{{ ...foo }}` | `params.foo` | Used to pass multiple attributes or nodes -->
 
@@ -221,6 +221,11 @@ const instance = new TemplateInstance(document.querySelector('my-template'), {},
 <!-- * [subscript](https://github.com/spectjs/subscript) − micro expression language. -->
 <!-- * [element-props](https://github.com/spectjs/element-props) − normalized access to element attributes / properties. -->
 <!-- * [define-element](https://github.com/spectjs/define-element) − declarative custom elements. -->
+
+## See also
+
+* [subscript](https://github.com/spectjs/subscript) − composable template processor language.
+* [subscribable-things](https://github.com/chrisguttandin/subscribable-things) − reactive wrappers for various APIs.
 
 ## Neighbors
 
