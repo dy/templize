@@ -9,6 +9,10 @@
 * [ ] make pipe a `|>` operator?
   + full js intuition
   + allows original meaning of |
+  - nope: proposal is not stabilized
+  - there's high risk of missing keyword
+  - `|` is valid safe common syntactical operator, we only override it
+  - `|` has better sense of R pipes for templates, unlike Hacky `|>`
 
 * [ ] externalize & share deps
 
