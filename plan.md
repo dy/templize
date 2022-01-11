@@ -2,7 +2,7 @@
 
 * [ ] externalize & share deps
 
-* [ ] ci
+* [x] ci
 
 * [x] tables
   * [ ] detect by insertion

@@ -5,8 +5,11 @@
 [Template Instantiation](https://github.com/w3c/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md) is limited to _\<template\>_ only;
 [DOM Parts](https://github.com/WICG/webcomponents/blob/gh-pages/proposals/DOM-Parts.md) lack hi-level convention and too early days.<br/>
 _Templize_ provides generic template parts for any elements, same time covering minimal spec surface.
+If either proposal lands, API will be assimilated.
 
-Difference from [@github/template-parts](https://github.com/github/template-parts):
+## Features
+
+Essentially extension of [@github/template-parts](https://github.com/github/template-parts) with the following:
 
 - Works with any elements.
 - Single vanilla ESM, no tooling.
@@ -18,8 +21,6 @@ Difference from [@github/template-parts](https://github.com/github/template-part
   - Reactive processor.
   - Combining processor.
 <!-- - [`<svg width={{ width }}>`](https://github.com/github/template-parts/issues/26) and other cases fixed. -->
-
-If either proposal lands, API will be assimilated.
 
 ## Usage
 
@@ -39,7 +40,7 @@ params.x = 'Goodbye'
 </script>
 ```
 
-_Templize_ also covers [spec surface](https://github.com/WICG/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md#32-template-parts-and-custom-template-process-callback) and can be used as _Template Instance_:
+_Templize_ also can be used as _Template Instance_ from the [spec]([spec surface](https://github.com/WICG/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md#32-template-parts-and-custom-template-process-callback)):
 
 ```js
 import { TemplateInstance, NodeTemplatePart, AttributeTemplatePart } from './templize.js'
@@ -93,7 +94,7 @@ interface NodeTemplatePart : TemplatePart {
 
 ## Processor
 
-_Templize_ support any [standard](https://github.com/WICG/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md#32-template-parts-and-custom-template-process-callback) template parts processor:
+_Templize_ supports any [standard](https://github.com/WICG/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md#32-template-parts-and-custom-template-process-callback) template parts processor:
 
 ```js
 const params = templize(element, initState, {
