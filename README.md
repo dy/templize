@@ -40,7 +40,7 @@ params.x = 'Goodbye'
 </script>
 ```
 
-_Templize_ also can be used as _Template Instance_ from the [spec]([spec surface](https://github.com/WICG/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md#32-template-parts-and-custom-template-process-callback)):
+_Templize_ also can be used as _Template Instance_ from the [spec](https://github.com/WICG/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md#32-template-parts-and-custom-template-process-callback):
 
 ```js
 import { TemplateInstance, NodeTemplatePart, AttributeTemplatePart } from './templize.js'
