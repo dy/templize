@@ -16,7 +16,7 @@ Essentially extension of [@github/template-parts](https://github.com/github/temp
 - Improved parser ([#38](https://github.com/github/template-parts/issues/38), [#44](https://github.com/github/template-parts/issues/44)).
 - More complete spec [API surface](./src/api.js).
 - `<table>{{ data }}</table>` support ([#24](https://github.com/domenic/template-parts/issues/2)).
-- Separate `processors.js` entry:
+- Separate `processor.js` entry:
   - Expression processor (based on [subscript](https://github.com/spectjs/subscript)).
   - Reactive processor.
   - Combining processor.

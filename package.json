@@ -27,8 +27,8 @@
   "browser": "templize.js",
   "files": [
     "src",
-    "processors.js",
-    "processors.min.js",
+    "processor.js",
+    "processor.min.js",
     "templize.js",
     "templize.min.js"
   ],
@@ -36,8 +36,8 @@
     "test": "node -r ./test/register.cjs test/index.js",
     "build": "rollup src/index.js --file templize.js --format esm",
     "minify": "terser templize.js -o templize.min.js --module -c passes=3 -m",
-    "build-processor": "rollup src/processors.js --file processors.js --format esm",
-    "minify-processor": "terser processors.js -o processors.min.js --module -c passes=3 -m"
+    "build-processor": "rollup src/processor.js --file processor.js --format esm",
+    "minify-processor": "terser processor.js -o processor.min.js --module -c passes=3 -m"
   },
   "devDependencies": {
     "jsdom": "^19.0.0",

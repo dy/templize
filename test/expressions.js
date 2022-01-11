@@ -1,7 +1,7 @@
 import test, {is} from './lib/tst.js'
 import {tick} from './lib/wait-please.js'
 import templize from '../src/index.js'
-import { expressions } from '../src/processors.js'
+import { expressions } from '../src/processor.js'
 
 test.only('expressions: readme', async () => {
   let el = document.createElement('div')
