@@ -61,7 +61,12 @@ export class NodeTemplatePart extends TemplatePart {
   get value() { return this.#nodes.map(node=>node.textContent).join(''); }
   set value(newValue) { this.replace(newValue) }
   replace(...nodes) { // replace current nodes with new nodes.
-    nodes = nodes.length ? nodes.flatMap(node => node.forEach ? [...node] : node.nodeType ? [node] : [new Text(node)]) : [new Text]
+    nodes = nodes.length ? nodes.flatMap(node =>
+      !node ? new Text :
+      node.forEach ? [...node] :
+      node.nodeType ? [node] :
+      [new Text(node)]
+    ) : [new Text]
     this.#nodes = updateNodes(this.parentNode, this.#nodes, nodes, this.nextSibling)
   }
   replaceHTML(html) {

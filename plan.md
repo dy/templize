@@ -1,5 +1,10 @@
 # plan
 
+* [ ] should we disallow safe-path prop getter and instead enforce ?. notation?
+  + js-familiar
+  + 1 cost for easy errors detection benefit
+  + reduced divergence with default subscript features
+
 * [ ] externalize & share deps
 
 * [x] ci

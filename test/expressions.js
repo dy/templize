@@ -3,11 +3,11 @@ import {tick} from './lib/wait-please.js'
 import templize from '../src/index.js'
 import { expressions } from '../src/processor.js'
 
-test.only('expressions: readme', async () => {
+test('expressions: {{ foo }}', async () => {
   let el = document.createElement('div')
   el.innerHTML = `<p>{{ text }}</p>`
 
-  const params = templize(el, { text: 'abc'})
+  const params = templize(el, { text: 'abc'}, expressions)
   is(el.innerHTML, '<p>abc</p>')
   params.text = 'def'
   is(el.innerHTML, '<p>def</p>')
@@ -19,10 +19,30 @@ test.only('expressions: readme', async () => {
 })
 
 
-// Part | Expression |  Note
-// ---|---|---
-// Direct Value | `{{ foo }}` |
-// Property | `{{ foo.bar }}`, `{{ foo['bar'] }}` | Path-safe, allows null-ish paths.
+test('expressions: {{ foo.bar }}', async () => {
+  let el = document.createElement('div')
+  el.innerHTML = `<p>{{ foo.bar }}</p>`
+
+  const params = templize(el, { foo: {bar: 'abc'}}, expressions)
+  is(el.innerHTML, '<p>abc</p>')
+
+  // safe-path
+  params.foo = null
+  is(el.innerHTML, '<p></p>')
+})
+
+test('expressions: {{ foo(bar, baz) }}', async () => {
+  let el = document.createElement('div')
+  el.innerHTML = `<p>{{ foo(bar, baz) }}</p>`
+
+  const params = templize(el, { foo: (bar, baz) => bar + baz, bar: 'a', baz: 'bc' }, expressions)
+  is(el.innerHTML, '<p>abc</p>')
+
+  // safe-path
+  // params.foo = null
+  // is(el.innerHTML, '<p></p>')
+})
+
 // Function call | `{{ foo(bar, baz) }}`, `{{ foo.bar(baz) }}` |
 // Boolean operators | `{{ !foo }}`, `{{ foo && bar \|\| baz }}` |
 // Ternary | `{{ foo ? bar : baz }}` |
