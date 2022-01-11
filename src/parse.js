@@ -35,10 +35,13 @@ export const parse = (element, parts=[]) => {
         slots = table.matches(':empty') ? [table] : table.querySelectorAll(tabular)
         for (lastParts = []; lastParts.length < slots.length && setter.parts[setter.parts.length - 1] instanceof NodeTemplatePart;)
           lastParts.push(setter.parts.pop())
-        for (slot of slots) if (lastParts.length)
-          parts.pop(),
-          setter.parts[setter.parts.length - 1] = new Text, // we have to stub removed field to keep children count
-          slot.appendChild(new Text(`{{ ${ lastParts.pop().expression } }}`))
+
+        for (slot of slots) {
+          if (lastParts.length)
+            parts.pop(), setter.parts.pop(),
+            slot.appendChild(new Text(`{{ ${ lastParts.pop().expression } }}`)),
+            setter.parts.push(new Text) // we have to stub removed field to keep children count
+        }
       }
 
       node.replaceWith(...setter.parts.flatMap(part => part.replacementNodes || [part]))
