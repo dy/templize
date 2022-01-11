@@ -140,14 +140,14 @@ It supports the following common expressions:
 Part | Expression
 ---|---
 Value | `{{ foo }}`
-Property | `{{ foo.bar['baz']?.qux }}`
+Property | `{{ foo.bar }}`, `{{ foo['bar'] }}`, `{{ foo?.bar }}`
 Call | `{{ foo.bar(baz, qux) }}`
 Boolean | `{{ !foo && bar \|\| baz }}`
 Ternary | `{{ foo ? bar : baz }}`
 Primitives | `{{ 'foo' }}`, `{{ true }}`, `{{ 0.1 }}`
-Comparison | `{{ foo == 1, bar != 2 }}`
+Comparison | `{{ foo == 1 }}`, `{{ bar >= 2 }}`
 Math | `{{ a * 2 + b / 3 }}`
-Pipe | `{{ bar \|> foo }}`
+Pipe | `{{ bar \| foo }}` (same as `{{ foo(bar) }}`)
 Defaults | `{{ foo ?? bar }}`
 <!-- Loop | `{{ item, idx in list }}` | `params.d` | Used for `:for` directive only -->
 <!-- Spread | `{{ ...foo }}` | `params.foo` | Used to pass multiple attributes or nodes -->
