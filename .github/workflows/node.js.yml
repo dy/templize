@@ -26,5 +26,5 @@ jobs:
         node-version: 14.7.0
     - name: Install dependencies
       run: npm i
+    - name: Run Node.js Tests
       run: npm run test
-
