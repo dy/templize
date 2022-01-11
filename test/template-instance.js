@@ -1,4 +1,4 @@
-import test, {is} from './lib/tst.js'
+import test, {is, any} from './lib/tst.js'
 import {TemplateInstance, AttributeTemplatePart} from '../src/api.js'
 
 
@@ -194,7 +194,7 @@ test('update: clears mustache when no args given', () => {
   const instance = new TemplateInstance(template, null, propertyIdentityOrBooleanAttribute)
   const root = document.createElement('div')
   root.appendChild(instance)
-  is(root.innerHTML, `<input required="" aria-disabled="" hidden="" value="">`)
+  any(root.innerHTML, [`<input required="" aria-disabled="" hidden="" value="">`,`<input required="" aria-disabled="" value="" hidden="">`])
 })
 
 test('update: is a noop when `update()` is called with no args', () => {
@@ -203,9 +203,16 @@ test('update: is a noop when `update()` is called with no args', () => {
   const instance = new TemplateInstance(template, {a: false, b: true}, propertyIdentityOrBooleanAttribute)
   const root = document.createElement('div')
   root.appendChild(instance)
-  is(root.innerHTML, `<input aria-disabled="false" hidden="" value="true">`)
+  any(root.innerHTML,
+    [
+    `<input aria-disabled="false" hidden="" value="true">`,
+    `<input aria-disabled="false" value="true" hidden="">`
+    ])
   instance.update()
-  is(root.innerHTML, `<input aria-disabled="false" hidden="" value="true">`)
+  any(root.innerHTML, [
+    `<input aria-disabled="false" hidden="" value="true">`,
+    `<input aria-disabled="false" value="true" hidden="">`
+  ])
 })
 
 test('update: is a noop when `update()` is called with no args', () => {
@@ -214,7 +221,7 @@ test('update: is a noop when `update()` is called with no args', () => {
   const instance = new TemplateInstance(template, {a: false, b: true}, propertyIdentityOrBooleanAttribute)
   const root = document.createElement('div')
   root.appendChild(instance)
-  is(root.innerHTML, `<input aria-disabled="false" hidden="" value="true">`)
+  any(root.innerHTML, [`<input aria-disabled="false" hidden="" value="true">`, `<input aria-disabled="false" value="true" hidden="">`])
   instance.update({b: false})
   is(root.innerHTML, `<input aria-disabled="false" value="false">`)
 })
