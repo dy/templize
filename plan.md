@@ -1,10 +1,12 @@
 # plan
 
-* [ ] should we disallow safe-path prop getter and instead enforce ?. notation?
+* [x] should we disallow safe-path prop getter and instead enforce ?. notation?
   + js-familiar
   + 1 cost for easy errors detection benefit
   + reduced divergence with default subscript features
   + allows extending subscript _for real_
+  - diverges from unopinionated expression style towards javascript
+    ~ many languages support it https://en.wikipedia.org/wiki/Safe_navigation_operator
 
 * [ ] make pipe a `|>` operator?
   + full js intuition
@@ -15,6 +17,8 @@
   - `|` has better sense of R pipes for templates, unlike Hacky `|>`
 
 * [ ] externalize & share deps
+
+* [x] make subscript packed dep
 
 * [x] ci
 

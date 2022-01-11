@@ -1,4 +1,4 @@
-import test, {is} from './lib/tst.js'
+import test, {is, throws} from './lib/tst.js'
 import {tick} from './lib/wait-please.js'
 import templize from '../src/index.js'
 import { expressions } from '../src/processor.js'
@@ -23,12 +23,17 @@ test('expressions: {{ foo.bar }}', async () => {
   let el = document.createElement('div')
   el.innerHTML = `<p>{{ foo.bar }}</p>`
 
-  const params = templize(el, { foo: {bar: 'abc'}}, expressions)
+  templize(el, { foo: {bar: 'abc'}}, expressions)
   is(el.innerHTML, '<p>abc</p>')
+  throws(() => params.foo = null)
 
   // safe-path
+  let el2 = document.createElement('div')
+  el2.innerHTML = `<p>{{ foo?.bar }}</p>`
+  const params = templize(el2, { foo: {bar: 'abc'}}, expressions)
+  is(el2.innerHTML, '<p>abc</p>')
   params.foo = null
-  is(el.innerHTML, '<p></p>')
+  is(el2.innerHTML, '<p></p>')
 })
 
 test('expressions: {{ foo(bar, baz) }}', async () => {
@@ -37,13 +42,8 @@ test('expressions: {{ foo(bar, baz) }}', async () => {
 
   const params = templize(el, { foo: (bar, baz) => bar + baz, bar: 'a', baz: 'bc' }, expressions)
   is(el.innerHTML, '<p>abc</p>')
-
-  // safe-path
-  // params.foo = null
-  // is(el.innerHTML, '<p></p>')
 })
 
-// Function call | `{{ foo(bar, baz) }}`, `{{ foo.bar(baz) }}` |
 // Boolean operators | `{{ !foo }}`, `{{ foo && bar \|\| baz }}` |
 // Ternary | `{{ foo ? bar : baz }}` |
 // Primitives | `{{ 'foo' }}`, `{{ true }}`, `{{ 0.1 }}` |
