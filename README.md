@@ -102,7 +102,7 @@ const params = templize(element, initState, {
 })
 ```
 
-Default processor supports only direct values:
+Default processor supports only direct values.
 
 ```js
 {
@@ -135,7 +135,7 @@ For expressions support there is **expression processor** based on [subscript](h
 </script>
 ```
 
-It supports the following fields with common expression syntax:
+It supports the following fields with common syntax:
 
 Part | Expression
 ---|---
@@ -154,7 +154,7 @@ Pipe | `{{ bar \| foo }}` → `{{ foo(bar) }}`
 
 ### Reactivity
 
-Initial state for expression processor can async/reactive values: _Promise_/_Thenable_, _AsyncIterable_, _Observable_/_Subject_. <!-- see sube --><br/>
+Initial state can define async/reactive values: _Promise_/_Thenable_, _AsyncIterable_, _Observable_/_Subject_. <!-- see sube --><br/>
 
 Update happens when any param changes:
 
@@ -178,7 +178,7 @@ Update happens when any param changes:
 This way, for example, _rxjs_ can be streamed directly to element attribute or content.
 
 
-### External processors
+## Interop
 
 Any external processor can be used with templize, eg. [@github/template-parts](https://github.com/github/template-parts):
 
@@ -194,7 +194,7 @@ const params = templize(
 params.hidden = true
 ```
 
-Any templize processor can also be used with other template parts libraries as:
+Templize expression processor can also be used with other template parts libraries as:
 
 ```js
 import { TemplateInstance } from '@github/template-parts'
