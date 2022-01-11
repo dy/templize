@@ -20,7 +20,7 @@ parse.set('|', 6, (a,b) => b(a))
 
 export const expressions = {
   createCallback(el, parts, state) {
-    for (const part of parts) part.evaluate = parse(part.expression)
+    for (const part of parts) (part.evaluate = parse(part.expression))
   },
   processCallback(el, parts, state) {
     for (const part of parts) part.value = part.evaluate(state)

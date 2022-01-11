@@ -106,11 +106,11 @@ test('expressions: {{ bar | foo }}', async () => {
   is(el.innerHTML, '<p>ABC</p>')
 })
 
-test.only('expressions: missing args', async () => {
+test.skip('expressions: missing args', async () => {
   let el = document.createElement('div')
   el.innerHTML = `<p>{{ boo }}</p>`
 
-  templize(el, { foo: 1 }, expressions)
+  throws(() => templize(el, { foo: 1 }, expressions))
   is(el.innerHTML, '<p></p>')
 })
 

@@ -1,6 +1,8 @@
 # plan
 
-* [ ] detect missing arguments in params for expr processor, like {{a}}, {b:1}
+* [x] ~~detect missing arguments in params for expr processor, like {{a}}, {b:1}~~
+  → maybe not: subscript is unable to reliably detect all ids, eg. a?.b it detects `b` as param, whereas it's not.
+  → overall not much benefit.
 
 * [x] should we disallow safe-path prop getter and instead enforce ?. notation?
   + js-familiar
