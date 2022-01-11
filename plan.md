@@ -2,7 +2,10 @@
 
 * [ ] externalize & share deps
 
-* [ ] tables
+* [ ] ci
+
+* [x] tables
+  * [ ] detect by insertion
 
 * [ ] tests
   * [ ] Parts test
