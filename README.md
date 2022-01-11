@@ -178,7 +178,7 @@ Update happens when any param changes:
 This way, for example, _rxjs_ can be streamed directly to element attribute or content.
 
 
-## Interop
+### Interop
 
 Any external processor can be used with templize, eg. [@github/template-parts](https://github.com/github/template-parts):
 
