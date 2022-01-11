@@ -138,7 +138,7 @@ For expressions support there is **expression processor** (based on [subscript](
 It supports the following common expressions:
 
 Part | Expression
----|---|---
+---|---
 Value | `{{ foo }}`
 Property | `{{ foo.bar }}`, `{{ foo?.bar }}`, `{{ foo['bar'] }}`
 Call | `{{ foo(bar, baz) }}`, `{{ foo.bar(baz) }}`
