@@ -1,6 +1,6 @@
 import { NodeTemplatePart, AttributeTemplatePart } from './api.js'
 
-const ELEMENT = 1, TEXT = 3, STRING = 0, PART = 1,
+const ELEMENT = 1, TEXT = 3, COMMENT = 8, STRING = 0, PART = 1,
       mem = {},
       tabular = ['caption','colgroup','thead','tbody','tfoot','tr'].map(e=>e+':empty')+''
 
@@ -20,7 +20,7 @@ export const parse = (element, parts=[]) => {
 
   for (node of element.childNodes) {
     if (node.nodeType === ELEMENT) parse(node, parts)
-    else if (node.nodeType === TEXT && node.data.includes('{{')) {
+    else if (node.nodeType === TEXT || node.nodeType === COMMENT) if (node.data.includes('{{')) {
       setter = { parentNode: element, parts: [] }
       for ([type, value] of tokenize(node.data.trim()))
         if (!type) setter.parts.push(new Text(value))

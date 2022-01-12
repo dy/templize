@@ -1,6 +1,7 @@
 
 import test, {is, any} from '../node_modules/tst/tst.js'
 import {TemplateInstance} from '../src/api.js'
+import templize from '../src/index.js'
 
 test.browser('table: default HTML behavior', () => {
   let tpl = document.createElement('template')
@@ -126,6 +127,23 @@ test.browser('table: <table><thead><tr>{{ a }}</tr></thead><tr>{{ b }}</tr></tab
 })
 
 
+test.browser('table: <table><!--{{ a }}--><tr></tr></table>', () => {
+  let el = document.createElement('el')
+  el.innerHTML = `<table><!--{{ a }}--><tr>{{ b }}</tr></table>`
+
+  let table = document.createElement('table')
+  table.innerHTML = `<tr><td>a</td></tr>`
+  templize(el, {a: table.childNodes[0].childNodes, b:'b'})
+
+  any(el.innerHTML, [
+    `<table><tr><td>a</td></tr><tr>b</tr></table>`,
+    `<table><tr><td>a</td></tr><tbody><tr>b</tr></tbody></table>`
+  ])
+})
+
+test.todo('table: <table><tr></tr>{{ a }}</table>', () => {
+})
+
 test.todo('table: {{ thead }}{{ tbody }}<table><thead></thead></table>', () => {
   // NOTE: if you wrap content into <thead> - also wrap into <tbody>
 })
@@ -140,12 +158,6 @@ test.todo('table: <table>{{a}}{{b}}<tbody></tbody></table> → {{a}}{{b}}<table>
 
 test.todo('table: {{ prefix }}<table><thead>{{ thead }}</thead>{{ tbody }}</table>', () => {
   // NOTE: same
-})
-
-test.todo('table: <table>{{ a }}<tr></tr></table>', () => {
-})
-
-test.todo('table: <table><tr></tr>{{ a }}</table>', () => {
 })
 
 test.todo('table: <table>{{thead}}<tbody><!-- ... --></tbody></table>', () => {

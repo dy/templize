@@ -15,7 +15,7 @@ Essentially extension of [@github/template-parts](https://github.com/github/temp
 - Single vanilla ESM, no tooling.
 - Improved parser ([#38](https://github.com/github/template-parts/issues/38), [#44](https://github.com/github/template-parts/issues/44)).
 - More complete spec [API surface](./src/api.js).
-- `<table>{{ data }}</table>` support ([#24](https://github.com/domenic/template-parts/issues/2)).
+- `<table>{{ data }}</table>` support<sup><a href="#tables">*</a></sup> ([#24](https://github.com/domenic/template-parts/issues/2)).
 - Expression processor with reactivity.
 <!-- - [`<svg width={{ width }}>`](https://github.com/github/template-parts/issues/26) and other cases fixed. -->
 
@@ -83,6 +83,15 @@ interface NodeTemplatePart : TemplatePart {
 ```
 </details>
 
+### Tables
+
+Due to HTML quirky table parsing, to ensure fields are inserted properly they should be wrapped into a comment as:
+
+```html
+<table>{{ a }}</table> - ✔ works fine
+<table>{{ a }}<tr></tr>{{ b }}</table> - ✘ broken
+<table><!--{{ a }}--><tr></tr><!--{{ b }}--></table> - ✔ works fine
+```
 
 ## Processor
 
