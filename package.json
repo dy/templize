@@ -1,6 +1,6 @@
 {
   "name": "templize",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Template parts for elements",
   "bugs": {
     "url": "https://github.com/spectjs/templize/issues"
