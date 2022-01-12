@@ -167,6 +167,7 @@ Update happens when any param changes:
   const params = templize(document.querySelector('#done'), { done }, processor)
 
   // <div id="done">...</div>
+
   // ... 1s after
   // <div id="done">done</div>
 </script>
