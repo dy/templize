@@ -212,6 +212,8 @@ const instance = new TemplateInstance(document.querySelector('my-template'), {},
 
 ## See also
 
+* [spect](https://github.com/spectjs/spect) − element aspects, useful for organizing dynamic templating.
+* [vref](https://github.com/spectjs/vref) − value reference with reactivity.
 * [subscript](https://github.com/spectjs/subscript) − composable template processor language.
 * [subscribable-things](https://github.com/chrisguttandin/subscribable-things) − reactive wrappers for various APIs.
 * [element-props](https://github.com/spectjs/element-props) − normalized access to element attributes / properties.
