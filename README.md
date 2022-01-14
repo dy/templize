@@ -85,7 +85,7 @@ interface NodeTemplatePart : TemplatePart {
 
 ### Tables
 
-Due to HTML quirky table parsing, to ensure fields are inserted properly they should be wrapped into a comment as:
+Due to HTML quirk in table parsing, table fields should be wrapped as comment:
 
 ```html
 <table>{{ a }}</table> - ✔ works fine
@@ -95,33 +95,7 @@ Due to HTML quirky table parsing, to ensure fields are inserted properly they sh
 
 ## Processor
 
-_Templize_ supports any [standard](https://github.com/WICG/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md#32-template-parts-and-custom-template-process-callback) template parts processor:
-
-```js
-const params = templize(element, initState, {
-  createCallback(el, parts, state) {
-    // ... init parts / parse expressions
-  },
-  processCallback(el, parts, state) {
-    // ... update parts / evaluate expressions
-  }
-})
-```
-
-Default processor supports only direct values.
-
-```js
-{
-  processCallback(instance, parts, state) {
-    if (!state) return
-    for (const part of parts) if (part.expression in state) part.value = state[part.expression]
-  }
-}
-```
-
-### Expression processor
-
-For expressions support there is **expression processor** based on [subscript](https://github.com/spectjs/subscript):
+Templize includes **expression processor** based on [subscript](https://github.com/spectjs/subscript):
 
 ```html
 <header id="title">
@@ -131,11 +105,9 @@ For expressions support there is **expression processor** based on [subscript](h
 
 <script>
   import templize from './templize.js'
-  import processor from './processor.js'
   const titleParams = templize(
     document.querySelector('#title'),
-    { user: { name: 'Hare Krishna', email: 'krishn@hari.om' }},
-    processor
+    { user: { name: 'Hare Krishna', email: 'krishn@hari.om' }}
   )
   titleParams.user.name = 'Hare Rama'
 </script>
@@ -154,13 +126,12 @@ Primitives | `{{ "foo" }}`, `{{ true }}`, `{{ 0.1 }}`
 Comparison | `{{ foo == 1 }}`, `{{ bar >= 2 }}`
 Math | `{{ a * 2 + b / 3 }}`
 Pipe | `{{ bar \| foo }}` → `{{ foo(bar) }}`
-<!-- Defaults | `{{ foo ?? bar }}` -->
 <!-- Loop | `{{ item, idx in list }}` | `params.d` | Used for `:for` directive only -->
 <!-- Spread | `{{ ...foo }}` | `params.foo` | Used to pass multiple attributes or nodes -->
 
 ### Reactivity
 
-Initial state can define async/reactive values: _Promise_/_Thenable_, _AsyncIterable_, _Observable_/_Subject_. <!-- see sube --><br/>
+Initial state can define async/reactive values: _Promise_/_Thenable_, _AsyncIterable_, _Observable_/_Subject_ (see [sube](https://github.com/spectjs/sube)).<br/>
 
 Update happens when any param changes:
 
@@ -169,16 +140,18 @@ Update happens when any param changes:
 
 <script type="module">
   import templize from './templize.js'
-  import processor from './processor.js'
 
   const done = new Promise(ok => setTimeout(() => ok('Done!'), 1000))
 
-  const params = templize(document.querySelector('#done'), { done }, processor)
+  const params = templize(document.querySelector('#done'), { done })
 
   // <div id="done">...</div>
 
   // ... 1s after
   // <div id="done">done</div>
+
+  // dispose observers
+  params[Symbol.dispose]()
 </script>
 ```
 
@@ -186,6 +159,31 @@ This way, for example, _rxjs_ can be streamed directly to element attribute or c
 
 
 ### Interop
+
+_Templize_ supports any [standard](https://github.com/WICG/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md#32-template-parts-and-custom-template-process-callback) template parts processor:
+
+```js
+const params = templize(element, initState, {
+  createCallback(el, parts, state) {
+    // ... init parts / parse expressions
+  },
+  processCallback(el, parts, state) {
+    // ... update parts / evaluate expressions
+  }
+})
+```
+<!--
+Default processor supports only direct values.
+
+```js
+{
+  processCallback(instance, parts, state) {
+    if (!state) return
+    for (const part of parts) if (part.expression in state) part.value = state[part.expression]
+  }
+}
+```
+-->
 
 Any external processor can be used with templize, eg. [@github/template-parts](https://github.com/github/template-parts):
 
@@ -205,13 +203,14 @@ Templize expression processor can also be used with other template parts librari
 
 ```js
 import { TemplateInstance } from '@github/template-parts'
-import processor from 'templize/processor'
+import { processor } from 'templize'
 
 const instance = new TemplateInstance(document.querySelector('my-template'), {}, processor)
 ```
 
 ## See also
 
+* [spect](https://github.com/spectjs/spect) − DOM selector aspects, perfect match with templize.
 * [subscript](https://github.com/spectjs/subscript) − composable template processor language.
 * [subscribable-things](https://github.com/chrisguttandin/subscribable-things) − reactive wrappers for various APIs.
 * [element-props](https://github.com/spectjs/element-props) − normalized access to element attributes / properties.

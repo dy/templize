@@ -1,12 +1,25 @@
 # plan
 
+* [ ] disposal tests
+
+* [ ] make templize-core.js entry - without processor included?
+  + default processor with reactivity and expressions is super handy to have. Manual setup is tedious.
+* [ ] ? or make simply templize with expr/reactivity immediately?
+  + that simplifies doc even more
+  + that simplifies use even more
+
+* [ ] [Symbol.dispose] for disposing reactive observers.
+  * [ ] Can disposal be made via WeakRef?
+
 * [ ] externalize & share deps
-* [ ] tests
-  * [ ] Parts test
+
+* [ ] get rid of table ad-hoc?
+  + `<!--{{data}}-->` solves any generic case without perf/size tax...
+
+* [x] tests
+  * [x] Parts test
   * [x] updated github-parts tests
   * [x] expression-processor
-  * [ ] combine-processor
-  * [ ] reactive processor
 
 * [x] Join reactivity, combo into single processor?
   + less cognitive load to understand

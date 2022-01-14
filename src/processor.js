@@ -1,5 +1,5 @@
 import parse from '../node_modules/subscript/subscript.min.js'
-import { sube, observable } from './lib/sube.js'
+import { sube, observable } from '../node_modules/sube/sube.min.js'
 
 // extend default subscript
 // ?:
@@ -17,7 +17,7 @@ parse.set('?.',18, (a,b,aid,bid) => a?.[bid])
 parse.set('|', 6, (a,b) => b(a))
 
 // expressions processor
-const _state = Symbol(), _init = Symbol()
+const _state = Symbol('params'), _init = Symbol('init')
 export default {
   createCallback(el, parts, state) {
     el[_state] = state
@@ -34,6 +34,10 @@ export default {
         )
       ))
     }
+
+    // provide disposal
+    const dispose = el[Symbol.dispose||=Symbol('dispose')]
+    el[Symbol.dispose] = () => (unsub.map(fn=>fn()), dispose?.())
 
     el[_init] = true
   },

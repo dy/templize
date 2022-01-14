@@ -3,7 +3,7 @@
 import updateNodes from './lib/diff.js'
 import { parse } from './parse.js'
 
-export const values = {
+const values = {
   processCallback(instance, parts, state) {
     if (!state) return
     for (const part of parts) if (part.expression in state) part.value = state[part.expression]

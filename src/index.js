@@ -1,9 +1,7 @@
 import { parse } from './parse.js'
-import { values } from './api.js'
+import expressions from './processor.js'
 
-const _update = Symbol.for('update')
-
-export default (node, params, processor=values) => {
+export default (node, params, processor=expressions) => {
   let parts = parse(node),
       planned,
       // throttled for batch update
@@ -16,10 +14,12 @@ export default (node, params, processor=values) => {
         }
       }
 
-  params ||= {}
 
   processor.createCallback?.(node, parts, params)
   processor.processCallback(node, parts, params)
+
+  // adopt dispose from node (Symbol.dispose is defined there)
+  ;(params ||= {})[Symbol.dispose] = node[Symbol.dispose]
 
   return new Proxy(params,  {
     set: (state, k, v) => (state[k] = v, update(), 1),
@@ -28,3 +28,4 @@ export default (node, params, processor=values) => {
 }
 
 export * from './api.js'
+export { processor }
