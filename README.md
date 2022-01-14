@@ -15,7 +15,7 @@ Essentially extension of [@github/template-parts](https://github.com/github/temp
 - Single vanilla ESM, no tooling.
 - Improved parser ([#38](https://github.com/github/template-parts/issues/38), [#44](https://github.com/github/template-parts/issues/44)).
 - More complete spec [API surface](./src/api.js).
-- `<table>{{ data }}</table>` support<sup><a href="#tables">*</a></sup> ([#24](https://github.com/domenic/template-parts/issues/2)).
+- `<table><!--{{ data }}--></table>` support<sup><a href="#tables">*</a></sup> ([#24](https://github.com/domenic/template-parts/issues/2)).
 - Expression processor with reactivity.
 <!-- - [`<svg width={{ width }}>`](https://github.com/github/template-parts/issues/26) and other cases fixed. -->
 
@@ -40,9 +40,9 @@ params.x = 'Goodbye'
 _Templize_ also can be used as _Template Instance_ from the [spec](https://github.com/WICG/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md#32-template-parts-and-custom-template-process-callback):
 
 ```js
-import { TemplateInstance, NodeTemplatePart, AttributeTemplatePart } from './templize.js'
+import { TemplateInstance, NodeTemplatePart, AttributeTemplatePart, processor } from './templize.js'
 
-let tpl = new TemplateInstance(templateElement, initParams, processor)
+let tpl = new TemplateInstance(templateElement, {...initParams}, processor)
 tpl.update(newParams)
 ```
 
