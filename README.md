@@ -98,7 +98,7 @@ Due to HTML quirk in table parsing, table fields should be wrapped as comment:
 
 ## Processor
 
-Templize includes **expression processor** based on [subscript](https://github.com/spectjs/subscript):
+Templize enables expressions via **expression processor** based on [subscript](https://github.com/spectjs/subscript):
 
 ```html
 <header id="title">
