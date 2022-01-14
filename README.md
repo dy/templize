@@ -45,7 +45,7 @@ import { TemplateInstance, NodeTemplatePart, AttributeTemplatePart, processor } 
 let tpl = new TemplateInstance(templateElement, initParams, processor)
 tpl.update(newParams)
 
-// NOTE: _Template Instance_ doesn't include expression processor, so that should be connected manually.
+// NOTE: Template Instance doesn't include expression processor, so that should be connected manually.
 ```
 
 
