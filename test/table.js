@@ -134,7 +134,7 @@ test.skip('table: <table><thead><tr>{{ a }}</tr></thead><tr>{{ b }}</tr></table>
 })
 
 
-test.only('table: <table><!--{{ a }}--><tr><!-- {{ b }} --></tr></table>', () => {
+test('table: <table><!--{{ a }}--><tr><!-- {{ b }} --></tr></table>', () => {
   let el = document.createElement('el')
   el.innerHTML = `<table><!--{{ a }}--><tr><!--  {{ b }}  --></tr></table>`
 

@@ -1,19 +1,20 @@
 # plan
 
-* [ ] disposal tests
+* [ ] externalize & share deps
+  * [x] sube
+  * [ ] diff
 
-* [ ] make templize-core.js entry - without processor included?
+* [x] ~~make templize-core.js entry - without processor included?~~
   + default processor with reactivity and expressions is super handy to have. Manual setup is tedious.
-* [ ] ? or make simply templize with expr/reactivity immediately?
+* [x] ? or make simply templize with expr/reactivity immediately?
   + that simplifies doc even more
   + that simplifies use even more
+  → TemplateInstance doesn't include expressions, templize does
 
-* [ ] [Symbol.dispose] for disposing reactive observers.
+* [x] [Symbol.dispose] for disposing reactive observers.
   * [ ] Can disposal be made via WeakRef?
 
-* [ ] externalize & share deps
-
-* [ ] get rid of table ad-hoc?
+* [x] get rid of table ad-hoc?
   + `<!--{{data}}-->` solves any generic case without perf/size tax...
 
 * [x] tests

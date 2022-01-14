@@ -182,4 +182,7 @@ test('reactivity: basic', async () => {
   is(el.innerHTML, '<p>bar</p>')
 
   text[Symbol.dispose]()
+  text.value = 'baz'
+  await tick()
+  is(el.innerHTML, '<p>bar</p>')
 })
