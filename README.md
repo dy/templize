@@ -46,6 +46,8 @@ let tpl = new TemplateInstance(templateElement, initParams, processor)
 tpl.update(newParams)
 ```
 
+<small>Note: _Template Instance_ doesn't include expression processor, you'd have to connect that manually.</small>
+
 <details><summary>Spec surface</summary>
 
 ```js
@@ -82,8 +84,6 @@ interface NodeTemplatePart : TemplatePart {
 };
 ```
 </details>
-
-Note also that _Template Instance_ doesn't include expression processor, you'd have to connect that manually.
 
 ### Tables
 
