@@ -1,25 +1,24 @@
 import { parse } from './parse.js'
-import expressions from './processor.js'
+import processor from './processor.js'
 
-export default (node, params, processor=expressions) => {
+export default (node, params, proc=processor) => {
+  // adopt dispose from node (Symbol.dispose is defined there)
+  ;(params ||= {})[Symbol.dispose] = node[Symbol.dispose]
+
   let parts = parse(node),
       planned,
       // throttled for batch update
       update = () => {
         if (!planned) {
-          processor.processCallback(node, parts, params) // first set is immediate
+          proc.processCallback(node, parts, params) // first set is immediate
           planned = Promise.resolve().then(() => (
-            planned = null, processor.processCallback(node, parts, params)
+            planned = null, proc.processCallback(node, parts, params)
           )) // rest is throttled
         }
       }
 
-
-  processor.createCallback?.(node, parts, params)
-  processor.processCallback(node, parts, params)
-
-  // adopt dispose from node (Symbol.dispose is defined there)
-  ;(params ||= {})[Symbol.dispose] = node[Symbol.dispose]
+  proc.createCallback?.(node, parts, params)
+  proc.processCallback(node, parts, params)
 
   return new Proxy(params,  {
     set: (state, k, v) => (state[k] = v, update(), 1),

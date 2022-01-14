@@ -1,5 +1,5 @@
 import parse from '../node_modules/subscript/subscript.min.js'
-import { sube, observable } from '../node_modules/sube/sube.min.js'
+import sube, { observable } from '../node_modules/sube/sube.min.js'
 
 // extend default subscript
 // ?:

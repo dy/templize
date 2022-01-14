@@ -48,6 +48,7 @@
     "wait-please": "^3.1.0"
   },
   "dependencies": {
+    "sube": "^1.0.2",
     "subscript": "^6.2.0"
   }
 }
