@@ -180,4 +180,6 @@ test('reactivity: basic', async () => {
 
   text.value = 'bar'
   is(el.innerHTML, '<p>bar</p>')
+
+  text[Symbol.dispose]()
 })

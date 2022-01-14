@@ -18,6 +18,9 @@ parse.set('|', 6, (a,b) => b(a))
 
 // expressions processor
 const _state = Symbol('params'), _init = Symbol('init')
+
+Symbol.dispose||=Symbol('dispose')
+
 export default {
   createCallback(el, parts, state) {
     el[_state] = state
@@ -36,7 +39,7 @@ export default {
     }
 
     // provide disposal
-    const dispose = el[Symbol.dispose||=Symbol('dispose')]
+    const dispose = el[Symbol.dispose]
     el[Symbol.dispose] = () => (unsub.map(fn=>fn()), dispose?.())
 
     el[_init] = true

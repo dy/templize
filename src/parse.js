@@ -30,19 +30,19 @@ export const parse = (element, parts=[]) => {
       // logic: for every empty node in a table there is meant to be part before the table.
       // NOTE: it doesn't cover all possible insertion cases, but the core ones.
       // TODO: it can be extended to detect on the moment of insertion, but it still won't be complete
-      //
-      if ((table = node.nextSibling)?.tagName === 'TABLE') {
-        slots = table.matches(':empty') ? [table] : table.querySelectorAll(tabular)
-        for (lastParts = []; lastParts.length < slots.length && setter.parts[setter.parts.length - 1] instanceof NodeTemplatePart;)
-          lastParts.push(setter.parts.pop())
+      // removing for now
+      // if ((table = node.nextSibling)?.tagName === 'TABLE') {
+      //   slots = table.matches(':empty') ? [table] : table.querySelectorAll(tabular)
+      //   for (lastParts = []; lastParts.length < slots.length && setter.parts[setter.parts.length - 1] instanceof NodeTemplatePart;)
+      //     lastParts.push(setter.parts.pop())
 
-        for (slot of slots) {
-          if (lastParts.length)
-            parts.pop(), setter.parts.pop(),
-            slot.appendChild(new Text(`{{ ${ lastParts.pop().expression } }}`)),
-            setter.parts.push(new Text) // we have to stub removed field to keep children count
-        }
-      }
+      //   for (slot of slots) {
+      //     if (lastParts.length)
+      //       parts.pop(), setter.parts.pop(),
+      //       slot.appendChild(new Text(`{{ ${ lastParts.pop().expression } }}`)),
+      //       setter.parts.push(new Text) // we have to stub removed field to keep children count
+      //   }
+      // }
 
       node.replaceWith(...setter.parts.flatMap(part => part.replacementNodes || [part]))
     }
