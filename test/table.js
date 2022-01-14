@@ -3,7 +3,7 @@ import test, {is, any} from '../node_modules/tst/tst.js'
 import {TemplateInstance} from '../src/api.js'
 import templize from '../src/index.js'
 
-test('table: default HTML behavior', () => {
+test.browser('table: default HTML behavior', () => {
   let tpl = document.createElement('template')
   tpl.innerHTML = `<table>123</table>`
   let instance = new TemplateInstance(tpl)
