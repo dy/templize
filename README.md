@@ -44,9 +44,10 @@ import { TemplateInstance, NodeTemplatePart, AttributeTemplatePart, processor } 
 
 let tpl = new TemplateInstance(templateElement, initParams, processor)
 tpl.update(newParams)
+
+// NOTE: _Template Instance_ doesn't include expression processor, so that should be connected manually.
 ```
 
-<small>Note: _Template Instance_ doesn't include expression processor, you'd have to connect that manually.</small>
 
 <details><summary>Spec surface</summary>
 
