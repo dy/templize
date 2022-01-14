@@ -88,7 +88,12 @@ interface NodeTemplatePart : TemplatePart {
 Due to HTML quirk in table parsing, table fields should be wrapped as comment:
 
 ```html
-<table><!--{{ thead }}--><tbody><!--{{ rows }}--></tbody></table>
+<table>
+  <!--{{ thead }}-->
+  <tbody>
+    <!--{{ rows }}-->
+  </tbody>
+</table>
 ```
 
 ## Processor
