@@ -13,6 +13,7 @@
 
 * [x] [Symbol.dispose] for disposing reactive observers.
   * [ ] Can disposal be made via WeakRef?
+    - depends on implementation of observable.
 
 * [x] get rid of table ad-hoc?
   + `<!--{{data}}-->` solves any generic case without perf/size tax...
