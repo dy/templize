@@ -5,7 +5,6 @@ import './api.js'
 import './table.js'
 
 
-
 /*
 test('readme: case 1', () => {
   // shadowRoot is the shadow root of a contact card component

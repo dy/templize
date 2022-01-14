@@ -45,6 +45,7 @@
   },
   "dependencies": {
     "sube": "^1.0.2",
-    "subscript": "^6.2.0"
+    "subscript": "^6.2.0",
+    "swapdom": "^1.1.0"
   }
 }

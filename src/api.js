@@ -1,6 +1,6 @@
 // minimal Template Instance API surface
 // https://github.com/WICG/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md#32-template-parts-and-custom-template-process-callback
-import updateNodes from './lib/diff.js'
+import updateNodes from '../node_modules/swapdom/swap-inflate.js'
 import { parse } from './parse.js'
 
 const values = {

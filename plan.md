@@ -1,8 +1,8 @@
 # plan
 
-* [ ] externalize & share deps
+* [x] externalize & share deps
   * [x] sube
-  * [ ] diff
+  * [x] diff
 
 * [x] ~~make templize-core.js entry - without processor included?~~
   + default processor with reactivity and expressions is super handy to have. Manual setup is tedious.
