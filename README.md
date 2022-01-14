@@ -211,6 +211,14 @@ import { processor } from 'templize'
 const instance = new TemplateInstance(document.querySelector('my-template'), {}, processor)
 ```
 
+Note also that own templize _Template Instance_ doesn't include expression processor, you'd have to do that manually:
+
+```js
+import { TemplateInstance, processor } from 'templize'
+
+const instance = new TemplateInstance(document.querySelector('my-template'), {}, processor)
+```
+
 ## See also
 
 * [spect](https://github.com/spectjs/spect) − element aspects, useful for organizing templating.
