@@ -42,9 +42,11 @@ _Templize_ also can be used as _Template Instance_ from the [spec](https://githu
 ```js
 import { TemplateInstance, NodeTemplatePart, AttributeTemplatePart, processor } from './templize.js'
 
-let tpl = new TemplateInstance(templateElement, {...initParams}, processor)
+let tpl = new TemplateInstance(templateElement, initParams, processor)
 tpl.update(newParams)
 ```
+
+Note also that _Template Instance_ doesn't include expression processor, you'd have to connect that manually.
 
 <details><summary>Spec surface</summary>
 
@@ -207,14 +209,6 @@ Templize expression processor can also be used with other template parts librari
 ```js
 import { TemplateInstance } from '@github/template-parts'
 import { processor } from 'templize'
-
-const instance = new TemplateInstance(document.querySelector('my-template'), {}, processor)
-```
-
-Note also that own templize _Template Instance_ doesn't include expression processor, you'd have to connect that manually:
-
-```js
-import { TemplateInstance, processor } from 'templize'
 
 const instance = new TemplateInstance(document.querySelector('my-template'), {}, processor)
 ```
