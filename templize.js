@@ -32,7 +32,7 @@ const swap = (parent, a, b, end = null) => {
     }
 
     // remove tail
-    while (cur != end) (next = cur.nextSibling, remove(cur, parent), cur = next);
+    while (!same(cur, end)) (next = cur.nextSibling, remove(cur, parent), cur = next);
   }
 
   return b
@@ -58,7 +58,7 @@ class TemplateInstance extends DocumentFragment {
   constructor(template, params, processor=values) {
     super();
     this.appendChild(template.content.cloneNode(true));
-    this.#parts = parse(this);
+    this.#parts = parse$1(this);
     this.#processor = processor;
     params ||= {};
     processor.createCallback?.(this, this.#parts, params);
@@ -79,6 +79,7 @@ class AttributeTemplatePart extends TemplatePart {
   get element() { return this.setter.element; }
   get value() { return this.#value; }
   set value(newValue) {
+    if (this.#value === newValue) return // save unnecessary call
     this.#value = newValue;
     const { attr, element, parts } = this.setter;
     if (parts.length === 1) { // fully templatized
@@ -124,7 +125,7 @@ const ELEMENT = 1, TEXT = 3, COMMENT = 8, STRING = 0, PART = 1,
       mem = {};
 
 // collect element parts
-const parse = (element, parts=[]) => {
+const parse$1 = (element, parts=[]) => {
   let attr, node, setter, type, value;
 
   for (attr of element.attributes || []) {
@@ -138,7 +139,7 @@ const parse = (element, parts=[]) => {
   }
 
   for (node of element.childNodes) {
-    if (node.nodeType === ELEMENT) parse(node, parts);
+    if (node.nodeType === ELEMENT) parse$1(node, parts);
     else if (node.nodeType === TEXT || node.nodeType === COMMENT) if (node.data.includes('{{')) {
       setter = { parentNode: element, parts: [] };
       for ([type, value] of tokenize(node.data.trim()))
@@ -194,24 +195,227 @@ tokenize = (text) => {
   return mem[text] = tokens
 };
 
-let e,r,t,a,o,l,d,n=(a,o=(r=a,e=0,t=[],!(a=i())||r[e]?h():e=>a(e||{})))=>(o.args=t,o),f=e=>e>=48&&e<=57||e>=65&&e<=90||e>=97&&e<=122||36==e||95==e||e>=192&&215!=e&&247!=e,h=(t="Bad syntax",a=r[e])=>{throw SyntaxError(t+" `"+a+"` at "+e)},s=(t=1,a=e,o)=>{if("number"==typeof t)e+=t;else for(;t(r.charCodeAt(e));)e++;return r.slice(a,e)},i=(r=0,t,a,o,l,d)=>{for(;(a=c())&&(l=(d=u[a])&&d(o,r)||!o&&p());)o=l;return t&&(a==t?e++:h()),o},c=t=>{for(;(t=r.charCodeAt(e))<=32;)e++;return t},p=(e=s(f),r)=>e?(r=r=>r[e],t.push(e),r.id=()=>e,r):0,u=[],g=n.set=(t,a,o=32,l=t.charCodeAt(0),d=t.length,n=u[l],h=o.length||([o,a]=[a,o],0),s=t.toUpperCase()!==t,c=(h>1?(e,r)=>e&&(r=i(a))&&(e.length||r.length?t=>o(e(t),r(t),e.id?.(t),r.id?.(t)):(e=o(e(),r()),()=>e)):h?e=>!e&&(e=i(a-1))&&(r=>o(e(r))):o))=>u[l]=(o,l,h=e)=>l<a&&(d<2||r.substr(e,d)==t)&&(!s||!f(r.charCodeAt(e+d)))&&(e+=d,c(o,l))||(e=h,n&&n(o,l)),C=e=>e>=48&&e<=57,A=t=>(t&&h("Unexpected number"),t=s((e=>46==e||C(e))),(69==r.charCodeAt(e)||101==r.charCodeAt(e))&&(t+=s(2)+s(C)),(t=+t)!=t?h("Bad number"):()=>t),x=(e,r)=>t=>r(e.of?e.of(t):t,e.id(t));for(o=48;o<=57;)u[o++]=A;for(a=['"',e=>(e=e?h("Unexpected string"):s((e=>e-34)),s()||h("Bad string"),()=>e),,".",(e,r)=>(c(),r=s(f)||h(),d=t=>e(t)[r],d.id=()=>r,d.of=e,d),18,".",e=>!e&&A(s(-1)),,"[",(e,r,t)=>e&&(r=i(0,93)||h(),(t=t=>e(t)[r(t)]).id=r,t.of=e,t),18,"(",(e,r,t)=>(r=i(0,41),e?t=>e(t).apply(e.of?.(t),r?r.all?r.all(t):[r(t)]:[]):r||h()),18,",",(e,r,t=i(1))=>(t.all=e.all?r=>[...e.all(r),t(r)]:r=>[e(r),t(r)],t),1,"|",6,(e,r)=>e|r,"||",4,(e,r)=>e||r,"&",8,(e,r)=>e&r,"&&",5,(e,r)=>e&&r,"^",7,(e,r)=>e^r,"==",9,(e,r)=>e==r,"!=",9,(e,r)=>e!=r,">",10,(e,r)=>e>r,">=",10,(e,r)=>e>=r,">>",11,(e,r)=>e>>r,">>>",11,(e,r)=>e>>>r,"<",10,(e,r)=>e<r,"<=",10,(e,r)=>e<=r,"<<",11,(e,r)=>e<<r,"+",12,(e,r)=>e+r,"+",15,e=>+e,"++",e=>x(e||i(14),e?(e,r)=>e[r]++:(e,r)=>++e[r]),15,"-",12,(e,r)=>e-r,"-",15,e=>-e,"--",e=>x(e||i(14),e?(e,r)=>e[r]--:(e,r)=>--e[r]),15,"!",15,e=>!e,"*",13,(e,r)=>e*r,"/",13,(e,r)=>e/r,"%",13,(e,r)=>e%r];[o,l,d,...a]=a,o;)g(o,l,d);
+const SPACE=32;
 
-Symbol.observable||=Symbol("observable");const observable=e=>e&&!!(e[Symbol.observable]||e[Symbol.asyncIterator]||e.call&&e.set||e.subscribe||e.then);var sube = (e,b,r,o,s)=>e&&(e.subscribe?.(b,r,o)||e[Symbol.observable]?.().subscribe?.(b,r,o)||e.set&&e.call?.(s,(e=>{try{b(e);}catch(e){r?.(e);}}))||(e.then?.((e=>(!s&&b(e),o?.())),r)||(async t=>{try{for await(e of e){if(s)return;b(e);}o?.();}catch(e){r?.(e);}})())&&(e=>s=1));
+// current string, index and collected ids
+let idx, cur, args,
+
+// no handling tagged literals since easily done on user side with cache, if needed
+parse = (s, fn= !(cur=s, idx=0, args=[], s=expr()) || cur[idx] ? err() : ctx=>s(ctx||{})) => (fn.args = args, fn),
+
+isId = c =>
+  (c >= 48 && c <= 57) || // 0..9
+  (c >= 65 && c <= 90) || // A...Z
+  (c >= 97 && c <= 122) || // a...z
+  c == 36 || c == 95 || // $, _,
+  (c >= 192 && c != 215 && c != 247), // any non-ASCII
+
+err = (msg='Bad syntax',c=cur[idx]) => { throw SyntaxError(msg + ' `' + c + '` at ' + idx) },
+
+skip = (is=1, from=idx, l) => {
+  if (typeof is == 'number') idx += is;
+  else while (is(cur.charCodeAt(idx))) idx++;
+  return cur.slice(from, idx)
+},
+
+// a + b - c
+expr = (prec=0, end, cc, token, newNode, fn) => {
+  // chunk/token parser
+  while (
+    ( cc=space() ) && // till not end
+    // FIXME: extra work is happening here, when lookup bails out due to lower precedence -
+    // it makes extra `space` call for parent exprs on the same character to check precedence again
+    ( newNode =
+      (fn=lookup[cc]) && fn(token, prec) || // if operator with higher precedence isn't found
+      (!token && id()) // parse literal or quit. token seqs are forbidden: `a b`, `a "b"`, `1.32 a`
+    )
+  ) token = newNode;
+
+  // check end character
+  // FIXME: can't show "Unclose paren", because can be unknown operator within group as well
+  if (end) cc==end?idx++:err();
+
+  return token
+},
+
+// skip space chars, return first non-space character
+space = cc => { while ((cc = cur.charCodeAt(idx)) <= SPACE) idx++; return cc },
+
+// variable identifier
+id = (name=skip(isId), fn) => name ? (fn=ctx => ctx[name], args.push(name), fn.id=()=>name, fn) : 0,
+
+// operator/token lookup table
+lookup = [],
+
+// create operator checker/mapper (see examples)
+set = parse.set = (
+  op,
+  opPrec, fn=SPACE, // if opPrec & fn come in reverse order - consider them raw parse fn case, still precedence possible
+  c=op.charCodeAt(0),
+  l=op.length,
+  prev=lookup[c],
+  arity=fn.length || ([fn,opPrec]=[opPrec,fn], 0),
+  word=op.toUpperCase()!==op, // make sure word boundary comes after word operator
+  map=
+    // binary
+    arity>1 ? (a,b) => a && (b=expr(opPrec)) && (
+      !a.length && !b.length ? (a=fn(a(),b()), ()=>a) : // static pre-eval like `"a"+"b"`
+      ctx => fn(a(ctx),b(ctx),a.id?.(ctx),b.id?.(ctx))
+    ) :
+    // unary prefix (0 args)
+    arity ? a => !a && (a=expr(opPrec-1)) && (ctx => fn(a(ctx))) :
+    fn // custom parser
+) =>
+lookup[c] = (a, curPrec, from=idx) => curPrec<opPrec && (l<2||cur.substr(idx,l)==op) && (!word||!isId(cur.charCodeAt(idx+l))) && (idx+=l, map(a, curPrec)) || (idx=from, prev&&prev(a, curPrec));
+
+const PERIOD=46, CPAREN=41, CBRACK=93, DQUOTE=34, _0=48, _9=57,
+PREC_SEQ=1, PREC_SOME=4, PREC_EVERY=5, PREC_OR=6, PREC_XOR=7, PREC_AND=8,
+PREC_EQ=9, PREC_COMP=10, PREC_SHIFT=11, PREC_SUM=12, PREC_MULT=13, PREC_UNARY=15, PREC_CALL=18;
+
+let list, op, prec, fn,
+    isNum = c => c>=_0 && c<=_9,
+    // 1.2e+3, .5
+    num = n => (
+      n&&err('Unexpected number'),
+      n = skip(c=>c == PERIOD || isNum(c)),
+      (cur.charCodeAt(idx) == 69 || cur.charCodeAt(idx) == 101) && (n += skip(2) + skip(isNum)),
+      n=+n, n!=n ? err('Bad number') : () => n // 0 args means token is static
+    ),
+
+    inc = (a,fn) => ctx => fn(a.of?a.of(ctx):ctx, a.id(ctx));
+
+// numbers
+for (op=_0;op<=_9;) lookup[op++] = num;
+
+// operators
+for (list=[
+  // "a"
+  '"', a => (a=a?err('Unexpected string'):skip(c => c-DQUOTE), skip()||err('Bad string'), ()=>a),,
+
+  // a.b
+  '.', (a,id) => (space(), id=skip(isId)||err(), fn=ctx=>a(ctx)[id], fn.id=()=>id, fn.of=a, fn), PREC_CALL,
+
+  // .2
+  // FIXME: .123 is not operator, so we skip back, but mb reorganizing num would be better
+  '.', a => !a && num(skip(-1)),,
+
+  // a[b]
+  '[', (a,b,fn) => a && (b=expr(0,CBRACK)||err(), fn=ctx=>a(ctx)[b(ctx)], fn.id=b, fn.of=a, fn), PREC_CALL,
+
+  // a(), a(b), (a,b), (a+b)
+  '(', (a,b,fn) => (
+    b=expr(0,CPAREN),
+    // a(), a(b), a(b,c,d)
+    a ? ctx => a(ctx).apply(a.of?.(ctx), b ? b.all ? b.all(ctx) : [b(ctx)] : []) :
+    // (a+b)
+    b || err()
+  ), PREC_CALL,
+
+  // [a,b,c] or (a,b,c)
+  ',', (a,prec,b=expr(PREC_SEQ)) => (
+    b.all = a.all ? ctx => [...a.all(ctx), b(ctx)] : ctx => [a(ctx),b(ctx)],
+    b
+  ), PREC_SEQ,
+
+  '|', PREC_OR, (a,b)=>a|b,
+  '||', PREC_SOME, (a,b)=>a||b,
+
+  '&', PREC_AND, (a,b)=>a&b,
+  '&&', PREC_EVERY, (a,b)=>a&&b,
+
+  '^', PREC_XOR, (a,b)=>a^b,
+
+  // ==, !=
+  '==', PREC_EQ, (a,b)=>a==b,
+  '!=', PREC_EQ, (a,b)=>a!=b,
+
+  // > >= >> >>>, < <= <<
+  '>', PREC_COMP, (a,b)=>a>b,
+  '>=', PREC_COMP, (a,b)=>a>=b,
+  '>>', PREC_SHIFT, (a,b)=>a>>b,
+  '>>>', PREC_SHIFT, (a,b)=>a>>>b,
+  '<', PREC_COMP, (a,b)=>a<b,
+  '<=', PREC_COMP, (a,b)=>a<=b,
+  '<<', PREC_SHIFT, (a,b)=>a<<b,
+
+  // + ++ - --
+  '+', PREC_SUM, (a,b)=>a+b,
+  '+', PREC_UNARY, (a)=>+a,
+  '++', a => inc(a||expr(PREC_UNARY-1), a ? (a,b)=>a[b]++ : (a,b)=>++a[b]), PREC_UNARY,
+
+  '-', PREC_SUM, (a,b)=>a-b,
+  '-', PREC_UNARY, (a)=>-a,
+  '--', a => inc(a||expr(PREC_UNARY-1), a ? (a,b)=>a[b]-- : (a,b)=>--a[b]), PREC_UNARY,
+
+  // ! ~
+  '!', PREC_UNARY, (a)=>!a,
+
+  // * / %
+  '*', PREC_MULT, (a,b)=>a*b,
+  '/', PREC_MULT, (a,b)=>a/b,
+  '%', PREC_MULT, (a,b)=>a%b
+]; [op,prec,fn,...list]=list, op;) set(op,prec,fn);
+
+// lil subscriby (v-less)
+Symbol.observable||=Symbol('observable');
+
+// is target observable
+const observable = arg => arg && !!(
+  arg[Symbol.observable] || arg[Symbol.asyncIterator] ||
+  arg.call && arg.set ||
+  arg.subscribe || arg.then
+  // || arg.mutation && arg._state != null
+);
+
+var sube = (target, next, error, complete, stop) => 
+  target && (
+    target.subscribe?.( next, error, complete ) ||
+    target[Symbol.observable]?.().subscribe?.( next, error, complete ) ||
+    target.set && target.call?.(stop, next) || // observ
+    (
+      target.then?.(v => (!stop && next(v), complete?.()), error) ||
+      (async _ => {
+        try {
+          // FIXME: possible drawback: it will catch error happened in next, not only in iterator
+          for await (target of target) { if (stop) return; next(target); }
+          complete?.();
+        } catch (err) { error?.(err); }
+      })()
+    ) && (_ => stop=1)
+  );
+
+// auto-parse pkg in 2 lines (no object/array detection)
+const prop = (el, k, v, desc) => (
+  k = k.slice(0,2)==='on' ? k.toLowerCase() : k, // onClick → onclick
+  // avoid readonly props https://jsperf.com/element-own-props-set/1
+  el[k] !== v && (
+    !(k in el.constructor.prototype) || !(desc = Object.getOwnPropertyDescriptor(el.constructor.prototype, k)) || desc.set
+  ) && (el[k] = v),
+  v === false || v == null ? el.removeAttribute(k) :
+  typeof v !== 'function' && el.setAttribute(k,
+    v === true ? '' :
+    typeof v === 'number' || typeof v === 'string' ? v :
+    k === 'class' && Array.isArray(v) ? v.filter(Boolean).join(' ') :
+    k === 'style' && v.constructor === Object && (
+      k=v, v=Object.values(v), Object.keys(k).map((k,i) => `${k}: ${v[i]};`).join(' ')
+    )
+  )
+);
 
 // extend default subscript
 // ?:
-n.set(':', 3.1, (a,b) => [a,b]);
-n.set('?', 3, (a,b) => a ? b[0] : b[1]);
+parse.set(':', 3.1, (a,b) => [a,b]);
+parse.set('?', 3, (a,b) => a ? b[0] : b[1]);
 
 // literals
-n.set('true', a => { if (a) throw new SyntaxError('Unexpected'); return ()=>true });
-n.set('false', a => { if (a) throw new SyntaxError('Unexpected'); return ()=>false });
+parse.set('true', a => { if (a) throw new SyntaxError('Unexpected'); return ()=>true });
+parse.set('false', a => { if (a) throw new SyntaxError('Unexpected'); return ()=>false });
 
 // a?.b - optional chain operator
-n.set('?.',18, (a,b,aid,bid) => a?.[bid]);
+parse.set('?.',18, (a,b,aid,bid) => a?.[bid]);
 
 // a | b - pipe overload
-n.set('|', 6, (a,b) => b(a));
+parse.set('|', 6, (a,b) => b(a));
 
 // expressions processor
 const _state = Symbol('params'), _init = Symbol('init');
@@ -222,7 +426,7 @@ var processor = {
   createCallback(el, parts, state) {
     el[_state] = state;
 
-    for (const part of parts) (part.evaluate = n(part.expression));
+    for (const part of parts) (part.evaluate = parse(part.expression));
 
     // we have to convert reactive state values into real ones
     let unsub = [], source;
@@ -242,19 +446,25 @@ var processor = {
     el[_init] = true;
   },
 
-  processCallback(el, parts, state) {
+  processCallback(el, parts, state, newValue) {
     // reactive parts can update only fraction of state
     // we also allow modifying state during the init stage, but apply parts only after init
     Object.assign(el[_state], state);
     if (!el[_init]) return
-    for (const part of parts) part.value = part.evaluate(el[_state]);
+    for (const part of parts) {
+      if ((newValue = part.evaluate(el[_state])) !== part.value) {
+        // apply functional or other setters
+        if (part.attributeName && part.setter.parts.length === 1) prop(part.element, part.attributeName, part.value = newValue);
+        else part.value = newValue;
+      }
+    }
   }
 };
 
 var index = (node, params, proc=processor) => {
 (params ||= {})[Symbol.dispose] = node[Symbol.dispose];
 
-  let parts = parse(node),
+  let parts = parse$1(node),
       planned,
       // throttled for batch update
       update = () => {

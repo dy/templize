@@ -37,6 +37,7 @@ export class AttributeTemplatePart extends TemplatePart {
   get element() { return this.setter.element; }
   get value() { return this.#value; }
   set value(newValue) {
+    if (this.#value === newValue) return // save unnecessary call
     this.#value = newValue
     const { attr, element, parts } = this.setter;
     if (parts.length === 1) { // fully templatized

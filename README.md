@@ -135,6 +135,14 @@ Pipe | `{{ bar \| foo }}` → `{{ foo(bar) }}`
 <!-- Loop | `{{ item, idx in list }}` | `params.d` | Used for `:for` directive only -->
 <!-- Spread | `{{ ...foo }}` | `params.foo` | Used to pass multiple attributes or nodes -->
 
+### Attributes
+
+Processor makes assumptions regarding how attribute parts set values.
+
+* `onClick="{{ handler }}"` assigns `onclick` handler function (no need to call it).
+* `class="{{ cls }}"` can take either an array or a string.
+* `style="{{ style }}"` can take either an object or a string.
+
 ### Reactivity
 
 Initial state can define async/reactive values: _Promise_/_Thenable_, _AsyncIterable_, _Observable_/_Subject_ (see [sube](https://github.com/spectjs/sube)).<br/>

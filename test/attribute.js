@@ -1,5 +1,9 @@
 import test, {is} from '../node_modules/tst/tst.js'
+import h from '../node_modules/hyperf/hyperf.js'
+import v from '../node_modules/value-ref/value-ref.js'
 import {AttributeTemplatePart} from '../src/api.js'
+import templize from '../src/index.js'
+import {tick} from '../node_modules/wait-please/index.js'
 
 test('attr: updates the given attribute from partList when updateParent is called', () => {
   const el = document.createElement('div')
@@ -24,3 +28,15 @@ test('attr: updates the AttributeValue which updates the Attr whenever it receiv
   is(el.getAttribute('class'), 'goodbye world')
 })
 
+test('attribute: binds function', async () => {
+  let el = h`<div x={{x}} onclick="{{ inc }}"></div>`
+  let x = v(0)
+  templize(el, { x, inc: ()=>x.value++ })
+  is(x.value, 0)
+  is(el.x, 0)
+  el.click()
+
+  await tick()
+  is(x.value, 1)
+  is(el.x, 1)
+})

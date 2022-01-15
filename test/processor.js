@@ -4,6 +4,7 @@ import {TemplateInstance} from '../src/api.js'
 import {tick} from '../node_modules/wait-please/index.js'
 import templize from '../src/index.js'
 import exprProcessor from '../src/processor.js'
+import h from '../node_modules/hyperf/hyperf.min.js'
 
 const originalHTML = `Hello {{x}}!`
 const processor = {
@@ -52,7 +53,6 @@ test('processor: does not process parts with no param for the expression', () =>
   is(processor.create, 1)
   is(processor.process, 0)
 })
-
 
 
 test('expressions: {{ foo }}', async () => {

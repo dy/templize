@@ -1,5 +1,6 @@
-import parse from '../node_modules/subscript/subscript.min.js'
-import sube, { observable } from '../node_modules/sube/sube.min.js'
+import parse from '../node_modules/subscript/subscript.js'
+import sube, { observable } from '../node_modules/sube/sube.js'
+import { prop } from '../node_modules/element-props/element-props.js'
 
 // extend default subscript
 // ?:
@@ -45,11 +46,17 @@ export default {
     el[_init] = true
   },
 
-  processCallback(el, parts, state) {
+  processCallback(el, parts, state, newValue) {
     // reactive parts can update only fraction of state
     // we also allow modifying state during the init stage, but apply parts only after init
     Object.assign(el[_state], state)
     if (!el[_init]) return
-    for (const part of parts) part.value = part.evaluate(el[_state])
+    for (const part of parts) {
+      if ((newValue = part.evaluate(el[_state])) !== part.value) {
+        // apply functional or other setters
+        if (part.attributeName && part.setter.parts.length === 1) prop(part.element, part.attributeName, part.value = newValue)
+        else part.value = newValue
+      }
+    }
   }
 }
