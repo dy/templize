@@ -88,7 +88,7 @@ interface NodeTemplatePart : TemplatePart {
 
 ### Tables
 
-Due to HTML quirk in table parsing, table fields should be wrapped as comment:
+Due to HTML quirk in table parsing, table fields should be wrapped into comment:
 
 ```html
 <table>
