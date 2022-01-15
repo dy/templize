@@ -205,7 +205,7 @@ const params = templize(
 params.hidden = true
 ```
 
-Templize expression processor can also be used with other template parts libraries as:
+_Templize_ expression processor can also be used with other template instancing libraries as:
 
 ```js
 import { TemplateInstance } from '@github/template-parts'
@@ -218,7 +218,7 @@ const instance = new TemplateInstance(document.querySelector('my-template'), {},
 
 * [spect](https://github.com/spectjs/spect) − selector observer, useful for templizing any elements in DOM.
 * [subscript](https://github.com/spectjs/subscript) − composable template processor language.
-* [vref](https://github.com/spectjs/vref) − value reference with reactivity.
+* [value-ref](https://github.com/spectjs/value-ref) − value reference with reactivity.
 * [subscribable-things](https://github.com/chrisguttandin/subscribable-things) − reactive wrappers for various APIs.
 * [element-props](https://github.com/spectjs/element-props) − normalized access to element attributes / properties.
 <!-- * [define-element](https://github.com/spectjs/define-element) − declarative custom elements. -->
