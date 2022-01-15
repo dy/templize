@@ -139,9 +139,12 @@ Pipe | `{{ bar \| foo }}` → `{{ foo(bar) }}`
 
 Processor makes assumptions regarding how attribute parts set values.
 
+* `hidden="{{ hidden }}"` boolean values set or remove attribute.
 * `onClick="{{ handler }}"` assigns `onclick` handler function (no need to call it).
 * `class="{{ cls }}"` can take either an array or a string.
 * `style="{{ style }}"` can take either an object or a string.
+
+Other attributes are handled as strings. See [element-props](https://github.com/spectjs/element-props).
 
 ### Reactivity
 
