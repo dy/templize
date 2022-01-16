@@ -54,16 +54,28 @@ test('processor: does not process parts with no param for the expression', () =>
   is(processor.process, 0)
 })
 
-test('processor: dont init twice', () => {
+test('processor: template cannot modify init state', () => {
   let text = v('foo')
   let el = document.createElement('div')
   el.innerHTML = `<p>{{ count++, text }}</p>`
 
   let init = {count:0, text}
   templize(el, init, exprProcessor)
+
+  is(init, {count:0, text})
+})
+
+test('processor: dont init twice, dont change the template data', () => {
+  let text = v('foo')
+  let el = document.createElement('div')
+  el.innerHTML = `<p>{{ count.x++, text }}</p>`
+
+  let init = {count:{x:0}, text}
+  templize(el, init, exprProcessor)
+  templize(el, init, exprProcessor)
   templize(el, init, exprProcessor)
 
-  is(init, {count:1, text: 'foo'})
+  is(init, {count:{x:1}, text})
 })
 
 
