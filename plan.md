@@ -1,5 +1,12 @@
 # plan
 
+* [ ] add '' strings
+  + it's easier to type
+  + they don't conflict with HTML attrib strings
+
+* [ ] :for, :if need to be added to processor
+  + useful not only in define-element, but generally
+
 * [x] externalize & share deps
   * [x] sube
   * [x] diff

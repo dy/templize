@@ -1,5 +1,4 @@
-
-import test, {is, any} from '../node_modules/tst/tst.js'
+import test, {is, any} from 'tst'
 import {TemplateInstance} from '../src/api.js'
 import templize from '../src/index.js'
 

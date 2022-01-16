@@ -1,4 +1,4 @@
-import test, {is, any} from '../node_modules/tst/tst.js'
+import test, {is, any} from 'tst'
 import {TemplateInstance, AttributeTemplatePart} from '../src/api.js'
 
 

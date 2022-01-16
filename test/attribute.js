@@ -1,9 +1,9 @@
-import test, {is} from '../node_modules/tst/tst.js'
-import h from '../node_modules/hyperf/hyperf.js'
-import v from '../node_modules/value-ref/value-ref.js'
+import test, {is} from 'tst'
+import h from 'hyperf'
+import v from 'value-ref'
 import {AttributeTemplatePart} from '../src/api.js'
 import templize from '../src/index.js'
-import {tick} from '../node_modules/wait-please/index.js'
+import {tick} from 'wait-please'
 
 test('attr: updates the given attribute from partList when updateParent is called', () => {
   const el = document.createElement('div')
