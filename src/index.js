@@ -2,9 +2,6 @@ import { parse } from './parse.js'
 import processor from './processor.js'
 
 export default (node, params, proc=processor) => {
-  // adopt dispose from node (Symbol.dispose is defined there)
-  ;(params ||= {})[Symbol.dispose] = node[Symbol.dispose]
-
   let parts = parse(node),
       planned,
       // throttled for batch update

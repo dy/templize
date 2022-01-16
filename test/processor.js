@@ -54,7 +54,7 @@ test('processor: does not process parts with no param for the expression', () =>
   is(processor.process, 0)
 })
 
-test.only('processor: dont init twice', () => {
+test('processor: dont init twice', () => {
   let text = v('foo')
   let el = document.createElement('div')
   el.innerHTML = `<p>{{ count++, text }}</p>`
