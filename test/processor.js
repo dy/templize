@@ -79,12 +79,12 @@ test('processor: dont init twice, dont change the template data', () => {
 })
 
 
-test('reactivity: basic', async () => {
-  let text = v('foo')
+test.only('reactivity: basic', async () => {
+  let text = v('foo'), init
   let el = document.createElement('div')
   el.innerHTML = `<p>{{ text }}</p>`
 
-  templize(el, { text }, exprProcessor)
+  templize(el, init={ text }, exprProcessor)
 
   await tick(2)
   is(el.innerHTML, '<p>foo</p>')
@@ -94,17 +94,23 @@ test('reactivity: basic', async () => {
 
   if (typeof global === 'undefined' || !global.gc) return
 
-  text = null
+  await gc()
 
-  // collect garbage
+  text.value = 'baz'
+  await tick(2)
+  is(el.innerHTML, '<p>baz</p>')
+
+  init.text = text = null
+  await gc()
+
+  is(states.get(el)[1].text, undefined)
+  is(el.innerHTML, '<p>baz</p>')
+})
+
+async function gc() {
   console.log('---collect garbage')
   await time(100)
   await global.gc()
   // eval("%CollectGarbage('all')");
   await time(100)
-
-  // console.log(states.get(el))
-  is(states.get(el)[1].text, undefined)
-
-  is(el.innerHTML, '<p>bar</p>')
-})
+}

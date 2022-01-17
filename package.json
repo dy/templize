@@ -44,12 +44,12 @@
     "spect": "^24.1.1",
     "terser": "^5.10.0",
     "tst": "^7.1.0",
-    "value-ref": "^1.4.0",
+    "value-ref": "^1.4.3",
     "wait-please": "^3.1.0"
   },
   "dependencies": {
     "element-props": "^2.0.2",
-    "sube": "^2.0.2",
+    "sube": "^2.1.0",
     "subscript": "^6.3.0",
     "swapdom": "^1.1.1"
   }

@@ -48,12 +48,10 @@ export default {
 
     // hook up observables
     Object.keys(init).map((k, next) => {
-      if (observable(value = init[k])) observers[k] = sube(
-        value,
-        next = v => (values[k] = v, ready && this.processCallback(el, parts[k], {[k]: v}))
-      ),
-      registry.register(next, [observers, k])
-      else values[k] = value
+      if (observable(init[k]))
+        observers[k] = sube(init[k], v => (values[k] = v, ready && this.processCallback(el, parts[k], {[k]: v}))),
+      registry.register(init[k], [observers, k])
+      else values[k] = init[k]
     })
 
     // initial state inits all parts
