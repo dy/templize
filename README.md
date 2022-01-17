@@ -166,14 +166,12 @@ Update happens when any param changes:
 
   // ... 1s after
   // <div id="done">done</div>
-
-  // dispose observers
-  params[Symbol.dispose]()
 </script>
 ```
 
 This way, for example, _rxjs_ can be streamed directly to element attribute or content.
 
+Note: observers don't require disposal, since they're connected in weak fashion.
 
 ### Interop
 
