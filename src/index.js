@@ -14,6 +14,8 @@ export default (node, params, proc=processor) => {
         }
       }
 
+  params ||= {}
+
   proc.createCallback?.(node, parts, params)
   proc.processCallback(node, parts, params)
 

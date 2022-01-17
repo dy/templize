@@ -20,38 +20,47 @@ parseExpr.set('|', 6, (a,b) => b(a))
 Symbol.dispose||=Symbol('dispose')
 
 // expressions processor
-const states = new WeakMap
 export default {
-  createCallback(el, parts, init) {
+  createCallback(el, allParts, init) {
     if (states.get(el)) return
 
-    for (const part of parts) part.evaluate = parseExpr(part.expression)
+    let parts = {}, part, k, value, values = {}, observers = {}, ready
 
-    // we have to cover reactive state values with real ones
-    let unsub = [], source, state = Object.create(init)
+    // track prop → part
+    for (part of allParts)
+      (part.evaluate = parseExpr(part.expression)).args.map(arg => (parts[arg]||=[]).push(part))
 
-    // FIXME: make weakrefs here to avoid dispose?
-    for (const k in init)
-      if (observable(source = init[k])) {
-        unsub.push(sube(source, v => (
-            init ? state[k] = v : this.processCallback(el, parts, {[k]: v})
-          )
-        ))
-      }
+    // hook up observables
+    Object.keys(init).map(k => {
+      if (observable(value = init[k])) observers[k] = sube(value,
+        v => (
+          values[k] = v, ready && this.processCallback(el, parts[k], {[k]: v})
+        )
+      )
+      else values[k] = value
+    })
 
-    init = null, states.set(el, state)
+    // initial state inits all parts
+    ready = true, states.set(el, [values, observers])
   },
 
-  processCallback(el, parts, diff) {
-    // reactive parts can update only fraction of state
-    // we also allow modifying state during the init stage, but apply parts only after init
-    let newValue, state = Object.assign(states.get(el), diff)
-    for (const part of parts) {
-      if ((newValue = part.evaluate(state)) !== part.value) {
-        // apply functional or other setters
-        if (part.attributeName && part.setter.parts.length === 1) prop(part.element, part.attributeName, part.value = newValue)
-        else part.value = newValue
-      }
-    }
+  // updates diff parts from current state
+  // TODO: @throttled
+  processCallback(el, parts, state) {
+    let [values, obs] = states.get(el), k, part
+    for (k in state) if (!obs[k]) values[k] = state[k] // extend state ignoring reactive vals
+    for (part of parts) updatePart(part, values)
   }
 }
+
+const states = new WeakMap,
+
+updatePart = (part, state, newValue) => {
+  if ((newValue = part.evaluate(state)) !== part.value) {
+    // apply functional or other setters
+    if (part.attributeName && part.setter.parts.length === 1) prop(part.element, part.attributeName, part.value = newValue)
+    else part.value = newValue
+  }
+}
+
+

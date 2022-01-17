@@ -1,5 +1,8 @@
 # plan
 
+* [ ] processor: throttle updates
+  + makes useful both for TemplateInstance and templize
+
 * [ ] add '' strings
   + it's easier to type
   + they don't conflict with HTML attrib strings
