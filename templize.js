@@ -369,7 +369,7 @@ const observable = arg => arg && !!(
 // cleanup subscriptions
 // ref: https://v8.dev/features/weak-references
 // FIXME: maybe there's smarter way to unsubscribe in weakref
-const registry$1 = new FinalizationRegistry(unsub => unsub()),
+const registry$1 = new FinalizationRegistry(unsub => unsub.call?.()),
 
 // create weak wrapped handler
 weak = (fn, ref=new WeakRef(fn)) => e => ref.deref()?.(e);
@@ -445,7 +445,7 @@ parse.set('|', 6, (a,b) => b(a));
 
 // expressions processor
 const states = new WeakMap,
-      registry = new FinalizationRegistry(([observers, key]) => delete observers[key]);
+  registry = new FinalizationRegistry(([obs, k]) => (obs[k]?.(), delete obs[k]));
 
 var processor = {
   createCallback(el, allParts, init) {
@@ -454,19 +454,18 @@ var processor = {
     let parts = {}, // parts by ids used in parts
         values = {}, // template values state
         observers = {}, // observable properties in state
-        part, value, ready;
+        part, ready, value;
 
     // detect prop → part
     for (part of allParts) (part.evaluate = parse(part.expression)).args.map(arg => (parts[arg]||=[]).push(part));
 
     // hook up observables
-    Object.keys(init).map(k => {
-      if (observable(value = init[k])) registry.register(
-        observers[k] = new WeakRef(sube(value,
-          v => (values[k] = v, ready && this.processCallback(el, parts[k], {[k]: v}))
-        )),
-        [observers, k]
-      );
+    Object.keys(init).map((k, next) => {
+      if (observable(value = init[k])) observers[k] = sube(
+        value,
+        next = v => (values[k] = v, ready && this.processCallback(el, parts[k], {[k]: v}))
+      ),
+      registry.register(next, [observers, k]);
       else values[k] = value;
     });
 

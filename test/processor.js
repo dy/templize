@@ -1,9 +1,9 @@
 import v from 'value-ref'
 import test, {is, throws} from 'tst'
 import {TemplateInstance} from '../src/api.js'
-import {tick} from 'wait-please'
+import {tick, time} from 'wait-please'
 import templize from '../src/index.js'
-import exprProcessor from '../src/processor.js'
+import exprProcessor, { states, registry } from '../src/processor.js'
 import h from 'hyperf'
 
 const originalHTML = `Hello {{x}}!`
@@ -92,8 +92,19 @@ test('reactivity: basic', async () => {
   text.value = 'bar'
   is(el.innerHTML, '<p>bar</p>')
 
-  text[Symbol.dispose]()
-  text.value = 'baz'
-  await tick()
+  if (typeof global === 'undefined' || !global.gc) return
+
+  text = null
+
+  // collect garbage
+  console.log('---collect garbage')
+  await time(100)
+  await global.gc()
+  // eval("%CollectGarbage('all')");
+  await time(100)
+
+  // console.log(states.get(el))
+  is(states.get(el)[1].text, undefined)
+
   is(el.innerHTML, '<p>bar</p>')
 })

@@ -116,24 +116,3 @@ test.skip('expressions: missing args', async () => {
   throws(() => templize(el, { foo: 1 }, exprProcessor))
   is(el.innerHTML, '<p></p>')
 })
-
-
-
-test('reactivity: basic', async () => {
-  let text = v('foo')
-  let el = document.createElement('div')
-  el.innerHTML = `<p>{{ text }}</p>`
-
-  templize(el, { text }, exprProcessor)
-
-  await tick(2)
-  is(el.innerHTML, '<p>foo</p>')
-
-  text.value = 'bar'
-  is(el.innerHTML, '<p>bar</p>')
-
-  text[Symbol.dispose]()
-  text.value = 'baz'
-  await tick()
-  is(el.innerHTML, '<p>bar</p>')
-})

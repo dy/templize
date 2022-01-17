@@ -31,8 +31,8 @@ parseExpr.set('?.',18, (a,b,aid,bid) => a?.[bid])
 parseExpr.set('|', 6, (a,b) => b(a))
 
 // expressions processor
-const states = new WeakMap,
-      registry = new FinalizationRegistry(([observers, key]) => delete observers[key])
+export const states = new WeakMap,
+  registry = new FinalizationRegistry(([obs, k]) => (obs[k]?.(), delete obs[k]))
 
 export default {
   createCallback(el, allParts, init) {
@@ -41,19 +41,18 @@ export default {
     let parts = {}, // parts by ids used in parts
         values = {}, // template values state
         observers = {}, // observable properties in state
-        part, k, value, ready
+        part, k, ready, value
 
     // detect prop → part
     for (part of allParts) (part.evaluate = parseExpr(part.expression)).args.map(arg => (parts[arg]||=[]).push(part))
 
     // hook up observables
-    Object.keys(init).map(k => {
-      if (observable(value = init[k])) registry.register(
-        observers[k] = new WeakRef(sube(value,
-          v => (values[k] = v, ready && this.processCallback(el, parts[k], {[k]: v}))
-        )),
-        [observers, k]
-      )
+    Object.keys(init).map((k, next) => {
+      if (observable(value = init[k])) observers[k] = sube(
+        value,
+        next = v => (values[k] = v, ready && this.processCallback(el, parts[k], {[k]: v}))
+      ),
+      registry.register(next, [observers, k])
       else values[k] = value
     })
 
