@@ -1,7 +1,9 @@
 # plan
 
-* [ ] processor: throttle updates
+* [x] ~~processor: throttle updates~~
   + makes useful both for TemplateInstance and templize
+  - bad for interop: may be unexpected to call update and not get result immediately
+  - can be organized by user: templizer anyways throttles
 
 * [ ] add '' strings
   + it's easier to type

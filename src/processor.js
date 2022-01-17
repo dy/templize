@@ -24,18 +24,18 @@ export default {
   createCallback(el, allParts, init) {
     if (states.get(el)) return
 
-    let parts = {}, part, k, value, values = {}, observers = {}, ready
+    let parts = {}, // parts by ids used in parts
+        values = {}, // template values state
+        observers = {}, // observable properties in state
+        part, k, value, ready
 
-    // track prop → part
-    for (part of allParts)
-      (part.evaluate = parseExpr(part.expression)).args.map(arg => (parts[arg]||=[]).push(part))
+    // detect prop → part
+    for (part of allParts) (part.evaluate = parseExpr(part.expression)).args.map(arg => (parts[arg]||=[]).push(part))
 
     // hook up observables
     Object.keys(init).map(k => {
       if (observable(value = init[k])) observers[k] = sube(value,
-        v => (
-          values[k] = v, ready && this.processCallback(el, parts[k], {[k]: v})
-        )
+        v => (values[k] = v, ready && this.processCallback(el, parts[k], {[k]: v}))
       )
       else values[k] = value
     })
@@ -45,7 +45,6 @@ export default {
   },
 
   // updates diff parts from current state
-  // TODO: @throttled
   processCallback(el, parts, state) {
     let [values, obs] = states.get(el), k, part
     for (k in state) if (!obs[k]) values[k] = state[k] // extend state ignoring reactive vals
