@@ -30,10 +30,10 @@ parseExpr.set('?.',18, (a,b,aid,bid) => a?.[bid])
 // a | b - pipe overload
 parseExpr.set('|', 6, (a,b) => b(a))
 
-Symbol.dispose||=Symbol('dispose')
-
 // expressions processor
-const states = new WeakMap
+const states = new WeakMap,
+      registry = new FinalizationRegistry(([observers, key]) => delete observers[key])
+
 export default {
   createCallback(el, allParts, init) {
     if (states.get(el)) return
@@ -48,8 +48,11 @@ export default {
 
     // hook up observables
     Object.keys(init).map(k => {
-      if (observable(value = init[k])) observers[k] = sube(value,
-        v => (values[k] = v, ready && this.processCallback(el, parts[k], {[k]: v}))
+      if (observable(value = init[k])) registry.register(
+        observers[k] = new WeakRef(sube(value,
+          v => (values[k] = v, ready && this.processCallback(el, parts[k], {[k]: v}))
+        )),
+        [observers, k]
       )
       else values[k] = value
     })
@@ -61,7 +64,9 @@ export default {
   // updates diff parts from current state
   processCallback(el, parts, state) {
     let [values, observers] = states.get(el), k, part, v
+
     for (k in state) if (!observers[k]) values[k] = state[k] // extend state ignoring reactive vals
+
     for (part of parts)
       if ((v = part.evaluate(values)) !== part.value) {
         // apply functional or other setters

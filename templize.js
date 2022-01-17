@@ -356,7 +356,6 @@ for (list=[
   '%', PREC_MULT, (a,b)=>a%b
 ]; [op,prec,fn,...list]=list, op;) set(op,prec,fn);
 
-// lil subscriby (v-less)
 Symbol.observable||=Symbol('observable');
 
 // is target observable
@@ -367,22 +366,36 @@ const observable = arg => arg && !!(
   // || arg.mutation && arg._state != null
 );
 
-var sube = (target, next, error, complete, stop) => 
-  target && (
-    target.subscribe?.( next, error, complete ) ||
-    target[Symbol.observable]?.().subscribe?.( next, error, complete ) ||
-    target.set && target.call?.(stop, next) || // observ
-    (
-      target.then?.(v => (!stop && next(v), complete?.()), error) ||
-      (async _ => {
-        try {
-          // FIXME: possible drawback: it will catch error happened in next, not only in iterator
-          for await (target of target) { if (stop) return; next(target); }
-          complete?.();
-        } catch (err) { error?.(err); }
-      })()
-    ) && (_ => stop=1)
-  );
+// cleanup subscriptions
+// ref: https://v8.dev/features/weak-references
+// FIXME: maybe there's smarter way to unsubscribe in weakref
+const registry$1 = new FinalizationRegistry(unsub => unsub()),
+
+// create weak wrapped handler
+weak = (fn, ref=new WeakRef(fn)) => e => ref.deref()?.(e);
+
+// lil subscriby (v-less)
+var sube = (target, next, error, complete, stop, unsub) => target && (
+  next &&= weak(next), error &&= weak(error), complete &&= weak(complete),
+
+  unsub = target.subscribe?.( next, error, complete ) ||
+  target[Symbol.observable]?.().subscribe?.( next, error, complete ) ||
+  target.set && target.call?.(stop, next) || // observ
+  (
+    target.then?.(v => (!stop && next(v), complete?.()), error) ||
+    (async _ => {
+      try {
+        // FIXME: possible drawback: it will catch error happened in next, not only in iterator
+        for await (target of target) { if (stop) return; next(target); }
+        complete?.();
+      } catch (err) { error?.(err); }
+    })()
+  ) && (_ => stop=1),
+
+  // register autocleanup
+  registry$1.register(next||error||complete, unsub),
+  unsub
+);
 
 // auto-parse pkg in 2 lines (no object/array detection)
 const prop = (el, k, v, desc) => (
@@ -430,10 +443,10 @@ parse.set('?.',18, (a,b,aid,bid) => a?.[bid]);
 // a | b - pipe overload
 parse.set('|', 6, (a,b) => b(a));
 
-Symbol.dispose||=Symbol('dispose');
-
 // expressions processor
-const states = new WeakMap;
+const states = new WeakMap,
+      registry = new FinalizationRegistry(([observers, key]) => delete observers[key]);
+
 var processor = {
   createCallback(el, allParts, init) {
     if (states.get(el)) return
@@ -448,8 +461,11 @@ var processor = {
 
     // hook up observables
     Object.keys(init).map(k => {
-      if (observable(value = init[k])) observers[k] = sube(value,
-        v => (values[k] = v, ready && this.processCallback(el, parts[k], {[k]: v}))
+      if (observable(value = init[k])) registry.register(
+        observers[k] = new WeakRef(sube(value,
+          v => (values[k] = v, ready && this.processCallback(el, parts[k], {[k]: v}))
+        )),
+        [observers, k]
       );
       else values[k] = value;
     });
@@ -461,7 +477,9 @@ var processor = {
   // updates diff parts from current state
   processCallback(el, parts, state) {
     let [values, observers] = states.get(el), k, part, v;
+
     for (k in state) if (!observers[k]) values[k] = state[k]; // extend state ignoring reactive vals
+
     for (part of parts)
       if ((v = part.evaluate(values)) !== part.value) {
         // apply functional or other setters

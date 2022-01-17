@@ -1,6 +1,6 @@
 # plan
 
-* [ ] weakrefify subscriptions
+* [x] weakrefify subscriptions
 
 * [ ] add '' strings
   + it's easier to type
