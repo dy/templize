@@ -2,6 +2,19 @@ import parseExpr from 'subscript'
 import sube, { observable } from 'sube'
 import { prop } from 'element-props'
 
+// TODO: extend subscript strings
+// const escape = {n:'\n', r:'\r', t:'\t', b:'\b', f:'\f', v:'\v'},
+//   string = q => (qc, c, str='') => {
+//     qc && err('Unexpected string') // must not follow another token
+//     while (c=cur.charCodeAt(idx), c-q) {
+//       if (c === BSLASH) skip(), c=skip(), str += escape[c] || c
+//       else str += skip()
+//     }
+//     return skip()||err('Bad string'), () => str
+//   }
+// parseExpr.set('"', string(34))
+// parseExpr.set("'", string(39))
+
 // extend default subscript
 // ?:
 parseExpr.set(':', 3.1, (a,b) => [a,b])
