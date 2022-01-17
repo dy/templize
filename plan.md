@@ -1,9 +1,6 @@
 # plan
 
-* [x] ~~processor: throttle updates~~
-  + makes useful both for TemplateInstance and templize
-  - bad for interop: may be unexpected to call update and not get result immediately
-  - can be organized by user: templizer anyways throttles
+* [ ] weakrefify subscriptions
 
 * [ ] add '' strings
   + it's easier to type
@@ -11,6 +8,11 @@
 
 * [ ] :for, :if need to be added to processor
   + useful not only in define-element, but generally
+
+* [x] ~~processor: throttle updates~~
+  + makes useful both for TemplateInstance and templize
+  - bad for interop: may be unexpected to call update and not get result immediately
+  - can be organized by user: templizer anyways throttles
 
 * [x] externalize & share deps
   * [x] sube

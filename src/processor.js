@@ -33,6 +33,7 @@ parseExpr.set('|', 6, (a,b) => b(a))
 Symbol.dispose||=Symbol('dispose')
 
 // expressions processor
+const states = new WeakMap
 export default {
   createCallback(el, allParts, init) {
     if (states.get(el)) return
@@ -59,20 +60,16 @@ export default {
 
   // updates diff parts from current state
   processCallback(el, parts, state) {
-    let [values, obs] = states.get(el), k, part
-    for (k in state) if (!obs[k]) values[k] = state[k] // extend state ignoring reactive vals
-    for (part of parts) updatePart(part, values)
+    let [values, observers] = states.get(el), k, part, v
+    for (k in state) if (!observers[k]) values[k] = state[k] // extend state ignoring reactive vals
+    for (part of parts)
+      if ((v = part.evaluate(values)) !== part.value) {
+        // apply functional or other setters
+        if (part.attributeName && part.setter.parts.length === 1) prop(part.element, part.attributeName, part.value = v)
+        else part.value = v
+      }
   }
 }
 
-const states = new WeakMap,
-
-updatePart = (part, state, newValue) => {
-  if ((newValue = part.evaluate(state)) !== part.value) {
-    // apply functional or other setters
-    if (part.attributeName && part.setter.parts.length === 1) prop(part.element, part.attributeName, part.value = newValue)
-    else part.value = newValue
-  }
-}
 
 
