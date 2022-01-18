@@ -79,7 +79,7 @@ test('processor: dont init twice, dont change the template data', () => {
 })
 
 
-test.only('reactivity: basic', async () => {
+test('reactivity: properly garbage-collected', async () => {
   let text = v('foo'), init
   let el = document.createElement('div')
   el.innerHTML = `<p>{{ text }}</p>`
@@ -100,7 +100,7 @@ test.only('reactivity: basic', async () => {
   await tick(2)
   is(el.innerHTML, '<p>baz</p>')
 
-  init.text = text = null
+  init = text = null
   await gc()
 
   is(states.get(el)[1].text, undefined)

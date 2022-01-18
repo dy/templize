@@ -369,31 +369,26 @@ const observable = arg => arg && !!(
 // cleanup subscriptions
 // ref: https://v8.dev/features/weak-references
 // FIXME: maybe there's smarter way to unsubscribe in weakref
-const registry$1 = new FinalizationRegistry(unsub => unsub.call?.()),
-
-// create weak wrapped handler
-weak = (fn, ref=new WeakRef(fn)) => e => ref.deref()?.(e);
+const registry$1 = new FinalizationRegistry(unsub => unsub.call?.());
 
 // lil subscriby (v-less)
 var sube = (target, next, error, complete, stop, unsub) => target && (
-  next &&= weak(next), error &&= weak(error), complete &&= weak(complete),
-
   unsub = target.subscribe?.( next, error, complete ) ||
   target[Symbol.observable]?.().subscribe?.( next, error, complete ) ||
   target.set && target.call?.(stop, next) || // observ
   (
     target.then?.(v => (!stop && next(v), complete?.()), error) ||
-    (async _ => {
+    (async v => {
       try {
         // FIXME: possible drawback: it will catch error happened in next, not only in iterator
-        for await (target of target) { if (stop) return; next(target); }
+        for await (v of target) { if (stop) return; next(v); }
         complete?.();
       } catch (err) { error?.(err); }
     })()
   ) && (_ => stop=1),
 
   // register autocleanup
-  registry$1.register(next||error||complete, unsub),
+  registry$1.register(target, unsub),
   unsub
 );
 
@@ -460,14 +455,12 @@ var processor = {
     for (part of allParts) (part.evaluate = parse(part.expression)).args.map(arg => (parts[arg]||=[]).push(part));
 
     // hook up observables
-    Object.keys(init).map((k, next) => {
-      if (observable(value = init[k])) observers[k] = sube(
-        value,
-        next = v => (values[k] = v, ready && this.processCallback(el, parts[k], {[k]: v}))
-      ),
-      registry.register(next, [observers, k]);
+    for (let k in init) {
+      if (observable(value = init[k]))
+        observers[k] = sube(value, v => (values[k] = v, ready && this.processCallback(el, parts[k], {[k]: v}))),
+      registry.register(value, [observers, k]);
       else values[k] = value;
-    });
+    }
 
     // initial state inits all parts
     ready = true, states.set(el, [values, observers]);

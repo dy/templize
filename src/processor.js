@@ -41,18 +41,18 @@ export default {
     let parts = {}, // parts by ids used in parts
         values = {}, // template values state
         observers = {}, // observable properties in state
-        part, k, ready, value
+        part, ready, value
 
     // detect prop → part
     for (part of allParts) (part.evaluate = parseExpr(part.expression)).args.map(arg => (parts[arg]||=[]).push(part))
 
     // hook up observables
-    Object.keys(init).map((k, next) => {
-      if (observable(init[k]))
-        observers[k] = sube(init[k], v => (values[k] = v, ready && this.processCallback(el, parts[k], {[k]: v}))),
-      registry.register(init[k], [observers, k])
-      else values[k] = init[k]
-    })
+    for (let k in init) {
+      if (observable(value = init[k]))
+        observers[k] = sube(value, v => (values[k] = v, ready && this.processCallback(el, parts[k], {[k]: v}))),
+      registry.register(value, [observers, k])
+      else values[k] = value
+    }
 
     // initial state inits all parts
     ready = true, states.set(el, [values, observers])
