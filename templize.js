@@ -356,6 +356,7 @@ for (list=[
   '%', PREC_MULT, (a,b)=>a%b
 ]; [op,prec,fn,...list]=list, op;) set(op,prec,fn);
 
+// lil subscriby (v-less)
 Symbol.observable||=Symbol('observable');
 
 // is target observable
@@ -369,12 +370,13 @@ const observable = arg => arg && !!(
 // cleanup subscriptions
 // ref: https://v8.dev/features/weak-references
 // FIXME: maybe there's smarter way to unsubscribe in weakref
-const registry$1 = new FinalizationRegistry(unsub => unsub.call?.());
+const registry$1 = new FinalizationRegistry(unsub => unsub.call?.()),
 
-// lil subscriby (v-less)
-var sube = (target, next, error, complete, stop, unsub) => target && (
-  unsub = target.subscribe?.( next, error, complete ) ||
-  target[Symbol.observable]?.().subscribe?.( next, error, complete ) ||
+// this thingy must lose target out of context to let gc hit
+unsubr = sub => sub && (() => sub.unsubscribe?.());
+
+var sube = (target, next, error, complete, stop, sub, unsub) => target && (
+  unsub = unsubr((target[Symbol.observable]?.() || target).subscribe?.( next, error, complete )) ||
   target.set && target.call?.(stop, next) || // observ
   (
     target.then?.(v => (!stop && next(v), complete?.()), error) ||
