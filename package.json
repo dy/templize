@@ -1,7 +1,7 @@
 {
   "name": "templize",
   "version": "1.4.3",
-  "description": "Template parts for elements",
+  "description": "Template parts for any elements",
   "bugs": {
     "url": "https://github.com/spectjs/templize/issues"
   },
@@ -49,7 +49,7 @@
   },
   "dependencies": {
     "element-props": "^2.0.2",
-    "sube": "^2.2.0",
+    "sube": "^2.2.1",
     "subscript": "^6.3.0",
     "swapdom": "^1.1.1"
   }

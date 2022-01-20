@@ -63,6 +63,7 @@ export default {
     let [values, observers] = states.get(el), k, part, v
 
     for (k in state) if (!observers[k]) values[k] = state[k] // extend state ignoring reactive vals
+    // Object.assign(values, state)
 
     for (part of parts)
       if ((v = part.evaluate(values)) !== part.value) {

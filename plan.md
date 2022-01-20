@@ -1,13 +1,46 @@
 # plan
 
 * [x] weakrefify subscriptions
+  * [ ] disposing element should unsubscribe reactives as well
 
 * [ ] add '' strings
   + it's easier to type
   + they don't conflict with HTML attrib strings
 
 * [ ] :for, :if need to be added to processor
-  + useful not only in define-element, but generally
+  + useful not only in define-element, but generally, eg. spect
+  + somewhat familiar pattern from vue
+  - still a bit too opinionaty
+    → opinionation is atoned by minimalism
+  ? vs `<template type="repeat" repeat="{{ items }}">{{ item }}</template>`
+    - non-generic: is bound to template tag
+    - no way to redefine `item` variable
+      - which also blocks double loops
+    - just verbose
+    + doesn't create fake-item representation
+      → can be mitigated via [:for], [:if], [:else-if], [:else] { display:none } css.
+    + conventional, more standard, intersecting with other libs API
+    + defaulting to `item` reduces needless decisions for user and enforces  good practice
+  - some confusion is going on with `:for="item in items"` (vue) vs `:for="{{ item in items }}"`. One of them is meaningless.
+    . `:for="{{ items }}"` makes more sense than `:for="items"`
+    . `:for="{{ a in b }}"` is
+      + valid syntax
+      - has different meaning than `a in b`, making attribute a part of syntax, as if `:for="{{ true }}"`
+  → would be nice to split processors into: expressions, reactivity, conditions, loops, props
+  → `:repeat="{{ items }}"` is a shortcut for `<template type="repeat" repeat="{{ items }}"></template>`
+    → `:foreach="{{ items }}"` `<template directive="foreach" expression="items"></template>`
+  * [ ] `:for` is confusable with `for` attribute used for different purpose. Alternatives:
+    * :each
+    * :foreach
+    * :loop
+    * :of
+    * :in
+    * :from
+    * item:in="{{ items }}", item:of="{{ items }}"
+      + makes sense for attrTypes
+      - discrepancy with :if, :else-if, :else
+
+* [ ] interpolated strings \`a ${b} c\`
 
 * [x] ~~processor: throttle updates~~
   + makes useful both for TemplateInstance and templize

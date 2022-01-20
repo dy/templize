@@ -1,4 +1,4 @@
-import { NodeTemplatePart, AttributeTemplatePart } from './api.js'
+import { NodeTemplatePart, AttributeTemplatePart, InnerTemplatePart } from './api.js'
 
 const ELEMENT = 1, TEXT = 3, COMMENT = 8, STRING = 0, PART = 1,
       mem = {},
@@ -19,32 +19,42 @@ export const parse = (element, parts=[]) => {
   }
 
   for (node of element.childNodes) {
-    if (node.nodeType === ELEMENT) parse(node, parts)
-    else if (node.nodeType === TEXT || node.nodeType === COMMENT) if (node.data.includes('{{')) {
-      setter = { parentNode: element, parts: [] }
-      for ([type, value] of tokenize(node.data.trim()))
-        if (!type) setter.parts.push(new Text(value))
-        else value = new NodeTemplatePart(setter, value), setter.parts.push(value), parts.push(value)
+    if (node.nodeType === ELEMENT && !(node instanceof HTMLTemplateElement)) parse(node, parts)
+    else {
+      if (node.nodeType === ELEMENT || node.data.includes('{{')) {
+        const setter = {parentNode: element, parts:[]}
 
-      // AD-HOC: {{rows}}<table></table> → <table>{{ rows }}</table>
-      // logic: for every empty node in a table there is meant to be part before the table.
-      // NOTE: it doesn't cover all possible insertion cases, but the core ones.
-      // TODO: it can be extended to detect on the moment of insertion, but it still won't be complete
-      // removing for now
-      // if ((table = node.nextSibling)?.tagName === 'TABLE') {
-      //   slots = table.matches(':empty') ? [table] : table.querySelectorAll(tabular)
-      //   for (lastParts = []; lastParts.length < slots.length && setter.parts[setter.parts.length - 1] instanceof NodeTemplatePart;)
-      //     lastParts.push(setter.parts.pop())
+        if (node.data) {
+          for ([type, value] of tokenize(node.data.trim()))
+            if (!type) setter.parts.push(new Text(value))
+            else value = new NodeTemplatePart(setter, value), setter.parts.push(value), parts.push(value)
+        }
+        else {
+          value = new InnerTemplatePart(setter, node.getAttribute('expression') || node.getAttribute(node.getAttribute('type')))
+          value.template = node
+          setter.parts.push(value), parts.push(value)
+        }
 
-      //   for (slot of slots) {
-      //     if (lastParts.length)
-      //       parts.pop(), setter.parts.pop(),
-      //       slot.appendChild(new Text(`{{ ${ lastParts.pop().expression } }}`)),
-      //       setter.parts.push(new Text) // we have to stub removed field to keep children count
-      //   }
-      // }
+        // AD-HOC: {{rows}}<table></table> → <table>{{ rows }}</table>
+        // logic: for every empty node in a table there is meant to be part before the table.
+        // NOTE: it doesn't cover all possible insertion cases, but the core ones.
+        // TODO: it can be extended to detect on the moment of insertion, but it still won't be complete
+        // removing for now
+        // if ((table = node.nextSibling)?.tagName === 'TABLE') {
+        //   slots = table.matches(':empty') ? [table] : table.querySelectorAll(tabular)
+        //   for (lastParts = []; lastParts.length < slots.length && setter.parts[setter.parts.length - 1] instanceof NodeTemplatePart;)
+        //     lastParts.push(setter.parts.pop())
 
-      node.replaceWith(...setter.parts.flatMap(part => part.replacementNodes || [part]))
+        //   for (slot of slots) {
+        //     if (lastParts.length)
+        //       parts.pop(), setter.parts.pop(),
+        //       slot.appendChild(new Text(`{{ ${ lastParts.pop().expression } }}`)),
+        //       setter.parts.push(new Text) // we have to stub removed field to keep children count
+        //   }
+        // }
+
+        node.replaceWith(...setter.parts.flatMap(part => part.replacementNodes || [part]))
+      }
     }
   }
 

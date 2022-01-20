@@ -16,7 +16,9 @@ Essentially extension of [@github/template-parts](https://github.com/github/temp
 - Improved parser ([#38](https://github.com/github/template-parts/issues/38), [#44](https://github.com/github/template-parts/issues/44)).
 - More complete spec [API surface](./src/api.js).
 - `<table><!--{{ data }}--></table>` support<sup><a href="#tables">*</a></sup> ([#24](https://github.com/domenic/template-parts/issues/2)).
-- Expression processor with reactivity and optimized updates.
+- Expression processor with optimized updates.
+- Reactive props support.
+- Loops, conditions support.
 <!-- - [`<svg width={{ width }}>`](https://github.com/github/template-parts/issues/26) and other cases fixed. -->
 
 ## Usage
@@ -82,6 +84,11 @@ interface NodeTemplatePart : TemplatePart {
     [NewObject] readonly NodeList replacementNodes;
     void replace((Node or DOMString)... nodes);
     void replaceHTML(DOMString html);
+};
+
+interface InnerTemplatePart : NodeTemplatePart {
+    HTMLTemplateElement template;
+    attribute DOMString directive;
 };
 ```
 </details>
@@ -173,7 +180,71 @@ This way, for example, _rxjs_ can be streamed directly to element attribute or c
 
 Note: observers don't require disposal, since they're connected in weak fashion.
 
-### Interop
+## Directives
+
+_Templize_ recognizes inner templates as _InnerTemplatePart_ (as proposed [in the standard](https://github.com/WICG/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md#33-conditionals-and-loops-using-nested-templates)), but also provides a shortcut for defining directives:
+
+```html
+<ul>
+  <template directive="foreach" expression="items">
+    <li class={{class}} data-value={{value}}>{{label}}</li>
+  </template>
+</ul>
+
+<!-- Shortcut: -->
+<ul>
+  <li :foreach={{items}} class={{class}} data-value={{value}}>{{label}}</li>
+<ul>
+```
+
+### Loops
+
+Iteration is organized via `:for` directive:
+
+```html
+<define-element>
+  <ul is="my-list">
+    <template>
+      <li :for="{{ item, index in items }}" id="item-{{ index }}">{{ item.text }}</li>
+    </template>
+    <script scoped>
+      this.params.items = [1,2,3]
+    </script>
+  </ul>
+</define-element>
+
+<ul is="my-list"></ul>
+```
+
+Note that `index` starts with `1`, not `0`.
+
+Cases:
+
+```html
+<li :for="{{ item, index in array }}">
+<li :for="{{ key, value, index in object }}">
+<li :for="{{ count in number }}">
+```
+
+### Conditions
+
+Conditions can be organized either as ternary template part or via `:if`, `:else-if`, `:else` directives.
+
+For text variants ternary operator is shorter:
+
+```html
+<span>Status: {{ status === 0 ? 'Active' : 'Inactive' }}</span>
+```
+
+To optionally display an element, use `:if`-`:else-if`-`:else`:
+
+```html
+<span :if="{{ status === 0 }}">Inactive</span>
+<span :else-if="{{ status === 1 }}">Active</span>
+<span :else>Finished</span>
+```
+
+## Interop
 
 _Templize_ supports any [standard](https://github.com/WICG/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md#32-template-parts-and-custom-template-process-callback) template parts processor:
 

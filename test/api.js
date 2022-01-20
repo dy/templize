@@ -327,3 +327,26 @@ test('processCallback: is called on update', () => {
   instance.update({a: false})
   is(processCallCount, 2)
 })
+
+test('innerTemplatePart: full form', () => {
+  const template = document.createElement('template')
+  template.innerHTML = `<div><template directive="x" expression="x">{{ x }}</template></div>`
+  let arr = []
+  const instance = new TemplateInstance(
+    template, {x: ['x','y']}, {
+      processCallback(el, [part], state) {
+        arr.push(part.directive)
+        arr.push(part.expression)
+        const nodes = state[part.expression].map(
+          item => new TemplateInstance(part.template, {x:item})
+        )
+        part.replace(nodes);
+      }
+    }
+  )
+  is(arr, ['x', 'x'])
+  is(instance.childNodes[0].innerHTML,'xy')
+
+  instance.update({x:['y','z','w']})
+  is(instance.childNodes[0].innerHTML,'yzw')
+})

@@ -3,6 +3,8 @@
 import updateNodes from 'swapdom'
 import { parse } from './parse.js'
 
+const FRAGMENT = 11
+
 const values = {
   processCallback(instance, parts, state) {
     if (!state) return
@@ -64,12 +66,15 @@ export class NodeTemplatePart extends TemplatePart {
   get value() { return this.#nodes.map(node=>node.textContent).join(''); }
   set value(newValue) { this.replace(newValue) }
   replace(...nodes) { // replace current nodes with new nodes.
-    nodes = nodes.length ? nodes.flatMap(node =>
-      !node ? [new Text(node)] :
-      node.forEach ? [...node] :
-      node.nodeType ? [node] :
-      [new Text(node)]
-    ) : [new Text]
+    nodes = nodes.length ? nodes
+      .flat()
+      .flatMap(node =>
+        node?.forEach ? [...node] :
+        node?.nodeType === FRAGMENT ? [...node.childNodes] :
+        node?.nodeType ? [node] :
+        [new Text(node)]
+      )
+    : [new Text]
     this.#nodes = updateNodes(this.parentNode, this.#nodes, nodes, this.nextSibling)
   }
   replaceHTML(html) {
@@ -77,4 +82,9 @@ export class NodeTemplatePart extends TemplatePart {
     fragment.innerHTML = html;
     this.replace(fragment.childNodes);
   }
+}
+
+export class InnerTemplatePart extends NodeTemplatePart {
+  template
+  get directive() { return this.template.getAttribute('directive') }
 }
