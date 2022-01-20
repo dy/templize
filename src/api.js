@@ -85,6 +85,10 @@ export class NodeTemplatePart extends TemplatePart {
 }
 
 export class InnerTemplatePart extends NodeTemplatePart {
-  template
-  get directive() { return this.template.getAttribute('directive') }
+  directive
+  constructor(setter, template, directive=template.getAttribute('directive')||template.getAttribute('type')) {
+    super(setter, template.getAttribute('expression') || template.getAttribute(directive))
+    this.template = template
+    this.directive = directive
+  }
 }

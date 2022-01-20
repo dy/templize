@@ -30,8 +30,7 @@ export const parse = (element, parts=[]) => {
             else value = new NodeTemplatePart(setter, value), setter.parts.push(value), parts.push(value)
         }
         else {
-          value = new InnerTemplatePart(setter, node.getAttribute('expression') || node.getAttribute(node.getAttribute('type')))
-          value.template = node
+          value = new InnerTemplatePart(setter, node)
           setter.parts.push(value), parts.push(value)
         }
 

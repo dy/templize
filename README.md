@@ -182,71 +182,31 @@ Due to HTML quirk in table parsing, table fields should be wrapped into comment:
 
 ## Directives
 
-_Templize_ recognizes inner templates as _InnerTemplatePart_ (as proposed [in the standard](https://github.com/WICG/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md#33-conditionals-and-loops-using-nested-templates)):
+_Templize_ recognizes inner templates as _InnerTemplatePart_ (as proposed [in the standard](https://github.com/WICG/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md#33-conditionals-and-loops-using-nested-templates)) or shortcut style directives.
 
-```html
-<ul>
-  <template directive="foreach" expression="items">
-    <li class={{class}} data-value={{value}}>{{label}}</li>
-  </template>
-</ul>
-```
-
-Also it provides a shortcut for defining directives:
-
-```html
-<ul>
-  <li :foreach={{items}} class={{class}} data-value={{value}}>{{label}}</li>
-<ul>
-```
-
-### Condition
-
-To optionally display an element, use `if`-`else-if`-`else` directives:
-
-```html
-<!-- Short style -->
-<span :if="{{ status === 0 }}">Inactive</span>
-<span :else-if="{{ status === 1 }}">Active</span>
-<span :else>Finished</span>
-```
-
-<details><summary>Full style</summary>
-
-  ```html
-  <template directive="if" expression="status === 0">
-    <span>Inactive</span>
-  </template>
-  <template directive="else-if" expression="status === 1">
-    <span>Active</span>
-  </template>
-  <template directive="else">
-    <span>Finished</span>
-  </template>
-  ```
-</details>
-
-Note: text conditions can be organized via ternary operator:
-
-```html
-<span>Status: {{ status === 0 ? 'Active' : 'Inactive' }}</span>
-```
-
-<!--
 ### Loop
 
-
-Iteration is organized via `:foreach` directive:
+Iterating over set of items can be organized via `foreach` directive:
 
 ```html
 <ul>
   <template directive>
-    <li :foreach="{{ item, index in items }}" id="item-{{ index }}">{{ item.text }}</li>
+    <li :foreach="{{ item, index in items }}" id="item-{{ index }}" title="{{ item.title }}">{{ item.text }}</li>
   </template>
 </ul>
 ```
 
 Note that `index` starts with `1`, not `0`.
+
+Long style:
+
+```html
+<ul>
+  <template directive="foreach" expression="{{ item in items }}">
+    <li class={{item.class}} data-value={{item.value}}>{{item.label}}</li>
+  </template>
+</ul>
+```
 
 Cases:
 
@@ -255,7 +215,37 @@ Cases:
 <li :foreach="{{ key, value, index in object }}">
 <li :foreach="{{ count in number }}">
 ```
--->
+
+### Condition
+
+To optionally display an element, there is `if`-`else-if`-`else` directives.
+
+Short style:
+```html
+<!-- Short style -->
+<span :if="{{ status === 0 }}">Inactive</span>
+<span :else-if="{{ status === 1 }}">Active</span>
+<span :else>Finished</span>
+```
+
+Long style:
+```html
+<template directive="if" if="{{ status === 0 }}">
+  <span>Inactive</span>
+</template>
+<template directive="else-if" else-if="{{ status === 1 }}">
+  <span>Active</span>
+</template>
+<template directive="else">
+  <span>Finished</span>
+</template>
+```
+
+Note: text conditions can be organized via ternary operator:
+
+```html
+<span>Status: {{ status === 0 ? 'Active' : 'Inactive' }}</span>
+```
 
 ## Interop
 
