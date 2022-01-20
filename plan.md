@@ -3,7 +3,7 @@
 * [x] weakrefify subscriptions
   * [ ] disposing element should unsubscribe reactives as well
 
-* [ ] add '' strings
+* [x] add '' strings
   + it's easier to type
   + they don't conflict with HTML attrib strings
 
@@ -26,6 +26,7 @@
     . `:for="{{ a in b }}"` is
       + valid syntax
       - has different meaning than `a in b`, making attribute a part of syntax, as if `:for="{{ true }}"`
+    → we need expression brackets for shortcut: otherwise
   → would be nice to split processors into: expressions, reactivity, conditions, loops, props
   → `:repeat="{{ items }}"` is a shortcut for `<template type="repeat" repeat="{{ items }}"></template>`
     → `:foreach="{{ items }}"` `<template directive="foreach" expression="items"></template>`
@@ -59,7 +60,7 @@
   → TemplateInstance doesn't include expressions, templize does
 
 * [x] [Symbol.dispose] for disposing reactive observers.
-  * [ ] Can disposal be made via WeakRef?
+  * [x] Can disposal be made via WeakRef?
     - depends on implementation of observable.
 
 * [x] get rid of table ad-hoc?

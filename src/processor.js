@@ -1,19 +1,19 @@
-import parseExpr from 'subscript'
+import {cur, idx, skip, err, expr} from 'subscript/src/index.js'
+import parseExpr from 'subscript/src/subscript.js'
 import sube, { observable } from 'sube'
 import { prop } from 'element-props'
 
-// TODO: extend subscript strings
-// const escape = {n:'\n', r:'\r', t:'\t', b:'\b', f:'\f', v:'\v'},
-//   string = q => (qc, c, str='') => {
-//     qc && err('Unexpected string') // must not follow another token
-//     while (c=cur.charCodeAt(idx), c-q) {
-//       if (c === BSLASH) skip(), c=skip(), str += escape[c] || c
-//       else str += skip()
-//     }
-//     return skip()||err('Bad string'), () => str
-//   }
-// parseExpr.set('"', string(34))
-// parseExpr.set("'", string(39))
+const BSLASH = 92,
+  escape = {n:'\n', r:'\r', t:'\t', b:'\b', f:'\f', v:'\v'},
+  string = q => (qc, c, str='') => {
+    while (c=cur.charCodeAt(idx), c-q) {
+      if (c === BSLASH) skip(), c=skip(), str += escape[c] || c
+      else str += skip()
+    }
+    return skip()||err('Bad string'), () => str
+  }
+parseExpr.set('"', string(34))
+parseExpr.set("'", string(39))
 
 // extend default subscript
 // ?:
@@ -42,6 +42,7 @@ export default {
         values = {}, // template values state
         observers = {}, // observable properties in state
         part, ready, value
+
 
     // detect prop → part
     for (part of allParts) (part.evaluate = parseExpr(part.expression)).args.map(arg => (parts[arg]||=[]).push(part))

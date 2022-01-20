@@ -78,6 +78,13 @@ test('expressions: literals', async () => {
   is(el2.innerHTML, '<p>abc</p>')
 
 
+  let el2a = document.createElement('div')
+  el2a.innerHTML = `<p>{{ 'abc' }}</p>`
+
+  templize(el2a, null, exprProcessor)
+  is(el2a.innerHTML, '<p>abc</p>')
+
+
   let el3 = document.createElement('div')
   el3.innerHTML = `<p>{{ -1e-2 }}</p>`
 
