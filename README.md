@@ -182,7 +182,7 @@ Due to HTML quirk in table parsing, table fields should be wrapped into comment:
 
 ## Directives
 
-_Templize_ recognizes inner templates as _InnerTemplatePart_ (as proposed [in the standard](https://github.com/WICG/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md#33-conditionals-and-loops-using-nested-templates)), but also provides a shortcut for defining directives:
+_Templize_ recognizes inner templates as _InnerTemplatePart_ (as proposed [in the standard](https://github.com/WICG/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md#33-conditionals-and-loops-using-nested-templates)):
 
 ```html
 <ul>
@@ -190,8 +190,11 @@ _Templize_ recognizes inner templates as _InnerTemplatePart_ (as proposed [in th
     <li class={{class}} data-value={{value}}>{{label}}</li>
   </template>
 </ul>
+```
 
-<!-- Shortcut: -->
+Also it provides a shortcut for defining directives:
+
+```html
 <ul>
   <li :foreach={{items}} class={{class}} data-value={{value}}>{{label}}</li>
 <ul>
