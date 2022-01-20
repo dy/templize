@@ -93,19 +93,6 @@ interface InnerTemplatePart : NodeTemplatePart {
 ```
 </details>
 
-### Tables
-
-Due to HTML quirk in table parsing, table fields should be wrapped into comment:
-
-```html
-<table>
-  <!--{{ thead }}-->
-  <tbody>
-    <!--{{ rows }}-->
-  </tbody>
-</table>
-```
-
 ## Expressions
 
 Templize enables expressions via default **expression processor** based on [subscript](https://github.com/spectjs/subscript):
@@ -179,6 +166,19 @@ Update happens when any param changes:
 This way, for example, _rxjs_ can be streamed directly to element attribute or content.
 
 Note: observers don't require disposal, since they're connected in weak fashion.
+
+### Tables
+
+Due to HTML quirk in table parsing, table fields should be wrapped into comment:
+
+```html
+<table>
+  <!--{{ thead }}-->
+  <tbody>
+    <!--{{ rows }}-->
+  </tbody>
+</table>
+```
 
 ## Directives
 
