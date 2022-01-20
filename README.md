@@ -182,28 +182,24 @@ Due to HTML quirk in table parsing, table fields should be wrapped into comment:
 
 ## Directives
 
-_Templize_ recognizes inner templates as _InnerTemplatePart_ (as proposed [in the standard](https://github.com/WICG/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md#33-conditionals-and-loops-using-nested-templates)) or shortcut style directives.
+_Templize_ recognizes inner templates (as _InnerTemplatePart_ proposed [in the standard](https://github.com/WICG/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md#33-conditionals-and-loops-using-nested-templates)) or shortcut directives.
 
-### Loop
+### Loops
 
 Iterating over set of items can be organized via `foreach` directive:
 
 ```html
 <ul>
-  <template directive>
-    <li :foreach="{{ item, index in items }}" id="item-{{ index }}" title="{{ item.title }}">{{ item.text }}</li>
-  </template>
+  <li :foreach="{{ item of items }}" id="item-{{item.id}}" data-value="{{item.value}}">{{item.label}}</li>
 </ul>
 ```
-
-Note that `index` starts with `1`, not `0`.
 
 Long style:
 
 ```html
 <ul>
   <template directive="foreach" expression="{{ item in items }}">
-    <li class={{item.class}} data-value={{item.value}}>{{item.label}}</li>
+    <li id="item-{{item.id}}" data-value={{item.value}}>{{item.label}}</li>
   </template>
 </ul>
 ```
@@ -213,10 +209,10 @@ Cases:
 ```html
 <li :foreach="{{ item, index in array }}">
 <li :foreach="{{ key, value, index in object }}">
-<li :foreach="{{ count in number }}">
+<li :foreach="{{ value of object }}">
 ```
 
-### Condition
+### Conditions
 
 To optionally display an element, there is `if`-`else-if`-`else` directives.
 
