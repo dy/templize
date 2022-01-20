@@ -62,7 +62,7 @@ export class NodeTemplatePart extends TemplatePart {
   get parentNode() { return this.setter.parentNode; }
   get nextSibling() { return this.#nodes[this.#nodes.length-1].nextSibling; }
   get previousSibling() { return this.#nodes[0].previousSibling; }
-  // FIXME: not sure why do we need string serialization here
+  // FIXME: not sure why do we need string serialization here? Just because parent class has type DOMString?
   get value() { return this.#nodes.map(node=>node.textContent).join(''); }
   set value(newValue) { this.replace(newValue) }
   replace(...nodes) { // replace current nodes with new nodes.
@@ -86,8 +86,11 @@ export class NodeTemplatePart extends TemplatePart {
 
 export class InnerTemplatePart extends NodeTemplatePart {
   directive
-  constructor(setter, template, directive=template.getAttribute('directive')||template.getAttribute('type')) {
-    super(setter, template.getAttribute('expression') || template.getAttribute(directive))
+  constructor(setter, template) {
+    let directive = template.getAttribute('directive') || template.getAttribute('type'),
+        expression = template.getAttribute('expression') || template.getAttribute(directive)
+    if (expression.startsWith('{{')) expression = expression.trim().slice(2,-2).trim()
+    super(setter, expression)
     this.template = template
     this.directive = directive
   }
