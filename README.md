@@ -226,7 +226,7 @@ To optionally display an element, use `if`-`else-if`-`else` directives:
   ```
 </details>
 
-Note: conditions can be organized simpler as ternary operator:
+Note: text conditions can be organized as ternary operator:
 
 ```html
 <span>Status: {{ status === 0 ? 'Active' : 'Inactive' }}</span>
