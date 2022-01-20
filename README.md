@@ -200,23 +200,50 @@ Also it provides a shortcut for defining directives:
 <ul>
 ```
 
-### Loops
+### Condition
 
-Iteration is organized via `:for` directive:
+To optionally display an element, use `if`-`else-if`-`else` directives:
 
 ```html
-<define-element>
-  <ul is="my-list">
-    <template>
-      <li :for="{{ item, index in items }}" id="item-{{ index }}">{{ item.text }}</li>
-    </template>
-    <script scoped>
-      this.params.items = [1,2,3]
-    </script>
-  </ul>
-</define-element>
+<!-- Short style -->
+<span :if="{{ status === 0 }}">Inactive</span>
+<span :else-if="{{ status === 1 }}">Active</span>
+<span :else>Finished</span>
+```
 
-<ul is="my-list"></ul>
+<details><summary>Full style</summary>
+
+  ```html
+  <template directive="if" expression="status === 0">
+    <span>Inactive</span>
+  </template>
+  <template directive="else-if" expression="status === 1">
+    <span>Active</span>
+  </template>
+  <template directive="else">
+    <span>Finished</span>
+  </template>
+  ```
+</details>
+
+Note: conditions can be organized simpler as ternary operator:
+
+```html
+<span>Status: {{ status === 0 ? 'Active' : 'Inactive' }}</span>
+```
+
+<!--
+### Loop
+
+
+Iteration is organized via `:foreach` directive:
+
+```html
+<ul>
+  <template directive>
+    <li :foreach="{{ item, index in items }}" id="item-{{ index }}">{{ item.text }}</li>
+  </template>
+</ul>
 ```
 
 Note that `index` starts with `1`, not `0`.
@@ -224,28 +251,11 @@ Note that `index` starts with `1`, not `0`.
 Cases:
 
 ```html
-<li :for="{{ item, index in array }}">
-<li :for="{{ key, value, index in object }}">
-<li :for="{{ count in number }}">
+<li :foreach="{{ item, index in array }}">
+<li :foreach="{{ key, value, index in object }}">
+<li :foreach="{{ count in number }}">
 ```
-
-### Conditions
-
-Conditions can be organized either as ternary template part or via `:if`, `:else-if`, `:else` directives.
-
-For text variants ternary operator is shorter:
-
-```html
-<span>Status: {{ status === 0 ? 'Active' : 'Inactive' }}</span>
-```
-
-To optionally display an element, use `:if`-`:else-if`-`:else`:
-
-```html
-<span :if="{{ status === 0 }}">Inactive</span>
-<span :else-if="{{ status === 1 }}">Active</span>
-<span :else>Finished</span>
-```
+-->
 
 ## Interop
 
