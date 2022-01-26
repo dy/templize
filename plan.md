@@ -1,5 +1,32 @@
 # plan
 
+* [x] find out a good way to bulk-update templize, instead of throttling props.
+  1. Maybe return `update` instead of `params`?
+    + we don't need params as much, since we had them in init, do we?
+    + spec-compatible
+    - `params.user.name` is nice to be able to update. `update({user: {...user, name}})` isn't nice.
+    - `update` is confusing along with mutable params - how's that different? params also do update, aren't they?
+      . that's needed for secret-ish sync bulk-update.
+  2. Return `[params, update]`
+    + hooks-familiar notation
+    - params is also hooked - a bit weird
+  3. Do both - `[params, update]` or just `update`?
+    + any desired syntax
+  4. It's even better to `{state, update}` and `[state, update]`.
+    - too much indecisiveness
+  5. Make `params` or `[params, update]` the same?
+    + react-compat
+    + backwards-compat
+    - not spec-compat but fine
+    - a bit hard to implement: do we extend params?
+      → we provide iterator: with extending array that's a mess
+      + iterator acts as update symbol as well.
+
+* [ ] How to provide `createCallback` not superceding default processor?
+  → Just manually import/call processor callback?
+
+* [ ] observables as props, not direct args {{prop.done}}
+
 * [x] weakrefify subscriptions
   * [ ] disposing element should unsubscribe reactives as well
 
@@ -32,14 +59,19 @@
     → `:foreach="{{ items }}"` `<template directive="foreach" expression="items"></template>`
   * [ ] `:for` is confusable with `for` attribute used for different purpose. Alternatives:
     * :each
+      + `<li :each="{{item in items}}"/>` + lovely, natural language
     * :foreach
-    * :loop
-    * :of
-    * :in
+      - `<li :foreach="{{ item in items }}"/>` - nah, li is not command
+    * :loop, :repeat
+      . `<li :loop="{{ item in items }}"` - li is not loop
+      . `<li :repeat="{{ item in items }}"/>` - it does not repeat, it maps
+    * :of, :in
+      - used in expression `<li :in="{{ item in todos }}">` - wut?
     * :from
     * item:in="{{ items }}", item:of="{{ items }}"
       + makes sense for attrTypes
       - discrepancy with :if, :else-if, :else
+      - messy
 
 * [ ] interpolated strings \`a ${b} c\`
 

@@ -17,6 +17,7 @@
     "template instantiation",
     "template-instance",
     "template instance",
+    "template engine",
     "dom-parts",
     "dom parts",
     "templatize"
@@ -38,7 +39,7 @@
   "devDependencies": {
     "@rollup/plugin-node-resolve": "^13.1.3",
     "es-module-shims": "^1.4.1",
-    "hyperf": "^1.1.2",
+    "hyperf": "^1.3.0",
     "jsdom": "^19.0.0",
     "rollup": "^2.63.0",
     "spect": "^24.1.1",
@@ -50,7 +51,7 @@
   "dependencies": {
     "element-props": "^2.0.2",
     "sube": "^2.2.1",
-    "subscript": "^6.3.0",
+    "subscript": "^6.4.0",
     "swapdom": "^1.1.1"
   }
 }

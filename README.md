@@ -31,13 +31,15 @@ Drop `templize.js` into project folder and:
 <script type="module">
 import templize from './templize.js'
 
-const params = templize(document.getElementById('foo'), { x: 'Hello', y: 'bar'})
+const [params, update] = templize(document.getElementById('foo'), { x: 'Hello', y: 'bar'})
 // <div id="foo" class="foo bar">Hello world</div>
 
-params.x = 'Goodbye'
+params.x = 'Goodbye' // === update({x: 'Goodbye'})
 // <div id="foo" class="foo bar">Goodbye world</div>
 </script>
 ```
+
+`params` is proxy reflecting current state; changing any of its props updates parts. `update` can be used for batch-update state.
 
 _Templize_ also can be used as _Template Instance_ from the [spec](https://github.com/WICG/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md#32-template-parts-and-custom-template-process-callback):
 
@@ -154,7 +156,7 @@ Update happens when any param changes:
 
   const done = new Promise(ok => setTimeout(() => ok('Done!'), 1000))
 
-  const params = templize(document.querySelector('#done'), { done })
+  templize(document.querySelector('#done'), { done })
 
   // <div id="done">...</div>
 
@@ -186,11 +188,11 @@ _Templize_ recognizes inner templates (as _InnerTemplatePart_ proposed [in the s
 
 ### Loops
 
-Iterating over set of items can be organized via `foreach` directive:
+Iterating over set of items can be organized via `each` directive:
 
 ```html
 <ul>
-  <li :foreach="{{ item of items }}" id="item-{{item.id}}" data-value="{{item.value}}">{{item.label}}</li>
+  <li :each="{{ item in items }}" id="item-{{item.id}}" data-value="{{item.value}}">{{item.label}}</li>
 </ul>
 ```
 
@@ -198,7 +200,7 @@ Long style:
 
 ```html
 <ul>
-  <template directive="foreach" expression="{{ item in items }}">
+  <template directive="each" expression="{{ item in items }}">
     <li id="item-{{item.id}}" data-value={{item.value}}>{{item.label}}</li>
   </template>
 </ul>
@@ -207,9 +209,9 @@ Long style:
 Cases:
 
 ```html
-<li :foreach="{{ item, index in array }}">
-<li :foreach="{{ key, value, index in object }}">
-<li :foreach="{{ value of object }}">
+<li :each="{{ item, index in array }}">
+<li :each="{{ key, value, index in object }}">
+<li :each="{{ value in object }}">
 ```
 
 ### Conditions
@@ -249,14 +251,16 @@ _Templize_ supports any [standard](https://github.com/WICG/webcomponents/blob/gh
 
 ```js
 const params = templize(element, initState, {
-  createCallback(el, parts, state) {
+  createCallback(element, parts, state) {
     // ... init parts / parse expressions
   },
-  processCallback(el, parts, state) {
+  processCallback(element, parts, state) {
     // ... update parts / evaluate expressions
   }
 })
 ```
+
+Note that callbacks receive _element_ itself, not _Template Instance_ (although also node).
 <!--
 Default processor supports only direct values.
 

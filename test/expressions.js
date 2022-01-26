@@ -10,14 +10,11 @@ test('expressions: {{ foo }}', async () => {
   let el = document.createElement('div')
   el.innerHTML = `<p>{{ text }}</p>`
 
-  const params = templize(el, { text: 'abc'}, exprProcessor)
+  const [params, update] = templize(el, { text: 'abc'}, exprProcessor)
   is(el.innerHTML, '<p>abc</p>')
   params.text = 'def'
   is(el.innerHTML, '<p>def</p>')
-  params.text = 'ghi'
-  is(el.innerHTML, '<p>def</p>')
-
-  await tick()
+  update({text: 'ghi'})
   is(el.innerHTML, '<p>ghi</p>')
 })
 

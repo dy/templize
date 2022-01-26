@@ -72,7 +72,7 @@ export class NodeTemplatePart extends TemplatePart {
         node?.forEach ? [...node] :
         node?.nodeType === FRAGMENT ? [...node.childNodes] :
         node?.nodeType ? [node] :
-        [new Text(node)]
+        [new Text(node == null ? '' : node)]
       )
     : [new Text]
     this.#nodes = updateNodes(this.parentNode, this.#nodes, nodes, this.nextSibling)
@@ -88,7 +88,7 @@ export class InnerTemplatePart extends NodeTemplatePart {
   directive
   constructor(setter, template) {
     let directive = template.getAttribute('directive') || template.getAttribute('type'),
-        expression = template.getAttribute('expression') || template.getAttribute(directive)
+        expression = template.getAttribute('expression') || template.getAttribute(directive) || ''
     if (expression.startsWith('{{')) expression = expression.trim().slice(2,-2).trim()
     super(setter, expression)
     this.template = template
