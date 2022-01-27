@@ -7,8 +7,8 @@ import h from 'hyperf'
 
 test('conditions: long', async () => {
   let el = h`<p>
-    <template directive="if" expression="{{ a==1 }}"><span>a</span></template>
-    <template directive="else-if" expression="{{ a==2 }}"><span>b</span></template>
+    <template directive="if" expression="a==1"><span>a</span></template>
+    <template directive="else-if" expression="a==2"><span>b</span></template>
     <template directive="else"><span>c</span></template>
   </p>`
 

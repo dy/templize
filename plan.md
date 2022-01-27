@@ -1,13 +1,12 @@
 # plan
 
-* [ ] Make API depend on templize instead of reproducing same flow
+
+* [ ] Move shortcut directives to processor?
 
 * [ ] How to provide `createCallback` not superceding default processor?
   → Just manually import/call processor callback?
 
 * [ ] observables as props, not direct args {{prop.done}}
-
-* [x] weakrefify subscriptions
 
 * [ ] disposing element should unsubscribe reactives as well
 
@@ -51,6 +50,15 @@
       - messy
 
 * [ ] interpolated strings \`a ${b} c\`
+
+* [x] Expose directive registering
+
+* [x] Make API depend on templize instead of reproducing same flow
+
+* [x] ~~? Decouple API from templize. templize includes directives set up, which is incompatible with polyfill...~~
+  ? maybe not - now it sets up directives
+
+* [x] weakrefify subscriptions
 
 * [x] find out a good way to bulk-update templize, instead of throttling props.
   1. Maybe return `update` instead of `params`?

@@ -3,6 +3,7 @@ import parseExpr from 'subscript/subscript.js'
 import sube, { observable } from 'sube'
 import { prop } from 'element-props'
 import { templize, NodeTemplatePart } from './api.js'
+import { directive, directives } from './directives.js'
 
 // extend default subscript
 // '" strings with escaping characters
@@ -35,6 +36,31 @@ parseExpr.set('|', 6, (a,b) => b(a))
 // a in b operator
 // parseExpr.set('in', (a,b) => (b = expr(), ctx => [(a.id)(ctx), b(ctx)])
 
+// configure directives
+directive('if', (instance, part) => {
+  // clauses in evaluation read detected clause by :if part and check if that's them
+  (part.addCase = (casePart, content, update, matches=casePart.eval) => (
+    casePart.eval = state => part.match ? '' : !matches(state) ? '' : (
+      part.match = casePart, // flag found case
+      // there is 2 ways how we can hide case elements:
+      // either create all cases content in the beginning or recreate when condition matches (proposed by standard)
+      // creating all upfront can be heavy initial hit; creating by processCallback can be heavy on update
+      // so we make it lazy - create only on the first match and only update after
+      !content ? (
+        content=casePart.template.content.cloneNode(true),
+        [,update]=templize(content,state,processor),
+        content=[...content.childNodes] // keep refs
+      ) : (update(state), content)
+    )
+  ))(instance.ifPart=part)
+
+  // `if` case goes first, so we clean up last matched case and detect match over again
+  const evalCase = part.eval
+  part.eval = state => (part.match = null, evalCase(state))
+})
+directive('else-if', (instance, part) => instance.ifPart?.addCase(part))
+directive('else', (instance, part) => (part.eval=()=>true, instance.ifPart?.addCase(part), instance.ifPart=null) )
+// directive('each', (instance, part) => ())
 
 const processor = {
   createCallback(instance, allParts, init) {
@@ -43,41 +69,14 @@ const processor = {
     let parts = {}, // parts by ids used in parts
         values = {}, // template values state
         observers = {}, // observable properties in state
-        ready, value, directive, ifPart
+        ready, value
 
     // detect prop → part
     for (const part of allParts) {
-      // parse arguments, also make :else part always eval to 1
-      ;(part.eval = parseExpr(part.expression || '1'))
-        .args.map(arg => (parts[arg]||=[]).push(part))
+      (part.eval = parseExpr(part.expression)).args.map(arg => (parts[arg]||=[]).push(part))
 
-      // inner template
-      if (part.directive === 'if') {
-        // clauses in evaluation read detected clause by :if part and check if that's them
-        ;(part.addCase = (casePart, content, update, evalCond=casePart.eval) => (
-          casePart.eval = state => part.match ? '' : !evalCond(state) ? '' : (
-            part.match = casePart, // flag found case
-            // there is 2 ways how we can hide case elements:
-            // either create all cases content in the beginning or recreate when condition matches (proposed by standard)
-            // creating all upfront can be heavy initial hit; creating by processCallback can be heavy on update
-            // so we make it lazy - create only on the first match and only update after
-            !content ? (
-              content=casePart.template.content.cloneNode(true),
-              [,update]=templize(content,state,processor),
-              content=[...content.childNodes] // keep refs
-            ) : (update(state), content)
-          )
-        ))(ifPart=part)
-
-        // `if` case goes first, so we clean up last matched case and detect match over again
-        const caseEval = part.eval
-        part.eval = (state) => (part.match = null, caseEval(state))
-      }
-      else if (part.directive === 'else-if') ifPart?.addCase(part)
-      else if (part.directive === 'else') ifPart?.addCase(part), ifPart = null
-      else if (part.directive === 'each') {
-      }
-      else if (part.directive) throw Error('Unknown directive', part.directive)
+      // apply directives
+      directives[part.directive]?.create(instance, part)
     }
 
     // hook up observables

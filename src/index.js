@@ -1,31 +1,15 @@
 import processor from './processor.js'
 import { templize } from './api.js'
+import { directive, directives } from './directives.js'
 
-// wrapper over templize defaulting to expressionProcessor
+// wrapper over templize with shortcut directives and defaulting to expressionProcessor
 export default (el, init, proc=processor) => {
-
   // convert shortcut directives :if, :else, ... to inner template parts
-  // can be used independently, eg. via spect
-  directive(el, 'if')
-  directive(el, 'else-if')
-  directive(el, 'else')
-  directive(el, 'each')
-
+  // could be used independently, eg. via spect
+  // FIXME: ideally this should reside in processor, but would require swapping template parts
+  for (let dir in directives) directives[dir].prepare(el)
   return templize(el, init, proc)
 }
 
-function directive(el, dir, els=el.querySelectorAll(`[\\:${dir}]`), holder, tpl, expr) {
-  for (el of els) {
-    el.replaceWith(holder=new Text)
-    tpl = document.createElement('template')
-    tpl.content.appendChild(el)
-    tpl.setAttribute('directive', dir)
-    expr = el.getAttribute(':'+dir)
-    tpl.setAttribute('expression', expr.slice(expr.indexOf('{{')+2, expr.lastIndexOf('}}')))
-    el.removeAttribute(':'+dir)
-    holder.replaceWith(tpl)
-  }
-}
-
-export { processor }
+export { processor, directive }
 export * from './api.js'
