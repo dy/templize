@@ -10,7 +10,11 @@
 
 * [ ] disposing element should unsubscribe reactives as well
 
-* [ ] :for, :if need to be added to processor
+* [ ] interpolated strings \`a ${b} c\`
+
+* [ ] `:each` need optimization to avoid recreating content every process call
+
+* [x] :for, :if need to be added to processor
   + useful not only in define-element, but generally, eg. spect
   + somewhat familiar pattern from vue
   - still a bit too opinionaty
@@ -33,8 +37,8 @@
   → would be nice to split processors into: expressions, reactivity, conditions, loops, props
   → `:repeat="{{ items }}"` is a shortcut for `<template type="repeat" repeat="{{ items }}"></template>`
     → `:foreach="{{ items }}"` `<template directive="foreach" expression="items"></template>`
-  * [ ] `:for` is confusable with `for` attribute used for different purpose. Alternatives:
-    * :each
+  * [x] `:for` is confusable with `for` attribute used for different purpose. Alternatives:
+    * [x] :each
       + `<li :each="{{item in items}}"/>` + lovely, natural language
     * :foreach
       - `<li :foreach="{{ item in items }}"/>` - nah, li is not command
@@ -48,8 +52,6 @@
       + makes sense for attrTypes
       - discrepancy with :if, :else-if, :else
       - messy
-
-* [ ] interpolated strings \`a ${b} c\`
 
 * [x] Expose directive registering
 

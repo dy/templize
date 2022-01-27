@@ -2,7 +2,7 @@ import {cur, idx, skip, err, expr} from 'subscript/parser.js'
 import parseExpr from 'subscript/subscript.js'
 import sube, { observable } from 'sube'
 import { prop } from 'element-props'
-import { templize, NodeTemplatePart } from './api.js'
+import { templize, NodeTemplatePart, TemplateInstance } from './api.js'
 import { directive, directives } from './directives.js'
 
 // extend default subscript
@@ -33,8 +33,9 @@ parseExpr.set('?.',18, (a,b,aid,bid) => a?.[bid])
 // a | b - pipe overload
 parseExpr.set('|', 6, (a,b) => b(a))
 
-// a in b operator
-// parseExpr.set('in', (a,b) => (b = expr(), ctx => [(a.id)(ctx), b(ctx)])
+// a in b operator for loops
+parseExpr.set('in', (a,b) => (b = expr(), ctx => [a.id(ctx), b(ctx)]))
+
 
 // configure directives
 directive('if', (instance, part) => {
@@ -48,6 +49,8 @@ directive('if', (instance, part) => {
       // so we make it lazy - create only on the first match and only update after
       !content ? (
         content=casePart.template.content.cloneNode(true),
+        // FIXME: use new TemplateInstance here
+        // instance=new TemplateInstance(casePart.template,)
         [,update]=templize(content,state,processor),
         content=[...content.childNodes] // keep refs
       ) : (update(state), content)
@@ -60,7 +63,16 @@ directive('if', (instance, part) => {
 })
 directive('else-if', (instance, part) => instance.ifPart?.addCase(part))
 directive('else', (instance, part) => (part.eval=()=>true, instance.ifPart?.addCase(part), instance.ifPart=null) )
-// directive('each', (instance, part) => ())
+
+directive('each', (instance, part) => {
+  let evalLoop = part.eval, lastItems
+  part.eval = state => {
+    // FIXME: proper keying can speed things up here
+    const [itemId, items] = evalLoop(state)
+    return items.map(item => new TemplateInstance(part.template, {item,...state}, processor))
+  }
+})
+
 
 const processor = {
   createCallback(instance, allParts, init) {
