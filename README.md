@@ -185,7 +185,8 @@ Due to HTML quirk in table parsing, table fields should be wrapped into comment:
 
 ## Directives
 
-_Templize_ recognizes inner templates as [_InnerTemplatePart_](https://github.com/WICG/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md#33-conditionals-and-loops-using-nested-templates), expecting `directive` and `expression` attributes. It also enables shortcut directives via `:attr`.
+_Templize_ recognizes inner templates as [_InnerTemplatePart_](https://github.com/WICG/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md#33-conditionals-and-loops-using-nested-templates), expecting `directive` and `expression` attributes.
+It also enables shortcut directives via `:attr`.
 
 ### Loops
 
@@ -193,7 +194,7 @@ Iterating over set of items can be done with `each` directive:
 
 ```html
 <ul>
-  <template directive="each" expression="{{ item in items }}">
+  <template directive="each" expression="item in items">
     <li id="item-{{item.id}}" data-value={{item.value}}>{{item.label}}</li>
   </template>
 </ul>
@@ -217,8 +218,8 @@ Iterating over set of items can be done with `each` directive:
 To optionally display an element, there is `if`, `else-if`, `else` directives.
 
 ```html
-<template directive="if" if="{{ status == 0 }}"><span>Inactive</span></template>
-<template directive="else-if" else-if="{{ status == 1 }}"><span>Active</span></template>
+<template directive="if" expression="status == 0"><span>Inactive</span></template>
+<template directive="else-if" expression="status == 1"><span>Active</span></template>
 <template directive="else"><span>Finished</span></template>
 
 <!-- shortcut -->
