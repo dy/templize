@@ -76,7 +76,7 @@ const processor = {
       (part.eval = parseExpr(part.expression)).args.map(arg => (parts[arg]||=[]).push(part))
 
       // apply directives
-      directives[part.directive]?.create(instance, part)
+      directives[part.directive]?.create(instance, part, init)
     }
 
     // hook up observables
