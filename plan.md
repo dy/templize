@@ -1,26 +1,6 @@
 # plan
 
-* [x] find out a good way to bulk-update templize, instead of throttling props.
-  1. Maybe return `update` instead of `params`?
-    + we don't need params as much, since we had them in init, do we?
-    + spec-compatible
-    - `params.user.name` is nice to be able to update. `update({user: {...user, name}})` isn't nice.
-    - `update` is confusing along with mutable params - how's that different? params also do update, aren't they?
-      . that's needed for secret-ish sync bulk-update.
-  2. Return `[params, update]`
-    + hooks-familiar notation
-    - params is also hooked - a bit weird
-  3. Do both - `[params, update]` or just `update`?
-    + any desired syntax
-  4. It's even better to `{state, update}` and `[state, update]`.
-    - too much indecisiveness
-  5. Make `params` or `[params, update]` the same?
-    + react-compat
-    + backwards-compat
-    - not spec-compat but fine
-    - a bit hard to implement: do we extend params?
-      → we provide iterator: with extending array that's a mess
-      + iterator acts as update symbol as well.
+* [ ] Make API depend on templize instead of reproducing same flow
 
 * [ ] How to provide `createCallback` not superceding default processor?
   → Just manually import/call processor callback?
@@ -28,11 +8,8 @@
 * [ ] observables as props, not direct args {{prop.done}}
 
 * [x] weakrefify subscriptions
-  * [ ] disposing element should unsubscribe reactives as well
 
-* [x] add '' strings
-  + it's easier to type
-  + they don't conflict with HTML attrib strings
+* [ ] disposing element should unsubscribe reactives as well
 
 * [ ] :for, :if need to be added to processor
   + useful not only in define-element, but generally, eg. spect
@@ -74,6 +51,32 @@
       - messy
 
 * [ ] interpolated strings \`a ${b} c\`
+
+* [x] find out a good way to bulk-update templize, instead of throttling props.
+  1. Maybe return `update` instead of `params`?
+    + we don't need params as much, since we had them in init, do we?
+    + spec-compatible
+    - `params.user.name` is nice to be able to update. `update({user: {...user, name}})` isn't nice.
+    - `update` is confusing along with mutable params - how's that different? params also do update, aren't they?
+      . that's needed for secret-ish sync bulk-update.
+  2. Return `[params, update]`
+    + hooks-familiar notation
+    - params is also hooked - a bit weird
+  3. Do both - `[params, update]` or just `update`?
+    + any desired syntax
+  4. It's even better to `{state, update}` and `[state, update]`.
+    - too much indecisiveness
+  5. Make `params` or `[params, update]` the same?
+    + react-compat
+    + backwards-compat
+    - not spec-compat but fine
+    - a bit hard to implement: do we extend params?
+      → we provide iterator: with extending array that's a mess
+      + iterator acts as update symbol as well.
+
+* [x] add '' strings
+  + it's easier to type
+  + they don't conflict with HTML attrib strings
 
 * [x] ~~processor: throttle updates~~
   + makes useful both for TemplateInstance and templize

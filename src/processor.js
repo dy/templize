@@ -2,7 +2,7 @@ import {cur, idx, skip, err, expr} from 'subscript/parser.js'
 import parseExpr from 'subscript/subscript.js'
 import sube, { observable } from 'sube'
 import { prop } from 'element-props'
-import templize from './index.js'
+import { templize } from './api.js'
 
 // extend default subscript
 // '" strings with escaping characters
@@ -35,6 +35,7 @@ parseExpr.set('|', 6, (a,b) => b(a))
 // a in b operator
 // parseExpr.set('in', (a,b) => (b = expr(), ctx => [(a.id)(ctx), b(ctx)])
 
+
 const processor = {
   createCallback(instance, allParts, init) {
     if (states.get(instance)) return
@@ -42,39 +43,46 @@ const processor = {
     let parts = {}, // parts by ids used in parts
         values = {}, // template values state
         observers = {}, // observable properties in state
-        part, ready, value, directive
+        ready, value, directive, ifPart
 
 
     // detect prop → part
-    for (part of allParts) {
+    for (const part of allParts) {
+      // parse arguments, also make :else part always eval to 1
+      ;(part.eval = parseExpr(part.expression || '1'))
+        .args.map(arg => (parts[arg]||=[]).push(part))
+
       // Collect directives: either short or full
       // if (part.element.hasAttribute(':if')) {
-
       // }
 
       // inner template
       if (part.directive === 'if') {
-        console.log(part)
+        // clauses in evaluation read detected clause by :if part and check if that's them
+        ;(part.addCase = (casePart, content, update, evalCond=casePart.eval) => (
+          casePart.eval = state => part.match ? '' : !evalCond(state) ? '' : (
+            part.match = casePart, // flag found case
+            // there is 2 ways how we can hide case elements:
+            // either create all cases content in the beginning or recreate when condition matches (proposed by standard)
+            // creating all upfront can be heavy initial hit; creating by processCallback can be heavy on update
+            // so we make it lazy - create only on the first match and only update after
+            !content ? (
+              content=casePart.template.content.cloneNode(true),
+              [,update]=templize(content,state,processor),
+              content=[...content.childNodes] // keep refs
+            ) : (update(state), content)
+          )
+        ))(ifPart=part)
 
-        // since template instantiation API is not stabilized, we refer to templizing
-        let evalCondition = parseExpr(part.expression),
-              content = part.template.content.cloneNode(true),
-              [params, update] = templize(content, init, processor)
-        // documentFragment loses children, so we keep refs
-        content = [...content.childNodes]
-
-        // FIXME: there's redundancy: on every evaluate it creates node anew
-        part.evaluate = (state) => evalCondition(state) ? (update(state), content) : null
-
-        // collect if else-if else group, replace with single part?
+        // `if` case goes first, so we clean up last matched case and detect match over again
+        const caseEval = part.eval
+        part.eval = (state) => (part.match = null, caseEval(state))
       }
-      else if (part.directive === 'else-if' || part.directive === 'else' ) {
-      }
+      else if (part.directive === 'else-if') ifPart?.addCase(part)
+      else if (part.directive === 'else') ifPart?.addCase(part), ifPart = null
       else if (part.directive === 'each') {
       }
       else if (part.directive) throw Error('Unknown directive', part.directive)
-
-      else (part.evaluate = parseExpr(part.expression)).args.map(arg => (parts[arg]||=[]).push(part))
     }
 
     // hook up observables
@@ -99,7 +107,7 @@ const processor = {
     // Object.assign(values, state)
 
     for (part of parts)
-      if ((v = part.evaluate(values)) !== part.value) {
+      if ((v = part.eval(values)) !== part.value) {
         // apply functional or other setters
         if (part.attributeName && part.setter.parts.length === 1) prop(part.element, part.attributeName, part.value = v)
 

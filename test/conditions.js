@@ -8,17 +8,17 @@ import h from 'hyperf'
 test('conditions: long', async () => {
   let el = h`<p>
     <template directive="if" expression="{{ a==1 }}"><span>a</span></template>
-    <!--<template directive="else-if" expression="{{ a==2 }}"><span>b</span></template>-->
-    <!--<template directive="else"><span>c</span></template>-->
+    <template directive="else-if" expression="{{ a==2 }}"><span>b</span></template>
+    <template directive="else"><span>c</span></template>
   </p>`
 
   const params = templize(el, { a: 1 }, exprProcessor)
 
   is(el.innerHTML, '<span>a</span>')
   params.a = 2
-  // is(el.innerHTML, '<p><span>b</span></p>')
+  is(el.innerHTML, '<span>b</span>')
   params.a = 3
-  // is(el.innerHTML, '<p><span>c</span></p>')
+  is(el.innerHTML, '<span>c</span>')
 
   delete params.a
 })

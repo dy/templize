@@ -5,26 +5,40 @@ import { parse } from './parse.js'
 
 const FRAGMENT = 11
 
-const values = {
+export const defaultProcessor = {
   processCallback(instance, parts, state) {
     if (!state) return
     for (const part of parts) if (part.expression in state) part.value = state[part.expression]
   }
+},
+
+// templize any element
+templize = (node, state, proc=defaultProcessor) => {
+  let parts = parse(node), params,
+      update = diff => proc.processCallback(node, parts, diff)
+
+  state ||= {}
+
+  proc.createCallback?.(node, parts, state)
+  proc.processCallback(node, parts, state)
+
+  // return update via destructuring of result to allow batch-update
+  state[Symbol.iterator] = function*(){ yield params; yield update;}
+
+  return params = new Proxy(state,  {
+    set: (s, k, v) => (state[k]=v, update(state), 1),
+    deleteProperty: (s,k) => (delete state[k], update(), 1)
+  })
 }
 
+// API
 export class TemplateInstance extends DocumentFragment {
-  #parts
-  #processor
-  constructor(template, params, processor=values) {
+  constructor(template, params, processor=defaultProcessor) {
     super()
     this.appendChild(template.content.cloneNode(true))
-    this.#parts = parse(this)
-    this.#processor = processor
-    params ||= {}
-    processor.createCallback?.(this, this.#parts, params)
-    processor.processCallback(this, this.#parts, params)
+    const [, update] = templize(this, params, processor)
+    this.update = update
   }
-  update(params) { this.#processor.processCallback(this, this.#parts, params) }
 }
 
 export class TemplatePart {
@@ -69,10 +83,11 @@ export class NodeTemplatePart extends TemplatePart {
     nodes = nodes.length ? nodes
       .flat()
       .flatMap(node =>
-        node?.forEach ? [...node] :
-        node?.nodeType === FRAGMENT ? [...node.childNodes] :
-        node?.nodeType ? [node] :
-        [new Text(node == null ? '' : node)]
+        node==null ? [new Text] :
+        node.forEach ? [...node] :
+        node.nodeType === FRAGMENT ? [...node.childNodes] :
+        node.nodeType ? [node] :
+        [new Text(node)]
       )
     : [new Text]
     this.#nodes = updateNodes(this.parentNode, this.#nodes, nodes, this.nextSibling)
