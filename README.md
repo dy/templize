@@ -243,7 +243,7 @@ To register a directive, `directive(name, onCreate)` function can be used:
 ```js
 import templize, { directive, TemplateInstance } from 'templize'
 
-directive('each', (instance, innerTplPart, state) =>
+directive('inline', (instance, innerTplPart, state) =>
   innerTplPart.replaceWith(templize(innerTplPart.template.content.cloneNode(true), state))
 )
 ```
