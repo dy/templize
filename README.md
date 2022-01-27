@@ -185,7 +185,7 @@ Due to HTML quirk in table parsing, table fields should be wrapped into comment:
 
 ## Directives
 
-_Templize_ recognizes inner templates as [_InnerTemplatePart_](https://github.com/WICG/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md#33-conditionals-and-loops-using-nested-templates). It also enables shortcut directives via `:attr`.
+_Templize_ recognizes inner templates as [_InnerTemplatePart_](https://github.com/WICG/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md#33-conditionals-and-loops-using-nested-templates), expecting `directive` and `expression` attributes. It also enables shortcut directives via `:attr`.
 
 ### Loops
 
