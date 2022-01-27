@@ -189,7 +189,7 @@ _Templize_ recognizes inner templates as [_InnerTemplatePart_](https://github.co
 
 ### Loops
 
-Iterating over set of items can be organized via `each` directive:
+Iterating over set of items can be done with `each` directive:
 
 ```html
 <ul>
