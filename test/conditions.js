@@ -23,7 +23,7 @@ test('conditions: long', async () => {
   delete params.a
 })
 
-test.todo('conditions: short', async () => {
+test('conditions: short', async () => {
   let el = h`<p>
     <span :if="{{ a==1 }}">a</span>
     <span :else-if="{{ a==2 }}">b</span>
@@ -32,11 +32,11 @@ test.todo('conditions: short', async () => {
 
   const params = templize(el, { a: 1 }, exprProcessor)
 
-  is(el.innerHTML, '<p><span>a</span></p>')
+  is(el.innerHTML, '<span>a</span>')
   params.a = 2
-  is(el.innerHTML, '<p><span>b</span></p>')
+  is(el.innerHTML, '<span>b</span>')
   params.a = 3
-  is(el.innerHTML, '<p><span>c</span></p>')
+  is(el.innerHTML, '<span>c</span>')
 
   delete params.a
 })

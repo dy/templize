@@ -2,7 +2,7 @@ import {cur, idx, skip, err, expr} from 'subscript/parser.js'
 import parseExpr from 'subscript/subscript.js'
 import sube, { observable } from 'sube'
 import { prop } from 'element-props'
-import { templize } from './api.js'
+import { templize, NodeTemplatePart } from './api.js'
 
 // extend default subscript
 // '" strings with escaping characters
@@ -45,16 +45,11 @@ const processor = {
         observers = {}, // observable properties in state
         ready, value, directive, ifPart
 
-
     // detect prop → part
     for (const part of allParts) {
       // parse arguments, also make :else part always eval to 1
       ;(part.eval = parseExpr(part.expression || '1'))
         .args.map(arg => (parts[arg]||=[]).push(part))
-
-      // Collect directives: either short or full
-      // if (part.element.hasAttribute(':if')) {
-      // }
 
       // inner template
       if (part.directive === 'if') {
@@ -101,18 +96,17 @@ const processor = {
 
   // updates diff parts from current state
   processCallback(instance, parts, state) {
-    let [values, observers] = states.get(instance), k, part, v, directive
+    let [values, observers] = states.get(instance), k, part, v
 
     for (k in state) if (!observers[k]) values[k] = state[k] // extend state ignoring reactive vals
     // Object.assign(values, state)
 
     for (part of parts)
       if ((v = part.eval(values)) !== part.value) {
-        // apply functional or other setters
-        if (part.attributeName && part.setter.parts.length === 1) prop(part.element, part.attributeName, part.value = v)
-
         // regular node set - either attrib or node part
-        else part.value = v
+        if (part.replace) part.replace(v)
+
+        else part.setter.parts.length === 1 ? prop(part.element, part.attributeName, part.value = v) : part.value = v
       }
   }
 }
@@ -121,24 +115,7 @@ const processor = {
 // expressions processor
 export const states = new WeakMap,
 
-registry = new FinalizationRegistry(([obs, k]) => (obs[k]?.(), delete obs[k])),
-
-directives = {
-  'if': (instance, part, state) => {
-    // FIXME: this can be broken
-    if (part.evaluate(state)) part.replace(new instance.constructor())
-  },
-  'else-if': () => {},
-  'else': () => {},
-
-  each: (part, state) => {
-    console.log(part.expression)
-    // const nodes = state[part.expression].map(
-    //   item => new TemplateInstance(part.template, state)
-    // )
-    // part.replace(nodes);
-  }
-}
+registry = new FinalizationRegistry(([obs, k]) => (obs[k]?.(), delete obs[k]))
 
 export default processor
 
