@@ -241,7 +241,7 @@ Note: text conditions can be organized via ternary operator:
 To register a directive, `directive(name, onCreate)` function can be used:
 
 ```js
-import templize, { directive, TemplateInstance } from 'templize'
+import templize, { directive } from 'templize'
 
 directive('inline', (instance, innerTplPart, state) =>
   innerTplPart.replaceWith(templize(innerTplPart.template.content.cloneNode(true), state))
@@ -286,13 +286,12 @@ import { processor } from 'templize'
 const instance = new TemplateInstance(document.querySelector('my-template'), {}, processor)
 ```
 
-## See also
+## Buddies
 
-* [spect](https://github.com/spectjs/spect) − selector observer, useful for templizing any elements in DOM.
-* [subscript](https://github.com/spectjs/subscript) − composable template processor language.
-* [value-ref](https://github.com/spectjs/value-ref) − value reference with reactivity.
+* [spect](https://github.com/spectjs/spect) − selector observer, perfect match for organizing flexible native DOM templates.
+* [value-ref](https://github.com/spectjs/value-ref) − reactive value container with reactivity, useful for state management.
 * [subscribable-things](https://github.com/chrisguttandin/subscribable-things) − reactive wrappers for various APIs.
-* [element-props](https://github.com/spectjs/element-props) − normalized access to element attributes / properties.
+<!-- * [element-props](https://github.com/spectjs/element-props) − normalized access to element attributes / properties. -->
 <!-- * [define-element](https://github.com/spectjs/define-element) − declarative custom elements. -->
 
 ## Neighbors
