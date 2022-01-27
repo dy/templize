@@ -190,16 +190,6 @@ Due to HTML quirk in table parsing, table fields should be wrapped into comment:
 _Templize_ recognizes inner templates as [_InnerTemplatePart_](https://github.com/WICG/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md#33-conditionals-and-loops-using-nested-templates), expecting `directive` and `expression` attributes.
 It also enables shortcut directives via `:attr`.
 
-To register a directive, `directive(name, oncreate)` function can be used:
-
-```js
-import templize, { directive, TemplateInstance } from 'templize'
-
-directive('each', (instance, innerTplPart, state) =>
-  innerTplPart.replaceWith(templize(innerTplPart.template.content.cloneNode(true), state))
-)
-```
-
 ### Loops
 
 Iterating over set of items can be done with `each` directive:
@@ -244,6 +234,18 @@ Note: text conditions can be organized via ternary operator:
 
 ```html
 <span>Status: {{ status === 0 ? 'Active' : 'Inactive' }}</span>
+```
+
+### Adding directives
+
+To register a directive, `directive(name, onCreate)` function can be used:
+
+```js
+import templize, { directive, TemplateInstance } from 'templize'
+
+directive('each', (instance, innerTplPart, state) =>
+  innerTplPart.replaceWith(templize(innerTplPart.template.content.cloneNode(true), state))
+)
 ```
 
 ## Interop
