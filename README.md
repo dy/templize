@@ -12,7 +12,7 @@ If either proposal lands, API will be assimilated.
 Essentially extension of [@github/template-parts](https://github.com/github/template-parts) with the following:
 
 - Works with any elements.
-- InnerTemplateParts
+- InnerTemplateParts support.
 - Improved parser ([#38](https://github.com/github/template-parts/issues/38), [#44](https://github.com/github/template-parts/issues/44)).
 - More complete spec [API surface](./src/api.js).
 - `<table><!--{{ data }}--></table>` support<sup><a href="#tables">*</a></sup> ([#24](https://github.com/domenic/template-parts/issues/2)).
