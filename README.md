@@ -215,7 +215,7 @@ Iterating over set of items can be done with `each` directive:
 
 ### Conditions
 
-To optionally display an element, there is `if`, `else-if`, `else` directives.
+To optionally display an element, there are `if`, `else-if`, `else` directives.
 
 ```html
 <template directive="if" expression="status == 0"><span>Inactive</span></template>
