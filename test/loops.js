@@ -19,20 +19,20 @@ test('loops: long', async () => {
   delete params.items
 })
 
-test.todo('loops: short', async () => {
+test('loops: short', async () => {
   let el = h`<p>
-    <span :each="{{ item in items }}">a</span>
+    <span :each="{{ item in items }}">{{ item }}</span>
   </p>`
 
-  const params = templize(el, { a: 1 }, exprProcessor)
+  const params = templize(el, { items: [] })
 
-  is(el.innerHTML, '<span>a</span>')
-  params.a = 2
-  is(el.innerHTML, '<span>b</span>')
-  params.a = 3
-  is(el.innerHTML, '<span>c</span>')
+  is(el.innerHTML, '')
+  params.items = [1,2]
+  is(el.innerHTML, '<span>1</span><span>2</span>')
+  params.items = []
+  is(el.innerHTML, '')
 
-  delete params.a
+  delete params.items
 })
 
 test.todo('loops: reactive values', async () => {

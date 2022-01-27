@@ -80,7 +80,7 @@ export class NodeTemplatePart extends TemplatePart {
   get value() { return this.#nodes.map(node=>node.textContent).join(''); }
   set value(newValue) { this.replace(newValue) }
   replace(...nodes) { // replace current nodes with new nodes.
-    nodes = nodes.length ? nodes
+    nodes = nodes
       .flat()
       .flatMap(node =>
         node==null ? [new Text] :
@@ -89,7 +89,7 @@ export class NodeTemplatePart extends TemplatePart {
         node.nodeType ? [node] :
         [new Text(node)]
       )
-    : [new Text]
+    if (!nodes.length) nodes.push(new Text) // add placeholder if all nodes are removed
     this.#nodes = updateNodes(this.parentNode, this.#nodes, nodes, this.nextSibling)
   }
   replaceHTML(html) {
