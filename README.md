@@ -41,7 +41,8 @@ params.x = 'Goodbye' // === update({x: 'Goodbye'})
 </script>
 ```
 
-`params` is proxy reflecting current state; changing any of its props updates parts. `update` can be used for batch-update state.
+`params` is proxy reflecting current state; changing any of its props updates parts.
+`update` can be used for batch-updating multiple props.
 
 _Templize_ also can be used as _Template Instance_ from the [spec](https://github.com/WICG/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md#32-template-parts-and-custom-template-process-callback):
 
@@ -51,7 +52,7 @@ import { TemplateInstance, NodeTemplatePart, AttributeTemplatePart, processor } 
 let tpl = new TemplateInstance(templateElement, initParams, processor)
 tpl.update(newParams)
 
-// NOTE: Template Instance doesn't include expression processor, that should be connected manually.
+// NOTE: Template Instance doesn't include expression processor by default.
 ```
 
 
@@ -195,7 +196,7 @@ To register a directive, `directive(name, oncreate)` function can be used:
 import templize, { directive, TemplateInstance } from 'templize'
 
 directive('each', (instance, innerTplPart, state) =>
-  innerTplPart.replace(new TemplateInstance(innerTplPart.template, state))
+  innerTplPart.replaceWith(templize(innerTplPart.template.content.cloneNode(true), state))
 )
 ```
 
