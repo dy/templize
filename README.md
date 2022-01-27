@@ -193,21 +193,18 @@ Iterating over set of items can be organized via `each` directive:
 
 ```html
 <ul>
-  <li :each="{{ item in items }}" id="item-{{item.id}}" data-value="{{item.value}}">{{item.label}}</li>
-</ul>
-```
-
-Long style:
-
-```html
-<ul>
   <template directive="each" expression="{{ item in items }}">
     <li id="item-{{item.id}}" data-value={{item.value}}>{{item.label}}</li>
   </template>
 </ul>
+
+<!-- shortcut -->
+<ul>
+  <li :each="{{ item in items }}" id="item-{{item.id}}" data-value="{{item.value}}">{{item.label}}</li>
+</ul>
 ```
 
-Cases:
+#### Cases
 
 ```html
 <li :each="{{ item, index in array }}">
@@ -217,27 +214,17 @@ Cases:
 
 ### Conditions
 
-To optionally display an element, there is `if`-`else-if`-`else` directives.
+To optionally display an element, there is `if`, `else-if`, `else` directives.
 
-Short style:
 ```html
-<!-- Short style -->
-<span :if="{{ status === 0 }}">Inactive</span>
-<span :else-if="{{ status === 1 }}">Active</span>
+<template directive="if" if="{{ status == 0 }}"><span>Inactive</span></template>
+<template directive="else-if" else-if="{{ status == 1 }}"><span>Active</span></template>
+<template directive="else"><span>Finished</span></template>
+
+<!-- shortcut -->
+<span :if="{{ status == 0 }}">Inactive</span>
+<span :else-if="{{ status == 1 }}">Active</span>
 <span :else>Finished</span>
-```
-
-Long style:
-```html
-<template directive="if" if="{{ status === 0 }}">
-  <span>Inactive</span>
-</template>
-<template directive="else-if" else-if="{{ status === 1 }}">
-  <span>Active</span>
-</template>
-<template directive="else">
-  <span>Finished</span>
-</template>
 ```
 
 Note: text conditions can be organized via ternary operator:
@@ -260,20 +247,6 @@ const params = templize(element, initState, {
   }
 })
 ```
-
-Note that callbacks receive _element_ itself, not _Template Instance_ (although also node).
-<!--
-Default processor supports only direct values.
-
-```js
-{
-  processCallback(instance, parts, state) {
-    if (!state) return
-    for (const part of parts) if (part.expression in state) part.value = state[part.expression]
-  }
-}
-```
--->
 
 Any external processor can be used with templize, eg. [@github/template-parts](https://github.com/github/template-parts):
 
