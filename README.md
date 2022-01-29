@@ -40,8 +40,7 @@ params.x = 'Goodbye' // === update({x: 'Goodbye'})
 </script>
 ```
 
-`params` is proxy reflecting current state; changing any of its props updates parts.<br/>
-`update` can be used for bulk-updating multiple props.
+`params` is proxy reflecting current state. Changing any of its props updates fields. `update` can be used for bulk-updating multiple props.
 
 _Templize_ also can be used as _Template Instance_ from the [spec](https://github.com/WICG/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md#32-template-parts-and-custom-template-process-callback):
 
@@ -55,7 +54,7 @@ tpl.update(newParams)
 ```
 
 
-<details><summary>Spec surface</summary>
+<details id="spec-surface"><summary>Spec surface</summary>
 
 ```js
 interface TemplateInstance : DocumentFragment {
