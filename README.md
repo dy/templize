@@ -14,7 +14,7 @@ Essentially extension of [@github/template-parts](https://github.com/github/temp
 - Works with any elements.
 - InnerTemplateParts support.
 - Improved parser ([#38](https://github.com/github/template-parts/issues/38), [#44](https://github.com/github/template-parts/issues/44)).
-- More complete spec API surface.
+- More complete spec [API surface](#user-content-spec-surface).
 - `<table><!--{{ data }}--></table>` support<sup><a href="#tables">*</a></sup> ([#24](https://github.com/domenic/template-parts/issues/2)).
 - Expression processor.
 - Reactive props support.
@@ -42,17 +42,16 @@ params.x = 'Goodbye' // === update({x: 'Goodbye'})
 
 `params` is proxy reflecting current state. Changing any of its props updates fields. `update` can be used for bulk-updating multiple props.
 
-_Templize_ also can be used as _Template Instance_ from the [spec](https://github.com/WICG/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md#32-template-parts-and-custom-template-process-callback):
+_Templize_ also can be used as _Template Instance_ [spec](https://github.com/WICG/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md#32-template-parts-and-custom-template-process-callback) ponyfill:
 
 ```js
-import { TemplateInstance, NodeTemplatePart, AttributeTemplatePart, processor } from 'templize'
+import { TemplateInstance, NodeTemplatePart, AttributeTemplatePart } from 'templize/template-parts'
 
-let tpl = new TemplateInstance(templateElement, initParams, processor)
+let tpl = new TemplateInstance(templateElement, initParams)
 tpl.update(newParams)
 
 // NOTE: Template Instance doesn't include expression processor by default.
 ```
-
 
 <details id="spec-surface"><summary>Spec surface</summary>
 
@@ -96,9 +95,10 @@ interface InnerTemplatePart : NodeTemplatePart {
 ```
 </details>
 
+
 ## Expressions
 
-Templize enables expressions via default **expression processor**:
+_Templize_ enables expressions via default **expression processor**:
 
 ```html
 <header id="title">
@@ -107,7 +107,7 @@ Templize enables expressions via default **expression processor**:
 </header>
 
 <script>
-  import templize from './templize.js'
+  import templize from 'templize'
   const titleParams = templize(
     document.querySelector('#title'),
     { user: { name: 'Hare Krishna', email: 'krishn@hari.om' }}
@@ -116,7 +116,7 @@ Templize enables expressions via default **expression processor**:
 </script>
 ```
 
-It supports the following fields with common syntax:
+It supports the following field expressions with common syntax:
 
 Part | Expression
 ---|---
@@ -136,10 +136,10 @@ Pipe | `{{ bar \| foo }}` → `{{ foo(bar) }}`
 
 Processor makes assumptions regarding how attribute parts set values.
 
-* `hidden="{{ hidden }}"` boolean values set or remove attribute.
-* `onClick="{{ handler }}"` assigns `onclick` handler function (no need to call it).
-* `class="{{ cls }}"` can take either an array or a string.
-* `style="{{ style }}"` can take either an object or a string.
+* `hidden="{{ boolean }}"` boolean values set or remove attribute.
+* `onClick="{{ function }}"` assigns `onclick` handler function (no need to call it).
+* `class="{{ classes }}"` can take either an array or a string.
+* `style="{{ styles }}"` can take either an object or a string.
 
 Other attributes are handled as strings.
 
@@ -153,7 +153,7 @@ Update happens when any param changes:
 <div id="done">{{ done || '...' }}</div>
 
 <script type="module">
-  import templize from './templize.js'
+  import templize from 'templize'
 
   const done = new Promise(ok => setTimeout(() => ok('Done!'), 1000))
 
@@ -186,6 +186,7 @@ Due to HTML quirk in table parsing, table fields should be wrapped into comment:
 ## Directives
 
 _Templize_ recognizes inner templates as [_InnerTemplatePart_](https://github.com/WICG/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md#33-conditionals-and-loops-using-nested-templates), expecting `directive` and `expression` attributes.
+
 It also enables shortcut directives via `:attr`.
 
 ### Loops
@@ -239,10 +240,10 @@ Note: text conditions can be organized via ternary operator:
 To register a directive, `directive(name, onCreate)` function can be used:
 
 ```js
-import templize, { directive } from 'templize'
+import templize, { directive, processor } from 'templize'
 
 directive('inline', (instance, innerTplPart, state) =>
-  innerTplPart.replaceWith(templize(innerTplPart.template.content.cloneNode(true), state))
+  innerTplPart.replaceWith(new TemplateInstance(innerTplPart.template, state, processor))
 )
 ```
 
@@ -279,7 +280,7 @@ _Templize_ expression processor can also be used with other template instancing 
 
 ```js
 import { TemplateInstance } from '@github/template-parts'
-import { processor } from 'templize'
+import processor from 'templize/processor'
 
 const instance = new TemplateInstance(document.querySelector('my-template'), {}, processor)
 ```
