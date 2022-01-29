@@ -19,8 +19,8 @@ Essentially extension of [@github/template-parts](https://github.com/github/temp
 - Expression processor.
 - Reactive props support.
 - Loops, conditions directives.
-- Registering directives.
-- Single vanilla ESM, no tooling.
+- Directives API.
+- Vanilla ESM, no tooling.
 <!-- - [`<svg width={{ width }}>`](https://github.com/github/template-parts/issues/26) and other cases fixed. -->
 
 ## Usage
