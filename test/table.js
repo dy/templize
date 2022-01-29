@@ -1,6 +1,6 @@
 import test, {is, any} from 'tst'
-import {TemplateInstance} from '../src/api.js'
-import templize from '../src/index.js'
+import {TemplateInstance} from '../template-parts.js'
+import templize from '../templize.js'
 
 test.browser('table: default HTML behavior', () => {
   let tpl = document.createElement('template')

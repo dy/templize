@@ -1,8 +1,8 @@
 import test, {is} from 'tst'
 import h from 'hyperf'
 import v from 'value-ref'
-import {AttributeTemplatePart} from '../src/api.js'
-import templize from '../src/index.js'
+import {AttributeTemplatePart} from '../template-parts.js'
+import templize from '../templize.js'
 import {tick} from 'wait-please'
 
 test('attr: updates the given attribute from partList when updateParent is called', () => {

@@ -1,5 +1,5 @@
 import test, {is} from 'tst'
-import { tokenize } from '../src/api.js'
+import { tokenize } from '../template-parts.js'
 
 const STRING = 0, PART = 1
 

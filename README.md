@@ -14,7 +14,7 @@ Essentially extension of [@github/template-parts](https://github.com/github/temp
 - Works with any elements.
 - InnerTemplateParts support.
 - Improved parser ([#38](https://github.com/github/template-parts/issues/38), [#44](https://github.com/github/template-parts/issues/44)).
-- More complete spec [API surface](./src/api.js).
+- More complete spec [API surface](./template-parts.js).
 - `<table><!--{{ data }}--></table>` support<sup><a href="#tables">*</a></sup> ([#24](https://github.com/domenic/template-parts/issues/2)).
 - Expression processor.
 - Reactive props support.
@@ -25,13 +25,12 @@ Essentially extension of [@github/template-parts](https://github.com/github/temp
 
 ## Usage
 
-Drop `templize.js` into project folder and:
-
 ```html
 <div id="foo" class="foo {{y}}">{{x}} world</div>
+<script type="importmap">{ "imports": { "templize": "parth/to/templize.js" }}</script>
 
 <script type="module">
-import templize from './templize.js'
+import templize from 'templize'
 
 const [params, update] = templize(document.getElementById('foo'), { x: 'Hello', y: 'bar'})
 // <div id="foo" class="foo bar">Hello world</div>
@@ -41,13 +40,13 @@ params.x = 'Goodbye' // === update({x: 'Goodbye'})
 </script>
 ```
 
-`params` is proxy reflecting current state; changing any of its props updates parts.
-`update` can be used for batch-updating multiple props.
+`params` is proxy reflecting current state; changing any of its props updates parts.<br/>
+`update` can be used for bulk-updating multiple props.
 
 _Templize_ also can be used as _Template Instance_ from the [spec](https://github.com/WICG/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md#32-template-parts-and-custom-template-process-callback):
 
 ```js
-import { TemplateInstance, NodeTemplatePart, AttributeTemplatePart, processor } from './templize.js'
+import { TemplateInstance, NodeTemplatePart, AttributeTemplatePart, processor } from 'templize'
 
 let tpl = new TemplateInstance(templateElement, initParams, processor)
 tpl.update(newParams)
@@ -100,7 +99,7 @@ interface InnerTemplatePart : NodeTemplatePart {
 
 ## Expressions
 
-Templize enables expressions via default **expression processor** based on [subscript](https://github.com/spectjs/subscript):
+Templize enables expressions via default **expression processor**:
 
 ```html
 <header id="title">
@@ -143,11 +142,11 @@ Processor makes assumptions regarding how attribute parts set values.
 * `class="{{ cls }}"` can take either an array or a string.
 * `style="{{ style }}"` can take either an object or a string.
 
-Other attributes are handled as strings. See [element-props](https://github.com/spectjs/element-props).
+Other attributes are handled as strings.
 
 ### Reactivity
 
-Initial state can define async/reactive values: _Promise_/_Thenable_, _AsyncIterable_, _Observable_/_Subject_ (see [sube](https://github.com/spectjs/sube)).<br/>
+Initial state can define async/reactive values: _Promise_/_Thenable_, _AsyncIterable_, _Observable_/_Subject_.<br/>
 
 Update happens when any param changes:
 
@@ -300,5 +299,12 @@ const instance = new TemplateInstance(document.querySelector('my-template'), {},
 * [template-instantiation-polyfill](https://github.com/bennypowers/template-instantiation-polyfill#readme) − closely follows the Template Instantiation spec algorithm, but [is not recommended](https://github.com/bennypowers/template-instantiation-polyfill/pull/2#issuecomment-1004110993) by author.
 * [PolymerLabs/template-instantiation](https://github.com/PolymerLabs/template-instantiation) − implementation from Google with TemplateAssembly, TemplateRule and other extensions.
 * [stampino](https://www.npmjs.com/package/stampino) − small HTML template system based on lit-html.
+
+## Dependencies
+
+* [subscript](https://github.com/specths/subscript) − fast and tiny expressions parser.
+* [swapdom](https://github.com/specths/swapdom) − fast and tiny dom swapping algo.
+* [sube](https://github.com/specths/sube) − subscribe to any reactive source.
+* [element-props](https://github.com/specths/element-props) − normalized element properties setter.
 
 <p align="center">🕉<p>

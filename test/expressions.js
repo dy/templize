@@ -1,9 +1,9 @@
 import v from 'value-ref'
 import test, {is, throws} from 'tst'
-import {TemplateInstance} from '../src/api.js'
+import {TemplateInstance} from '../template-parts.js'
 import {tick} from 'wait-please'
-import templize from '../src/index.js'
-import exprProcessor from '../src/processor.js'
+import templize from '../templize.js'
+import exprProcessor from '../processor.js'
 import h from 'hyperf'
 
 test('expressions: {{ foo }}', async () => {

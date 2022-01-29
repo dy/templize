@@ -1,7 +1,7 @@
 import v from 'value-ref'
 import test, {is, throws} from 'tst'
 import {tick, time} from 'wait-please'
-import templize from '../src/index.js'
+import templize from '../templize.js'
 import h from 'hyperf'
 
 
