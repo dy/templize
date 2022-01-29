@@ -2,7 +2,7 @@ import {cur, idx, skip, err, expr} from 'subscript/parser.js'
 import parseExpr from 'subscript/subscript.js'
 import sube, { observable } from 'sube'
 import { prop } from 'element-props'
-import { templize, NodeTemplatePart, TemplateInstance } from './api.js'
+import { NodeTemplatePart, TemplateInstance } from './api.js'
 import { directive, directives } from './directives.js'
 
 // extend default subscript
@@ -53,7 +53,7 @@ directive('if', (instance, part) => {
         // instance=new TemplateInstance(casePart.template,)
         [,update]=templize(content,state,processor),
         content=[...content.childNodes] // keep refs
-      ) : (update(state), content)
+      ) : (console.log(content[0]),update(state), content)
     )
   ))(instance.ifPart=part)
 
@@ -64,14 +64,26 @@ directive('if', (instance, part) => {
 directive('else-if', (instance, part) => instance.ifPart?.addCase(part))
 directive('else', (instance, part) => (part.eval=()=>true, instance.ifPart?.addCase(part), instance.ifPart=null) )
 
-directive('each', (instance, part) => {
-  let evalLoop = part.eval, lastItems
-  part.eval = state => {
-    // FIXME: proper keying can speed things up here
-    const [itemId, items] = evalLoop(state)
-    return items.map(item => new TemplateInstance(part.template, {item,...state}, processor))
-  }
-})
+// directive('each', (instance, part) => {
+//   let evalLoop = part.eval, cache = new Map // FIXME: weakify
+//   part.eval = state => {
+//     const [itemId, items] = evalLoop(state)
+//     state = Object.create(state)
+//     return items.map((item, inst, content) => {
+//       // FIXME: fact that template instance loses its children is unsettling
+//       if (inst = cache.get(item)) return (
+//         console.log('update', state, inst.nodes.map(n => n.parentNode)),
+//         inst.update(state),
+//         console.log('after update',inst.nodes.map(n => n.parentNode)),
+//         inst.nodes
+//       )
+//       content=casePart.template.content.cloneNode(true)
+//       state.item = item
+//       cache.set(item, inst = templize(content, state, processor))
+//       return content
+//     })
+//   }
+// })
 
 
 const processor = {
@@ -97,7 +109,7 @@ const processor = {
     for (let k in init) {
       if (observable(value = init[k]))
         observers[k] = sube(value, v => (values[k] = v, ready && this.processCallback(instance, parts[k], {[k]: v}))),
-      registry.register(value, [observers, k])
+        registry.register(value, [observers, k])
       else values[k] = value
     }
 
@@ -111,7 +123,6 @@ const processor = {
 
     for (k in state) if (!observers[k]) values[k] = state[k] // extend state ignoring reactive vals
     // Object.assign(values, state)
-
     for (part of parts)
       if ((v = part.eval(values)) !== part.value) {
         // regular node set - either attrib or node part

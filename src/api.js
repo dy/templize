@@ -4,41 +4,28 @@ import updateNodes from 'swapdom'
 
 const FRAGMENT = 11, ELEMENT = 1, TEXT = 3, COMMENT = 8, STRING = 0, PART = 1
 
-
 export const defaultProcessor = {
   processCallback(instance, parts, state) {
     if (!state) return
     for (const part of parts) if (part.expression in state) part.value = state[part.expression]
   }
-},
-
-// templize any element
-templize = (node, state, proc=defaultProcessor) => {
-  let parts = parse(node), params,
-      update = diff => proc.processCallback(node, parts, diff)
-
-  state ||= {}
-
-  proc.createCallback?.(node, parts, state)
-  proc.processCallback(node, parts, state)
-
-  // return update via destructuring of result to allow batch-update
-  state[Symbol.iterator] = function*(){ yield params; yield update; yield parts;}
-
-  return params = new Proxy(state,  {
-    set: (s, k, v) => (state[k]=v, update(state), 1),
-    deleteProperty: (s,k) => (delete state[k], update(), 1)
-  })
 }
 
 // API
 export class TemplateInstance extends DocumentFragment {
-  constructor(template, params, processor=defaultProcessor) {
+  #parts
+  #processor
+  constructor(template, state, processor=defaultProcessor) {
     super()
     this.appendChild(template.content.cloneNode(true))
-    const [, update] = templize(this, params, processor)
-    this.update = update
+    this.#parts = parse(this)
+    this.#processor = processor
+
+    state ||= {}
+    processor.createCallback?.(this, this.#parts, state)
+    processor.processCallback(this, this.#parts, state)
   }
+  update(state) { this.#processor.processCallback(this, this.#parts, state) }
 }
 
 export class TemplatePart {
@@ -112,8 +99,6 @@ export class InnerTemplatePart extends NodeTemplatePart {
   }
 }
 
-// const tabular = ['caption','colgroup','thead','tbody','tfoot','tr'].map(e=>e+':empty')+''
-
 // collect element parts
 export const parse = (element, parts=[]) => {
   let attr, node, setter, type, value, table, lastParts, slot, slots
@@ -149,6 +134,7 @@ export const parse = (element, parts=[]) => {
         // NOTE: it doesn't cover all possible insertion cases, but the core ones.
         // TODO: it can be extended to detect on the moment of insertion, but it still won't be complete
         // removing for now
+        // const tabular = ['caption','colgroup','thead','tbody','tfoot','tr'].map(e=>e+':empty')+''
         // if ((table = node.nextSibling)?.tagName === 'TABLE') {
         //   slots = table.matches(':empty') ? [table] : table.querySelectorAll(tabular)
         //   for (lastParts = []; lastParts.length < slots.length && setter.parts[setter.parts.length - 1] instanceof NodeTemplatePart;)
