@@ -5,6 +5,39 @@ import { prop } from 'element-props'
 import { NodeTemplatePart, TemplateInstance } from './template-parts.js'
 
 
+// extend default subscript
+// '" strings with escaping characters
+const BSLASH = 92,
+  escape = {n:'\n', r:'\r', t:'\t', b:'\b', f:'\f', v:'\v'},
+  string = q => (qc, c, str='') => {
+    while (c=cur.charCodeAt(idx), c-q) {
+      if (c === BSLASH) skip(), c=skip(), str += escape[c] || c
+      else str += skip()
+    }
+    return skip()||err('Bad string'), () => str
+  }
+parseExpr.set('"', string(34))
+parseExpr.set("'", string(39))
+
+// ?:
+parseExpr.set(':', 3.1, (a,b) => [a,b])
+parseExpr.set('?', 3, (a,b) => a ? b[0] : b[1])
+
+// literals
+parseExpr.set('true', a => { if (a) throw new SyntaxError('Unexpected'); return ()=>true })
+parseExpr.set('false', a => { if (a) throw new SyntaxError('Unexpected'); return ()=>false })
+
+// a?.b - optional chain operator
+parseExpr.set('?.',18, (a,b,aid,bid) => a?.[bid])
+
+// a | b - pipe overload
+parseExpr.set('|', 6, (a,b) => b(a))
+
+// a in b operator for loops
+parseExpr.set('in', (a,b) => (b = expr(), ctx => [a.id(ctx), b(ctx)]))
+
+
+
 export const processor = {
   createCallback(instance, allParts, init) {
     if (states.get(instance)) return
@@ -74,38 +107,6 @@ directive = (dir, create) => directives[dir] = {
   },
   create
 }
-
-// extend default subscript
-// '" strings with escaping characters
-const BSLASH = 92,
-  escape = {n:'\n', r:'\r', t:'\t', b:'\b', f:'\f', v:'\v'},
-  string = q => (qc, c, str='') => {
-    while (c=cur.charCodeAt(idx), c-q) {
-      if (c === BSLASH) skip(), c=skip(), str += escape[c] || c
-      else str += skip()
-    }
-    return skip()||err('Bad string'), () => str
-  }
-parseExpr.set('"', string(34))
-parseExpr.set("'", string(39))
-
-// ?:
-parseExpr.set(':', 3.1, (a,b) => [a,b])
-parseExpr.set('?', 3, (a,b) => a ? b[0] : b[1])
-
-// literals
-parseExpr.set('true', a => { if (a) throw new SyntaxError('Unexpected'); return ()=>true })
-parseExpr.set('false', a => { if (a) throw new SyntaxError('Unexpected'); return ()=>false })
-
-// a?.b - optional chain operator
-parseExpr.set('?.',18, (a,b,aid,bid) => a?.[bid])
-
-// a | b - pipe overload
-parseExpr.set('|', 6, (a,b) => b(a))
-
-// a in b operator for loops
-parseExpr.set('in', (a,b) => (b = expr(), ctx => [a.id(ctx), b(ctx)]))
-
 
 // configure directives
 directive('if', (instance, part) => {
