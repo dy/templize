@@ -42,10 +42,10 @@ params.x = 'Goodbye' // === update({x: 'Goodbye'})
 
 `params` is proxy reflecting current state. Changing any of its props updates fields. `update` can be used for bulk-updating multiple props.
 
-_Templize_ also can be used as _Template Instance_ [spec](https://github.com/WICG/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md#32-template-parts-and-custom-template-process-callback) ponyfill:
+_Templize_ also can be used as _Template Instance_ [spec](https://github.com/WICG/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md#32-template-parts-and-custom-template-process-callback) implementation:
 
 ```js
-import { TemplateInstance, NodeTemplatePart, AttributeTemplatePart } from 'templize/template-parts'
+import { TemplateInstance, NodeTemplatePart, AttributeTemplatePart } from 'templize'
 
 let tpl = new TemplateInstance(templateElement, initParams)
 tpl.update(newParams)
@@ -283,6 +283,15 @@ import { TemplateInstance } from '@github/template-parts'
 import processor from 'templize/processor'
 
 const instance = new TemplateInstance(document.querySelector('my-template'), {}, processor)
+```
+
+_Templize_ also provides _Template Instantiation_ ponyfill without extra rigging included:
+
+```js
+import { TemplateInstance, NodeTemplatePart, AttributeTemplatePart } from 'templize/template-parts'
+
+let tpl = new TemplateInstance(templateElement, initParams)
+tpl.update(newParams)
 ```
 
 ## Buddies
