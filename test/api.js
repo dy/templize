@@ -122,6 +122,28 @@ test('update: is a noop when update() is called with no args', () => {
   is(root.innerHTML, `<div class="my-foo-state bar">baz</div>`)
 })
 
+test('update: inserting instance does not break update', () => {
+  let template = document.createElement('template')
+  template.innerHTML = `{{a}}`
+  const inst = new TemplateInstance(template, {a:1})
+  let el = document.createElement('div')
+  el.appendChild(inst)
+  is(el.innerHTML, `1`)
+  inst.update({a:2})
+  is(el.innerHTML, `2`)
+})
+
+test('update: inserting instance does not break update', () => {
+  let template = document.createElement('template')
+  template.innerHTML = `{{a}}`
+  const inst = new TemplateInstance(template, {a:1})
+  let el = document.createElement('div')
+  el.appendChild(inst)
+  is(el.innerHTML, `1`)
+  inst.update({a:2})
+  is(el.innerHTML, `2`)
+})
+
 
 
 const propertyIdentityOrBooleanAttribute = {
