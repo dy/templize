@@ -40,20 +40,11 @@ parseExpr.set('in', (a,b) => (b = expr(), ctx => [a.id(ctx), b(ctx)]))
 // configure directives
 directive('if', (instance, part) => {
   // clauses in evaluation read detected clause by :if part and check if that's them
-  (part.addCase = (casePart, content, update, matches=casePart.eval) => (
+  (part.addCase = (casePart, matches=casePart.eval) => (
     casePart.eval = state => part.match ? '' : !matches(state) ? '' : (
       part.match = casePart, // flag found case
-      // there is 2 ways how we can hide case elements:
-      // either create all cases content in the beginning or recreate when condition matches (proposed by standard)
-      // creating all upfront can be heavy initial hit; creating by processCallback can be heavy on update
-      // so we make it lazy - create only on the first match and only update after
-      !content ? (
-        content=casePart.template.content.cloneNode(true),
-        // FIXME: use new TemplateInstance here
-        // instance=new TemplateInstance(casePart.template,)
-        [,update]=templize(content,state,processor),
-        content=[...content.childNodes] // keep refs
-      ) : (console.log(content[0]),update(state), content)
+      // FIXME: create on the first match and only update after; complicated by instance losing children on update
+      new TemplateInstance(casePart.template, state, processor)
     )
   ))(instance.ifPart=part)
 
@@ -64,26 +55,14 @@ directive('if', (instance, part) => {
 directive('else-if', (instance, part) => instance.ifPart?.addCase(part))
 directive('else', (instance, part) => (part.eval=()=>true, instance.ifPart?.addCase(part), instance.ifPart=null) )
 
-// directive('each', (instance, part) => {
-//   let evalLoop = part.eval, cache = new Map // FIXME: weakify
-//   part.eval = state => {
-//     const [itemId, items] = evalLoop(state)
-//     state = Object.create(state)
-//     return items.map((item, inst, content) => {
-//       // FIXME: fact that template instance loses its children is unsettling
-//       if (inst = cache.get(item)) return (
-//         console.log('update', state, inst.nodes.map(n => n.parentNode)),
-//         inst.update(state),
-//         console.log('after update',inst.nodes.map(n => n.parentNode)),
-//         inst.nodes
-//       )
-//       content=casePart.template.content.cloneNode(true)
-//       state.item = item
-//       cache.set(item, inst = templize(content, state, processor))
-//       return content
-//     })
-//   }
-// })
+directive('each', (instance, part) => {
+  let evalLoop = part.eval
+  part.eval = state => {
+    const [itemId, items] = evalLoop(state)
+    // FIXME: cache instances instead of recreating. Causes difficulties tracking instance children
+    return items.map(item => new TemplateInstance(part.template, {item, ...state}, processor))
+  }
+})
 
 
 const processor = {

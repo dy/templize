@@ -5,7 +5,7 @@ import templize from '../src/index.js'
 import h from 'hyperf'
 
 
-test.only('loops: long', async () => {
+test('loops: long', async () => {
   let el = h`<p>
     <template directive="each" expression="item in items">{{item.id}}:{{item.value}},</template>
   </p>`

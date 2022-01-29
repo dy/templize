@@ -66,7 +66,7 @@ test('conditions: short with insertions', async () => {
   delete params.a
 })
 
-test.only('conditions: long with insertions', async () => {
+test('conditions: long with insertions', async () => {
   let el = h`<p>
     <template directive="if" expression="a==1">{{a}}</template>
     <template directive="else-if" expression="a==2">{{a}}</template>
