@@ -7,7 +7,7 @@ import h from 'hyperf'
 
 test('loops: long', async () => {
   let el = h`<p>
-    <template directive="each" expression="item in items">{{item.id}}:{{item.value}},</template>
+    <template directive="each" expression="it in items">{{it.id}}:{{it.value}},</template>
   </p>`
 
   const params = templize(el, { items: [{id:1,value:'a'}] })
@@ -21,7 +21,7 @@ test('loops: long', async () => {
 
 test('loops: long base', async () => {
   let el = h`<p>
-    <template directive="each" expression="item in items">{{item.id}}:{{item.value}},</template>
+    <template directive="each" expression="it in items">{{it.id}}:{{it.value}},</template>
   </p>`
 
   const params = templize(el, { items: [{id:1,value:'a'}, {id:2,value:'b'}] })

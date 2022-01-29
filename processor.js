@@ -39,7 +39,7 @@ parseExpr.set('in', (a,b) => (b = expr(), ctx => [a.id(ctx), b(ctx)]))
 
 
 export const processor = {
-  createCallback(instance, allParts, init) {
+  createCallback(instance, allParts, state) {
     if (states.get(instance)) return
 
     let parts = {}, // parts by ids used in parts
@@ -52,14 +52,14 @@ export const processor = {
       (part.eval = parseExpr(part.expression)).args.map(arg => (parts[arg]||=[]).push(part))
 
       // apply directives
-      directives[part.directive]?.create(instance, part, init)
+      directives[part.directive]?.create(instance, part, state)
     }
 
     // hook up observables
     // FIXME: we don't know all possible observables here, eg. item.text.
     // We instead must check when we set the value to a part - if that's observable, it must be initialized
-    for (let k in init) {
-      if (observable(value = init[k]))
+    for (let k in state) {
+      if (observable(value = state[k]))
         observers[k] = sube(value, v => (values[k] = v, ready && this.processCallback(instance, parts[k], {[k]: v}))),
         registry.register(value, [observers, k])
       else values[k] = value
@@ -74,6 +74,7 @@ export const processor = {
     let [values, observers] = states.get(instance), k, part, v
 
     for (k in state) if (!observers[k]) values[k] = state[k] // extend state ignoring reactive vals
+
     // Object.assign(values, state)
     for (part of parts)
       if ((v = part.eval(values)) !== part.value) {
@@ -129,9 +130,10 @@ directive('else', (instance, part) => (part.eval=()=>true, instance.ifPart?.addC
 directive('each', (instance, part) => {
   let evalLoop = part.eval
   part.eval = state => {
-    const [itemId, items] = evalLoop(state)
+    let [itemId, items] = evalLoop(state), list=[]
     // FIXME: cache instances instead of recreating. Causes difficulties tracking instance children
-    return items.map(item => new TemplateInstance(part.template, {item, ...state}, processor))
+    for (let item of items) list.push(new TemplateInstance(part.template, {...state,[itemId]:item}, processor))
+    return list
   }
 })
 
