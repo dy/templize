@@ -27,14 +27,15 @@
   "module": "./src/index.js",
   "browser": "templize.js",
   "files": [
-    "src",
+    "template-parts.js",
+    "processor.js",
     "templize.js",
     "templize.min.js"
   ],
   "scripts": {
     "test": "node --expose-gc --allow-natives-syntax -r ./test/register.cjs test/index.js",
-    "build": "rollup ./src/index.js -p @rollup/plugin-node-resolve --file templize.js --format esm",
-    "minify": "terser templize.js -o templize.min.js --module -c passes=3 -m"
+    "build": "rollup ./templize.js -p @rollup/plugin-node-resolve --file templize.min.js --format esm",
+    "minify": "terser templize.min.js -o templize.min.js --module -c passes=3 -m"
   },
   "devDependencies": {
     "@rollup/plugin-node-resolve": "^13.1.3",
