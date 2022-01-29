@@ -5,12 +5,26 @@ import templize from '../src/index.js'
 import h from 'hyperf'
 
 
-test('loops: long', async () => {
+test.only('loops: long', async () => {
   let el = h`<p>
     <template directive="each" expression="item in items">{{item.id}}:{{item.value}},</template>
   </p>`
 
-  const params = templize(el, { items: [{id:1,value:'a'},{id:2,value:'b'}] })
+  const params = templize(el, { items: [{id:1,value:'a'}] })
+
+  is(el.innerHTML, '1:a,')
+  params.items = [params.items[0], {id:2,value:'b'}]
+  is(el.innerHTML, '1:a,2:b,')
+
+  delete params.items
+})
+
+test('loops: long base', async () => {
+  let el = h`<p>
+    <template directive="each" expression="item in items">{{item.id}}:{{item.value}},</template>
+  </p>`
+
+  const params = templize(el, { items: [{id:1,value:'a'}, {id:2,value:'b'}] })
 
   is(el.innerHTML, '1:a,2:b,')
   params.items = [...params.items, {id:3,value:'c'}]

@@ -1,5 +1,5 @@
 import test, {is} from 'tst'
-import { tokenize } from '../src/parse.js'
+import { tokenize } from '../src/api.js'
 
 const STRING = 0, PART = 1
 
