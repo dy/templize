@@ -120,7 +120,7 @@ export const parse = (element, parts=[]) => {
         const setter = {parentNode: element, parts:[]}
 
         if (node.data) {
-          for ([type, value] of tokenize(node.data.trim()))
+          for ([type, value] of tokenize(node.data))
             if (!type) setter.parts.push(new Text(value))
             else value = new NodeTemplatePart(setter, value), setter.parts.push(value), parts.push(value)
         }

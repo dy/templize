@@ -142,8 +142,8 @@ test('table: <table><!--{{ a }}--><tr><!-- {{ b }} --></tr></table>', () => {
   templize(el, {a: table.childNodes[0].childNodes, b:'b'})
 
   any(el.innerHTML, [
-    `<table><tr><td>a</td></tr><tr>b</tr></table>`,
-    `<table><tr><td>a</td></tr><tbody><tr>b</tr></tbody></table>`
+    `<table><tr><td>a</td></tr><tr> b </tr></table>`,
+    `<table><tr><td>a</td></tr><tbody><tr>  b  </tr></tbody></table>`
   ])
 })
 
