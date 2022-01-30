@@ -91,7 +91,7 @@ test('reactivity: internal observable should be evaluated by value', t => {
   is(el.innerHTML, "1")
 })
 
-test.only('reactivity: properly garbage-collected', async () => {
+test('reactivity: properly garbage-collected', async () => {
   let text = v('foo'), init
   let el = document.createElement('div')
   el.innerHTML = `<p>{{ text }}</p>`

@@ -37,58 +37,68 @@ parseExpr.set('|', 6, (a,b) => b(a))
 parseExpr.set('in', (a,b) => (b = expr(), ctx => [a.id(ctx), b(ctx)]))
 
 
+export const states = new WeakMap,
 
-export const processor = {
+processor = {
   createCallback(instance, allParts, state) {
     if (states.get(instance)) return
 
-    let parts = {}, // parts by ids used in parts
-        values = {}, // template values state
-        observers = {}, // observable properties in state
-        ready, value
+    let partIds = {}, values = {}, v, obs={}, ready,
+
+    // hook up observables (deeply, to include item.text etc)
+    // that's least evil compared to dlv/dset or proxies
+    // moving it to processCallback makes it a bit heavy
+    // it gives bonus of reinitializing observers, but we don't need it (tentatively)
+    // and it still needs recursion to avoid extending values with observables, but
+    // here we also avoid reinitializing same element multiple times, but in processCallback that's impossible
+    rsube = (state, values, root) => {
+      for (let k in state) {
+        if (observable(v = state[k]))
+          registry.register(v, sube(v, v => (values[k] = v, ready && this.processCallback(instance, partIds[root||k]))))
+        else if (v?.constructor === Object) rsube(v, values[k] = {}, root||k)
+        else values[k] = v
+      }
+    }
 
     // detect prop → part
     for (const part of allParts) {
-      (part.eval = parseExpr(part.expression)).args.map(arg => (parts[arg]||=[]).push(part))
+      (part.eval = parseExpr(part.expression)).args.map(arg => (partIds[arg]||=[]).push(part))
 
       // apply directives
       directives[part.directive]?.create(instance, part, state)
     }
 
-    // hook up observables
-    // FIXME: we don't know all possible observables here, eg. item.text.
-    // We instead must check when we set the value to a part - if that's observable, it must be initialized
-    for (let k in state) {
-      if (observable(value = state[k]))
-        observers[k] = sube(value, v => (values[k] = v, ready && this.processCallback(instance, parts[k], {[k]: v}))),
-        registry.register(value, [observers, k])
-      else values[k] = value
-    }
+    // extend state, hook up observables
+    rsube(state, values)
 
     // initial state inits all parts
-    ready = true, states.set(instance, [values, observers])
+    states.set(instance, [values])
+
+    ready=true
   },
 
   // updates diff parts from current state
   processCallback(instance, parts, state) {
-    let [values, observers] = states.get(instance), k, part, v
+    let [values] = states.get(instance), k, part, v
 
-    for (k in state) if (!observers[k]) values[k] = state[k] // extend state ignoring reactive vals
+    patch(values, state)
 
-    // Object.assign(values, state)
-    for (part of parts)
+    // rerender affected parts
+    for (part of parts) {
       if ((v = part.eval(values)) !== part.value) {
-        // regular node set - either attrib or node part
         if (part.replace) part.replace(v)
-
+        // <x attr={{single}}>
         else part.setter.parts.length === 1 ? prop(part.element, part.attributeName, part.value = v) : part.value = v
       }
+    }
   }
 },
 
-states = new WeakMap,
+registry = new FinalizationRegistry(unsub => unsub?.call?.()),
 
-registry = new FinalizationRegistry(([obs, k]) => (obs[k]?.(), delete obs[k])),
+patch = (a,b) => {
+  for (let k in b) if (k in a) b[k]?.constructor == Object ? patch(a[k], b[k]) : !observable(b[k]) ? a[k] = b[k] : 0
+},
 
 directives = {},
 
