@@ -32,7 +32,6 @@ test('attribute: binds function', async () => {
   let el = h`<div x={{x}} onclick="{{ inc }}"></div>`
   let x = v(0)
   templize(el, { x, inc: ()=>x.value++ })
-  is(x.value, 0)
   is(el.x, 0)
   el.click()
 

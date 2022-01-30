@@ -3,7 +3,7 @@ import test, {is, throws} from 'tst'
 import {TemplateInstance} from '../template-parts.js'
 import {tick, time} from 'wait-please'
 import templize from '../templize.js'
-import exprProcessor, { states, registry } from '../processor.js'
+import exprProcessor, { states } from '../processor.js'
 import h from 'hyperf'
 
 const originalHTML = `Hello {{x}}!`
@@ -68,18 +68,30 @@ test('processor: template cannot modify init state', () => {
 test('processor: dont init twice, dont change the template data', () => {
   let text = v('foo')
   let el = document.createElement('div')
-  el.innerHTML = `<p>{{ count.x++, text }}</p>`
+  el.innerHTML = `<p>{{ count(), text }}</p>`
 
-  let init = {count:{x:0}, text}
+  let x = 0
+  let init = {count:()=>x++, text}
   templize(el, init, exprProcessor)
+  console.log('---')
   templize(el, init, exprProcessor)
+  console.log('---')
   templize(el, init, exprProcessor)
 
-  is(init, {count:{x:1}, text})
+  is(x, 1)
 })
 
 
-test('reactivity: properly garbage-collected', async () => {
+test('reactivity: internal observable should be evaluated by value', t => {
+  let el = h`<p>{{ a.x ? 1 : 2 }}</p>`
+  let params = templize(el, {a:{x:v(false)}})
+  is(el.innerHTML, "2")
+
+  params.a.x.value = true
+  is(el.innerHTML, "1")
+})
+
+test.only('reactivity: properly garbage-collected', async () => {
   let text = v('foo'), init
   let el = document.createElement('div')
   el.innerHTML = `<p>{{ text }}</p>`
@@ -103,7 +115,7 @@ test('reactivity: properly garbage-collected', async () => {
   init = text = null
   await gc()
 
-  is(states.get(el)[1].text, undefined)
+  is(states.get(el).text, undefined)
   is(el.innerHTML, '<p>baz</p>')
 })
 

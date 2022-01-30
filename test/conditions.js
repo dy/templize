@@ -2,7 +2,7 @@ import v from 'value-ref'
 import test, {is, throws} from 'tst'
 import {tick, time} from 'wait-please'
 import templize from '../templize.js'
-import exprProcessor, { states, registry } from '../processor.js'
+import exprProcessor, { states } from '../processor.js'
 import h from 'hyperf'
 
 test('conditions: long', async () => {

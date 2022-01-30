@@ -1,18 +1,33 @@
 # plan
 
-
-* [ ] Move shortcut directives to processor?
+* [x] Move shortcut directives to processor?
 
 * [ ] How to provide `createCallback` not superceding default processor?
   → Just manually import/call processor callback?
 
-* [ ] observables as props, not direct args {{prop.done}}
+* [ ] observables as props, not direct args `{{ prop.done }}`
+  . not only direct props, but enables also as `{{ item.done ? 'complete' : '' }}`
+  . How can that possibly be done?
+  1. detect prop chains `a.b.c` via subscript as args, subscribe to all internal props
+    - lacking dynamics: if prop is undefined, then defined - it's not subscribed
+    - problem with `a?.b` etc.
+    + doesn't overdynamize: `{{ a[b] }}` can refer to any value, which is if subscribed going to be pain
+  2. disable dot-prop operator and detect it as long identifier
+    - to pass environment we'd have to flatten objects - ugh
+    - or else - we'd have to by access to identifiers do dotprop parsing
+  3. provide proxy as state: subscribes if value returned prop
+    ~ should make sure no millions of proxies created, like in case of iterator. It must be one proxy.
+    - `a.b.c` → `a.b` should return detector proxy = spawning dynamic proxies, too heavy.
+  4. iterating by all object props and subscribing to all observables
+    + least evil from all: doesn't itroduce fragile args detection;
+    + doesn't introduce heavy proxy detection;
 
 * [ ] disposing element should unsubscribe reactives as well
 
 * [ ] interpolated strings \`a ${b} c\`
 
 * [ ] `:each` need optimization to avoid recreating content every process call
+  → complicated for now due to TemplateInstance isn't tracking all refs to children
 
 * [x] :for, :if need to be added to processor
   + useful not only in define-element, but generally, eg. spect
