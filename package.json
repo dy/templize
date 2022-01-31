@@ -13,14 +13,13 @@
   "author": "Dmitry Iv.",
   "keywords": [
     "template-parts",
+    "template parts",
     "template-instantiation",
-    "template instantiation",
-    "template-instance",
     "template instance",
     "template engine",
-    "dom-parts",
+    "template processor",
     "dom parts",
-    "templatize"
+    "dom template"
   ],
   "type": "module",
   "main": "./src/index.js",

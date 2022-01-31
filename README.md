@@ -208,7 +208,7 @@ _Templize_ expression processor can also be used with other template instancing 
 
 ```js
 import { TemplateInstance } from '@github/template-parts'
-import processor from 'templize/processor'
+import { processor } from 'templize'
 
 const instance = new TemplateInstance(document.querySelector('my-template'), {}, processor)
 ```
@@ -217,7 +217,7 @@ Or it can be used with proposal polyfill:
 
 ```js
 import 'templize-instantiation-polyfill'
-import processor from 'templize/processor'
+import { processor } from 'templize'
 
 document.defineTemplateType('my-template-type', processor)
 ```

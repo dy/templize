@@ -1,8 +1,7 @@
 import v from 'value-ref'
 import test, {is, throws} from 'tst'
 import {tick} from 'wait-please'
-import templize from '../templize.js'
-import exprProcessor from '../processor.js'
+import templize, {processor as exprProcessor} from '../templize.js'
 import h from 'hyperf'
 
 test('expressions: {{ foo }}', async () => {
