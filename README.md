@@ -1,12 +1,10 @@
 # templize <a href="https://github.com/spectjs/templize/actions/workflows/node.js.yml"><img src="https://github.com/spectjs/templize/actions/workflows/node.js.yml/badge.svg"/></a> <a href="http://npmjs.org/templize"><img src="https://img.shields.io/npm/v/templize"/></a>
 
-> Native HTML templating based on template-parts
+> Native HTML templating based on template parts.
 
-_Templize_ provides elegant native templating for any DOM elements, based on [template instantiation](https://github.com/w3c/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md) and [DOM-parts](https://github.com/WICG/webcomponents/blob/gh-pages/proposals/DOM-Parts.md) spec.
+_Templize_ provides elegant native templating for any DOM elements with expressions and reactivity. Based on [Template Instantiation](https://github.com/w3c/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md) and [DOM-parts](https://github.com/WICG/webcomponents/blob/gh-pages/proposals/DOM-Parts.md) spec.
 
 ## Features
-
-Extends _template-parts_ with the following:
 
 - Works with any elements;
 - Expression processor;
@@ -163,10 +161,10 @@ Note: text conditions can be organized via ternary operator:
 To register a directive, `directive(name, onCreate)` function can be used:
 
 ```js
-import templize, { directive, processor } from 'templize'
+import templize, { directive } from 'templize'
 
 directive('inline', (instance, innerTplPart, state) =>
-  innerTplPart.replaceWith(new TemplateInstance(innerTplPart.template, state, processor))
+  innerTplPart.replaceWith(innerTplPart.template.createInstance(state))
 )
 ```
 
@@ -206,6 +204,13 @@ import { TemplateInstance } from '@github/template-parts'
 import processor from 'templize/processor'
 
 const instance = new TemplateInstance(document.querySelector('my-template'), {}, processor)
+```
+
+Or it can be used with proposal polyfill:
+
+```js
+import processor from 'templize/processor'
+document.defineTemplateType('my-template-type', processor)
 ```
 
 ## Dependencies

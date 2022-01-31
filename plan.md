@@ -4,6 +4,7 @@
   + it's independent already
   + it makes API/docs more lightweight
   + makes polyfill useful and independent on its own
+  + it moves problem of instantiating subtemplates outside of package scope
 
 * [ ] don't expose event handler as attribute
 
