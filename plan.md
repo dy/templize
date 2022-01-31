@@ -1,10 +1,5 @@
 # plan
 
-* [ ] Separate template-parts?
-  + it's independent already
-  + it makes API/docs more lightweight
-  + makes polyfill useful and independent on its own
-  + it moves problem of instantiating subtemplates outside of package scope
 
 * [ ] don't expose event handler as attribute
 
@@ -17,6 +12,13 @@
 
 * [ ] `:each` need optimization to avoid recreating content every process call
   → complicated for now due to TemplateInstance isn't tracking all refs to children
+
+* [x] Separate template-parts?
+  + it's independent already
+  + it makes API/docs/tests more lightweight
+  + makes polyfill useful and independent on its own
+  + it moves problem of instantiating subtemplates outside of package scope
+  + better SoC
 
 * [x] Move shortcut directives to processor?
 

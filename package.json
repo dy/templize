@@ -53,6 +53,7 @@
     "element-props": "^2.0.2",
     "sube": "^2.2.1",
     "subscript": "^6.4.0",
-    "swapdom": "^1.1.1"
+    "swapdom": "^1.1.1",
+    "template-parts": "^1.0.0"
   }
 }
