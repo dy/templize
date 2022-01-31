@@ -127,6 +127,7 @@ Iterating over set of items can be done with `each` directive:
 </ul>
 ```
 
+<!--
 #### Cases
 
 ```html
@@ -134,6 +135,7 @@ Iterating over set of items can be done with `each` directive:
 <li :each="{{ key, value, index in object }}">
 <li :each="{{ value in object }}">
 ```
+-->
 
 ### Conditions
 
