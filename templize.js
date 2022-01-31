@@ -1,5 +1,5 @@
 import processor, { directives } from './processor.js'
-import { parse } from './template-parts.js'
+import { parse } from 'template-parts'
 
 // wrapper over templize with shortcut directives and defaulting to expressionProcessor
 export default (el, state, proc=processor) => {

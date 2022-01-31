@@ -1,5 +1,12 @@
 # plan
 
+* [ ] Separate template-parts?
+  + it's independent already
+  + it makes API/docs more lightweight
+  + makes polyfill useful and independent on its own
+
+* [ ] don't expose event handler as attribute
+
 * [ ] How to provide `createCallback` not superceding default processor?
   → Just manually import/call processor callback?
 
