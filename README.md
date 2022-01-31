@@ -108,7 +108,7 @@ Note: observers don't require disposal, since they're connected in weak fashion.
 
 ## Directives
 
-_Templize_ recognizes full-form or shortcut directives via `:attr` (similar form to _vue_).
+_Templize_ recognizes shortcut directives via `:attr` (similar to _vue_).
 
 ### Loops
 
@@ -119,13 +119,16 @@ Iterating over set of items can be done with `each` directive:
   <li :each="{{ item in items }}" id="item-{{item.id}}" data-value="{{item.value}}">{{item.label}}</li>
 </ul>
 
-<!-- equivalent to -->
+```
+
+<!-- equivalent to
 <ul>
   <template directive="each" expression="item in items">
     <li id="item-{{item.id}}" data-value={{item.value}}>{{item.label}}</li>
   </template>
 </ul>
 ```
+-->
 
 <!--
 #### Cases
@@ -145,12 +148,14 @@ To optionally display an element, there are `if`, `else-if`, `else` directives.
 <span :if="{{ status == 0 }}">Inactive</span>
 <span :else-if="{{ status == 1 }}">Active</span>
 <span :else>Finished</span>
+```
 
-<!-- equivalent to -->
+<!-- equivalent to
 <template directive="if" expression="status == 0"><span>Inactive</span></template>
 <template directive="else-if" expression="status == 1"><span>Active</span></template>
 <template directive="else"><span>Finished</span></template>
 ```
+ -->
 
 Note: text conditions can be organized via ternary operator:
 
