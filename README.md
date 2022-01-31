@@ -2,7 +2,7 @@
 
 > Native HTML templating based on template parts.
 
-_Templize_ provides elegant native templating for any DOM elements with expressions and reactivity. Based on [Template Instantiation](https://github.com/w3c/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md) and [DOM-parts](https://github.com/WICG/webcomponents/blob/gh-pages/proposals/DOM-Parts.md) spec.
+_Templize_ provides elegant native templating for any DOM elements with expressions and reactivity. Based on [Template Instantiation](https://github.com/w3c/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md) and [DOM-parts](https://github.com/WICG/webcomponents/blob/gh-pages/proposals/DOM-Parts.md) spec. It can act as compact replacement for _vue_ and other heavy frameworks.
 
 ## Features
 
