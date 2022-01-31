@@ -1,6 +1,5 @@
 import v from 'value-ref'
 import test, {is, throws} from 'tst'
-import {TemplateInstance} from '../template-parts.js'
 import {tick} from 'wait-please'
 import templize from '../templize.js'
 import exprProcessor from '../processor.js'

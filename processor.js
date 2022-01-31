@@ -2,7 +2,7 @@ import { cur, idx, skip, err, expr } from 'subscript/parser.js'
 import parseExpr from 'subscript/subscript.js'
 import sube, { observable } from 'sube'
 import { prop } from 'element-props'
-import { NodeTemplatePart, TemplateInstance } from './template-parts.js'
+import { NodeTemplatePart, TemplateInstance } from 'template-parts'
 
 
 // extend default subscript

@@ -1,27 +1,17 @@
 # templize <a href="https://github.com/spectjs/templize/actions/workflows/node.js.yml"><img src="https://github.com/spectjs/templize/actions/workflows/node.js.yml/badge.svg"/></a> <a href="http://npmjs.org/templize"><img src="https://img.shields.io/npm/v/templize"/></a>
 
-> Template parts for any elements
+> Native HTML templating based on template parts.
 
-[Template Instantiation](https://github.com/w3c/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md) is limited to _\<template\>_ only;
-[DOM Parts](https://github.com/WICG/webcomponents/blob/gh-pages/proposals/DOM-Parts.md) lack hi-level convention and too early days.<br/>
-_Templize_ provides generic template parts for any elements, same time covering minimal spec surface.
-If either proposal lands, API will be assimilated.
+_Templize_ provides elegant native templating for any DOM elements with expressions and reactivity. Based on [Template Instantiation](https://github.com/w3c/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md) and [DOM-parts](https://github.com/WICG/webcomponents/blob/gh-pages/proposals/DOM-Parts.md) spec.
 
 ## Features
 
-Essentially extension of [@github/template-parts](https://github.com/github/template-parts) with the following:
-
-- Works with any elements.
-- InnerTemplateParts support.
-- Improved parser ([#38](https://github.com/github/template-parts/issues/38), [#44](https://github.com/github/template-parts/issues/44)).
-- More complete spec [API surface](#user-content-spec-surface).
-- `<table><!--{{ data }}--></table>` support<sup><a href="#tables">*</a></sup> ([#24](https://github.com/domenic/template-parts/issues/2)).
-- Expression processor.
-- Reactive props support.
-- Loops, conditions directives.
-- Directives API.
+- Works with any elements;
+- Expression processor;
+- Reactive props support;
+- Loops, conditions directives;
+- Directives API;
 - Vanilla ESM, no tooling.
-<!-- - [`<svg width={{ width }}>`](https://github.com/github/template-parts/issues/26) and other cases fixed. -->
 
 ## Usage
 
@@ -41,60 +31,6 @@ params.x = 'Goodbye' // === update({x: 'Goodbye'})
 ```
 
 `params` is proxy reflecting current state. Changing any of its props updates fields. `update` can be used for bulk-updating multiple props.
-
-_Templize_ also can be used as _Template Instance_ [spec](https://github.com/WICG/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md#32-template-parts-and-custom-template-process-callback) implementation:
-
-```js
-import { TemplateInstance, NodeTemplatePart, AttributeTemplatePart } from 'templize'
-
-let tpl = new TemplateInstance(templateElement, initParams)
-tpl.update(newParams)
-
-// NOTE: Template Instance doesn't include expression processor by default.
-```
-
-<details id="spec-surface"><summary>Spec surface</summary>
-
-```js
-interface TemplateInstance : DocumentFragment {
-    void update(any state);
-};
-
-callback TemplateProcessCallback = void (TemplateInstance, sequence<TemplatePart>, any state);
-
-dictionary TemplateProcessor {
-    TemplateProcessCallback processCallback;
-    TemplateProcessCallback? createCallback;
-};
-
-interface TemplatePart {
-    readonly attribute DOMString expression;
-    attribute DOMString? value;
-};
-
-interface AttributeTemplatePart : TemplatePart {
-    readonly attribute Element element;
-    readonly attribute DOMString attributeName;
-    readonly attribute DOMString attributeNamespace;
-    attribute boolean booleanValue;
-};
-
-interface NodeTemplatePart : TemplatePart {
-    readonly attribute ContainerNode parentNode;
-    readonly attribute Node? previousSibling;
-    readonly attribute Node? nextSibling;
-    [NewObject] readonly NodeList replacementNodes;
-    void replace((Node or DOMString)... nodes);
-    void replaceHTML(DOMString html);
-};
-
-interface InnerTemplatePart : NodeTemplatePart {
-    HTMLTemplateElement template;
-    attribute DOMString directive;
-};
-```
-</details>
-
 
 ## Expressions
 
@@ -170,24 +106,9 @@ This way, for example, _rxjs_ can be streamed directly to element attribute or c
 
 Note: observers don't require disposal, since they're connected in weak fashion.
 
-### Tables
-
-Due to HTML quirk in table parsing, table fields should be wrapped into comment:
-
-```html
-<table>
-  <!--{{ thead }}-->
-  <tbody>
-    <!--{{ rows }}-->
-  </tbody>
-</table>
-```
-
 ## Directives
 
-_Templize_ recognizes inner templates as [_InnerTemplatePart_](https://github.com/WICG/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md#33-conditionals-and-loops-using-nested-templates), expecting `directive` and `expression` attributes.
-
-It also enables shortcut directives via `:attr`.
+_Templize_ recognizes full-form or shortcut directives via `:attr`.
 
 ### Loops
 
@@ -195,14 +116,14 @@ Iterating over set of items can be done with `each` directive:
 
 ```html
 <ul>
+  <li :each="{{ item in items }}" id="item-{{item.id}}" data-value="{{item.value}}">{{item.label}}</li>
+</ul>
+
+<!-- equivalent to -->
+<ul>
   <template directive="each" expression="item in items">
     <li id="item-{{item.id}}" data-value={{item.value}}>{{item.label}}</li>
   </template>
-</ul>
-
-<!-- shortcut -->
-<ul>
-  <li :each="{{ item in items }}" id="item-{{item.id}}" data-value="{{item.value}}">{{item.label}}</li>
 </ul>
 ```
 
@@ -219,14 +140,14 @@ Iterating over set of items can be done with `each` directive:
 To optionally display an element, there are `if`, `else-if`, `else` directives.
 
 ```html
-<template directive="if" expression="status == 0"><span>Inactive</span></template>
-<template directive="else-if" expression="status == 1"><span>Active</span></template>
-<template directive="else"><span>Finished</span></template>
-
-<!-- shortcut -->
 <span :if="{{ status == 0 }}">Inactive</span>
 <span :else-if="{{ status == 1 }}">Active</span>
 <span :else>Finished</span>
+
+<!-- equivalent to -->
+<template directive="if" expression="status == 0"><span>Inactive</span></template>
+<template directive="else-if" expression="status == 1"><span>Active</span></template>
+<template directive="else"><span>Finished</span></template>
 ```
 
 Note: text conditions can be organized via ternary operator:
@@ -240,10 +161,10 @@ Note: text conditions can be organized via ternary operator:
 To register a directive, `directive(name, onCreate)` function can be used:
 
 ```js
-import templize, { directive, processor } from 'templize'
+import templize, { directive } from 'templize'
 
 directive('inline', (instance, innerTplPart, state) =>
-  innerTplPart.replaceWith(new TemplateInstance(innerTplPart.template, state, processor))
+  innerTplPart.replaceWith(innerTplPart.template.createInstance(state))
 )
 ```
 
@@ -285,35 +206,33 @@ import processor from 'templize/processor'
 const instance = new TemplateInstance(document.querySelector('my-template'), {}, processor)
 ```
 
-_Templize_ also provides _Template Instantiation_ ponyfill without extra rigging included:
+Or it can be used with proposal polyfill:
 
 ```js
-import { TemplateInstance, NodeTemplatePart, AttributeTemplatePart } from 'templize/template-parts'
+import 'templize-instantiation-polyfill'
+import processor from 'templize/processor'
 
-let tpl = new TemplateInstance(templateElement, initParams)
-tpl.update(newParams)
+document.defineTemplateType('my-template-type', processor)
 ```
+
+## Dependencies
+
+* [template-parts](https://github.com/spectjs/template-parts) − compact template parts ponyfill.
+* [subscript](https://github.com/spectjs/subscript) − fast and tiny expressions parser.
+* [sube](https://github.com/specths/sube) − subscribe to any reactive source.
+* [element-props](https://github.com/specths/element-props) − normalized element properties setter.
+<!-- * [swapdom](https://github.com/specths/swapdom) − fast and tiny dom swapping algo. -->
 
 ## Buddies
 
 * [spect](https://github.com/spectjs/spect) − selector observer, perfect match for organizing flexible native DOM templates.
 * [value-ref](https://github.com/spectjs/value-ref) − reactive value container with reactivity, useful for state management.
 * [subscribable-things](https://github.com/chrisguttandin/subscribable-things) − reactive wrappers for various APIs.
-<!-- * [element-props](https://github.com/spectjs/element-props) − normalized access to element attributes / properties. -->
 <!-- * [define-element](https://github.com/spectjs/define-element) − declarative custom elements. -->
 
 ## Neighbors
 
-* [@github/template-parts](https://github.com/github/template-parts) − viable Template Parts implementation, doesn't closely follow spec in secondary details, but provides reliable ground.
-* [template-instantiation-polyfill](https://github.com/bennypowers/template-instantiation-polyfill#readme) − closely follows the Template Instantiation spec algorithm, but [is not recommended](https://github.com/bennypowers/template-instantiation-polyfill/pull/2#issuecomment-1004110993) by author.
-* [PolymerLabs/template-instantiation](https://github.com/PolymerLabs/template-instantiation) − implementation from Google with TemplateAssembly, TemplateRule and other extensions.
 * [stampino](https://www.npmjs.com/package/stampino) − small HTML template system based on lit-html.
 
-## Dependencies
-
-* [subscript](https://github.com/specths/subscript) − fast and tiny expressions parser.
-* [swapdom](https://github.com/specths/swapdom) − fast and tiny dom swapping algo.
-* [sube](https://github.com/specths/sube) − subscribe to any reactive source.
-* [element-props](https://github.com/specths/element-props) − normalized element properties setter.
 
 <p align="center">🕉<p>
