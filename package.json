@@ -26,8 +26,6 @@
   "module": "./src/index.js",
   "browser": "templize.js",
   "files": [
-    "template-parts.js",
-    "processor.js",
     "templize.js",
     "templize.min.js"
   ],
