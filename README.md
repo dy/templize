@@ -108,7 +108,7 @@ Note: observers don't require disposal, since they're connected in weak fashion.
 
 ## Directives
 
-_Templize_ recognizes full-form or shortcut directives via `:attr`.
+_Templize_ recognizes full-form or shortcut directives via `:attr` (similar form to_vue_).
 
 ### Loops
 
