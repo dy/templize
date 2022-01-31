@@ -209,7 +209,9 @@ const instance = new TemplateInstance(document.querySelector('my-template'), {},
 Or it can be used with proposal polyfill:
 
 ```js
+import 'templize-instantiation-polyfill'
 import processor from 'templize/processor'
+
 document.defineTemplateType('my-template-type', processor)
 ```
 
