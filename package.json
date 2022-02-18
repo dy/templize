@@ -49,7 +49,7 @@
   "dependencies": {
     "element-props": "^2.0.2",
     "sube": "^2.2.1",
-    "subscript": "^6.4.0",
+    "subscript": "^7.0.3",
     "swapdom": "^1.1.1",
     "template-parts": "^1.0.0"
   }

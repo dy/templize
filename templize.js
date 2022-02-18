@@ -1,5 +1,5 @@
-import { cur, idx, skip, err, expr } from 'subscript/parser.js'
-import parseExpr from 'subscript/subscript.js'
+import subscript, { parse as parseExpr, compile} from 'subscript'
+import { cur, idx, skip, err, expr } from 'subscript/parse.js'
 import sube, { observable } from 'sube'
 import { prop } from 'element-props'
 import { parse, NodeTemplatePart, TemplateInstance } from 'template-parts'
@@ -31,34 +31,53 @@ export default (el, state, proc=processor) => {
 
 // extend default subscript
 // '" strings with escaping characters
-const BSLASH = 92,
-  escape = {n:'\n', r:'\r', t:'\t', b:'\b', f:'\f', v:'\v'},
+let escape = {n:'\n', r:'\r', t:'\t', b:'\b', f:'\f', v:'\v'},
   string = q => (qc, c, str='') => {
+    qc&&err('Unexpected string') // must not follow another token
+    skip()
     while (c=cur.charCodeAt(idx), c-q) {
-      if (c === BSLASH) skip(), c=skip(), str += escape[c] || c
+      if (c === 92) skip(), c=skip(), str += escape[c] || c
       else str += skip()
     }
-    return skip()||err('Bad string'), () => str
-  }
-parseExpr.set('"', string(34))
-parseExpr.set("'", string(39))
+    skip()
+    return ['', str]
+  },
+
+  collectArgs = (_, ...args) => args.flatMap(arg => Array.isArray(arg) ? collectArgs(...arg) : arg ? [arg] : [])
+
+
+subscript.set('"', null, [string(34)])
+subscript.set("'", null, [string(39)])
 
 // ?:
-parseExpr.set(':', 3.1, (a,b) => [a,b])
-parseExpr.set('?', 3, (a,b) => a ? b[0] : b[1])
+subscript.set('?', 3, [
+    (a, b, c) => a && (b=expr(2,58)) && (c=expr(3), ['?', a, b, c]),
+    (a, b, c) => (a=compile(a),b=compile(b),c=compile(c), ctx => a(ctx) ? b(ctx) : c(ctx))
+  ])
 
-// literals
-parseExpr.set('true', a => { if (a) throw new SyntaxError('Unexpected'); return ()=>true })
-parseExpr.set('false', a => { if (a) throw new SyntaxError('Unexpected'); return ()=>false })
+subscript.set('??', 6, (a,b) => a ?? b)
+
+// a?.[, a?.( - postfix operator
+subscript.set('?.', 18, [a => a && ['?.', a], a => (a=compile(a), ctx => a(ctx)||(()=>{})) ])
 
 // a?.b - optional chain operator
-parseExpr.set('?.',18, (a,b,aid,bid) => a?.[bid])
+subscript.set('?.', 18, [
+    (a,b) => a && (b=expr(18),!b?.map) && ['?.',a,b],
+    (a,b) => b && (a=compile(a), ctx => a(ctx)?.[b])
+  ])
+
+
+// literals
+subscript.set('null', 20, [a => a ? err() : ['',null]])
+subscript.set('true', 20, [a => a ? err() : ['',true]])
+subscript.set('false', 20, [a => a ? err() : ['',false]])
+subscript.set('undefined', 20, [a => a ? err() : ['',undefined]])
 
 // a | b - pipe overload
-parseExpr.set('|', 6, (a,b) => b(a))
+subscript.set('|', 6, (a,b) => b(a))
 
 // a in b operator for loops
-parseExpr.set('in', (a,b) => (b = expr(), ctx => [a.id(ctx), b(ctx)]))
+subscript.set('in', 10, [(a,b) => ['in',a,expr(10)], (a,b) => ctx => [a,ctx[b]]] )
 
 
 export const states = new WeakMap,
@@ -86,7 +105,10 @@ processor = {
 
     // detect prop → part
     for (const part of allParts) {
-      (part.eval = parseExpr(part.expression)).args.map(arg => (partIds[arg]||=[]).push(part))
+      const ast = parseExpr(part.expression)
+      // console.log(ast, collectArgs(null,ast))
+      collectArgs(null,ast).map(arg => (partIds[arg]||=[]).push(part))
+      part.eval = compile(ast)
 
       // apply directives
       directives[part.directive]?.create(instance, part, state)
