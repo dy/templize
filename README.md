@@ -20,17 +20,18 @@ Extends template parts with the following:
 ## Usage
 
 ```html
-<div id="foo" class="foo {{y}}">{{x}} world</div>
 <script type="importmap">{ "imports": { "templize": "parth/to/templize.js" }}</script>
 
+<div id="foo" class="foo {{y}}">{{x}} world</div>
+
 <script type="module">
-import templize from 'templize'
+  import templize from 'templize'
 
-const [params, update] = templize(document.getElementById('foo'), { x: 'Hello', y: 'bar'})
-// <div id="foo" class="foo bar">Hello world</div>
+  const [params, update] = templize(document.getElementById('foo'), { x: 'Hello', y: 'bar'})
+  // <div id="foo" class="foo bar">Hello world</div>
 
-params.x = 'Goodbye' // === update({x: 'Goodbye'})
-// <div id="foo" class="foo bar">Goodbye world</div>
+  params.x = 'Goodbye' // === update({x: 'Goodbye'})
+  // <div id="foo" class="foo bar">Goodbye world</div>
 </script>
 ```
 
