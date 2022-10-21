@@ -83,7 +83,7 @@ _Templize_ enables expressions via default **expression processor**:
 ```html
 <header id="title">
   <h1>{{ user.name }}</h1>
-  Email: <a href="mailto:{{ user.email }}">{{ user.email }}</a>
+  Email: <a href="mailto:{{ user.email }}" onclick="{{ e => { event.preventDefault(); await sendEmail(user.email); } }}">{{ user.email }}</a>
 </header>
 
 <script>
@@ -109,6 +109,7 @@ Primitives | `{{ "foo" }}`, `{{ true }}`, `{{ 0.1 }}`
 Comparison | `{{ foo == 1 }}`, `{{ bar >= 2 }}`
 Math | `{{ a * 2 + b / 3 }}`
 Pipe | `{{ bar \| foo }}` → `{{ foo(bar) }}`
+Functions | `{{ e => foo() }}`, `{{ async e => { await foo(); bar(); } }}`
 <!-- Loop | `{{ item, idx in list }}` | `params.d` | Used for `:for` directive only -->
 <!-- Spread | `{{ ...foo }}` | `params.foo` | Used to pass multiple attributes or nodes -->
 
@@ -117,11 +118,11 @@ Pipe | `{{ bar \| foo }}` → `{{ foo(bar) }}`
 Processor makes assumptions regarding how attribute parts set values.
 
 * `hidden="{{ boolean }}"` boolean values set or remove attribute.
-* `onClick="{{ function }}"` assigns `onclick` handler function (no need to call it).
+* `onClick="{{ function }}"` assigns `onclick` handler function (no need to call it, unlike in html).
 * `class="{{ classes }}"` can take either an array or a string.
 * `style="{{ styles }}"` can take either an object or a string.
 
-Other attributes are handled as strings.
+Other attribute values cast to strings.
 
 
 ## Directives
@@ -135,9 +136,8 @@ Iterating over set of items can be done with `each` directive:
 
 ```html
 <ul>
-  <li :each="{{ item in items }}" id="item-{{item.id}}" data-value="{{item.value}}">{{item.label}}</li>
+  <li :each="{{ item, index in items }}" id="item-{{item.id}}" data-value="{{item.value}}">{{item.label}}</li>
 </ul>
-
 ```
 
 <!-- equivalent to
