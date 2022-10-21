@@ -1,4 +1,4 @@
-import subscript, { parse as parseExpr, compile} from 'subscript'
+import subscript, { parse as parseExpr, compile, set } from 'subscript'
 import { cur, idx, skip, err, expr } from 'subscript/parse.js'
 import sube, { observable } from 'sube'
 import { prop } from 'element-props'
@@ -45,39 +45,38 @@ let escape = {n:'\n', r:'\r', t:'\t', b:'\b', f:'\f', v:'\v'},
 
   collectArgs = (_, ...args) => args.flatMap(arg => Array.isArray(arg) ? collectArgs(...arg) : arg ? [arg] : [])
 
-
-subscript.set('"', null, [string(34)])
-subscript.set("'", null, [string(39)])
+set('"', null, [string(34)])
+set("'", null, [string(39)])
 
 // ?:
-subscript.set('?', 3, [
+set('?', 3, [
     (a, b, c) => a && (b=expr(2,58)) && (c=expr(3), ['?', a, b, c]),
     (a, b, c) => (a=compile(a),b=compile(b),c=compile(c), ctx => a(ctx) ? b(ctx) : c(ctx))
   ])
 
-subscript.set('??', 6, (a,b) => a ?? b)
+set('??', 6, (a,b) => a ?? b)
 
 // a?.[, a?.( - postfix operator
-subscript.set('?.', 18, [a => a && ['?.', a], a => (a=compile(a), ctx => a(ctx)||(()=>{})) ])
+set('?.', 18, [a => a && ['?.', a], a => (a=compile(a), ctx => a(ctx)||(()=>{})) ])
 
 // a?.b - optional chain operator
-subscript.set('?.', 18, [
+set('?.', 18, [
     (a,b) => a && (b=expr(18),!b?.map) && ['?.',a,b],
     (a,b) => b && (a=compile(a), ctx => a(ctx)?.[b])
   ])
 
 
 // literals
-subscript.set('null', 20, [a => a ? err() : ['',null]])
-subscript.set('true', 20, [a => a ? err() : ['',true]])
-subscript.set('false', 20, [a => a ? err() : ['',false]])
-subscript.set('undefined', 20, [a => a ? err() : ['',undefined]])
+set('null', 20, [a => a ? err() : ['',null]])
+set('true', 20, [a => a ? err() : ['',true]])
+set('false', 20, [a => a ? err() : ['',false]])
+set('undefined', 20, [a => a ? err() : ['',undefined]])
 
 // a | b - pipe overload
-subscript.set('|', 6, (a,b) => b(a))
+set('|', 6, (a,b) => b(a))
 
 // a in b operator for loops
-subscript.set('in', 10, [(a,b) => ['in',a,expr(10)], (a,b) => ctx => [a,ctx[b]]] )
+set('in', 10, [(a,b) => ['in',a,expr(10)], (a,b) => ctx => [a,ctx[b]]] )
 
 
 export const states = new WeakMap,
