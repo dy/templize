@@ -50,7 +50,6 @@ Template fields support the following async/reactive values:
 * _Promise_/_Thenable_
 * _AsyncIterable_
 * _Observable_/_Subject_
-* [@preact/signals](https://www.npmjs.com/package/@preact/signals)
 
 Update happens when any param changes:
 
