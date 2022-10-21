@@ -6,7 +6,7 @@ Based on [Template Instantiation](https://github.com/w3c/webcomponents/blob/gh-p
 
 ## Features
 
-Extends [template parts](https://github.com/spectjs/template-parts)) with the following:
+Extends [template parts](https://github.com/spectjs/template-parts) with the following:
 
 - Works with any elements;
 - Supports reactive props / parts;
