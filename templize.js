@@ -95,7 +95,7 @@ processor = {
     // here we also avoid reinitializing same element multiple times, but in processCallback that's impossible
     rsube = (state, values, root) => {
       for (let k in state) {
-        if (observable(v = state[k]))
+        if (observable(v = state[k])) 
           registry.register(v, sube(v, v => (values[k] = v, ready && this.processCallback(instance, partIds[root||k]))))
         else if (v?.constructor === Object) rsube(v, values[k] = {}, root||k)
         else values[k] = v
@@ -114,7 +114,7 @@ processor = {
     }
 
     // extend state, hook up observables
-    rsube(state, values)
+    if (allParts.length) rsube(state, values)
 
     // initial state inits all parts
     states.set(instance, [values])

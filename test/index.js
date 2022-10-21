@@ -3,7 +3,7 @@ import './processor.js'
 import './expressions.js'
 import './conditions.js'
 import './loops.js'
-
+import './reactivity.js'
 
 /*
 test('readme: case 1', () => {

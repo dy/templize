@@ -35,6 +35,7 @@
     "minify": "terser templize.min.js -o templize.min.js --module -c passes=3 -m"
   },
   "devDependencies": {
+    "@preact/signals": "^1.1.2",
     "@rollup/plugin-node-resolve": "^13.1.3",
     "es-module-shims": "^1.4.1",
     "hyperf": "^1.3.0",
