@@ -9,7 +9,7 @@ Based on [Template Instantiation](https://github.com/w3c/webcomponents/blob/gh-p
 Extends [template parts](https://github.com/spectjs/template-parts) with the following:
 
 - Works with any elements, not just `<template>`;
-- Supports reactive props / parts;
+- Supports reactive fields;
 - Provides expression processor;
 - Supports loops, conditions directives;
 - Exposes directives API;
