@@ -11,7 +11,7 @@ Extends [template parts](https://github.com/spectjs/template-parts) with the fol
 - Works with any elements, not just `<template>`;
 - Supports reactive fields;
 - Provides expression processor;
-- Supports loops, conditions directives;
+- Enables loops, conditions;
 - Exposes directives API;
 - Plugs as vanilla ESM, doesn't require tooling.
 
