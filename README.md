@@ -38,7 +38,7 @@ It can be used as module via `npm i templize` or in HTML directly:
 const [params, update] = templize(element, init?);
 ```
 
-`params` is proxy reflecting template fields values. Changing any of its props updates fields and rerenders template.<br/>
+`params` is proxy reflecting template fields values. Changing any of its props updates / rerenders fields.<br/>
 `update` can be used for bulk-updating multiple props.<br/>
 `init` is the initial state to render the template. It can include reactive values, see [reactivity](#reactivity).<br/>
 
