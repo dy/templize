@@ -1,41 +1,83 @@
 # templize <a href="https://github.com/spectjs/templize/actions/workflows/node.js.yml"><img src="https://github.com/spectjs/templize/actions/workflows/node.js.yml/badge.svg"/></a> <a href="http://npmjs.org/templize"><img src="https://img.shields.io/npm/v/templize"/></a>
 
-> Native HTML templating based on template parts.
+> HTML reactive template parts for any DOM elements with expressions and reactivity. 
 
-_Templize_ provides elegant native templating for any DOM elements with expressions and reactivity. It builds on [template-parts ponyfill](https://github.com/spectjs/template-parts), providing more user-friendly API.
-
-Based on [Template Instantiation](https://github.com/w3c/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md) and [DOM-parts](https://github.com/WICG/webcomponents/blob/gh-pages/proposals/DOM-Parts.md) spec.
+Based on [Template Instantiation](https://github.com/w3c/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md) and [DOM-parts](https://github.com/WICG/webcomponents/blob/gh-pages/proposals/DOM-Parts.md) specs.
 
 ## Features
 
-Extends template parts with the following:
+Extends [template parts](https://github.com/spectjs/template-parts)) with the following:
 
 - Works with any elements;
-- Expression processor;
-- Reactive props support;
-- Loops, conditions directives;
-- Directives API;
-- Vanilla ESM, no tooling.
+- Supports reactive props / parts;
+- Provides expression processor;
+- Supports loops, conditions directives;
+- Exposes directives API;
+- Plugs as vanilla ESM, doesn't require tooling.
 
 ## Usage
 
+It can be used as module via `npm i templize` or in HTML directly:
+
 ```html
-<script type="importmap">{ "imports": { "templize": "parth/to/templize.js" }}</script>
+<script type="importmap">{ "imports": { "templize": "path/to/templize.js" }}</script>
 
 <div id="foo" class="foo {{y}}">{{x}} world</div>
 
 <script type="module">
   import templize from 'templize'
 
-  const [params, update] = templize(document.getElementById('foo'), { x: 'Hello', y: 'bar'})
+  templize(document.getElementById('foo'), { x: 'Hello', y: 'bar'})
   // <div id="foo" class="foo bar">Hello world</div>
-
-  params.x = 'Goodbye' // === update({x: 'Goodbye'})
-  // <div id="foo" class="foo bar">Goodbye world</div>
 </script>
 ```
 
-`params` is proxy reflecting current state. Changing any of its props updates fields. `update` can be used for bulk-updating multiple props.
+## API
+
+```js
+const [params, update] = templize(element, init?);
+```
+
+`params` is proxy reflecting current template state. Changing any of its props updates fields.
+
+`update` can be used for bulk-updating multiple props.
+
+`init` is the initial state to render the template. It can include reactive values, see [reactivity](#reactivity).
+
+
+### Reactivity
+
+Template fields support the following async/reactive values:
+
+* _Promise_/_Thenable_
+* _AsyncIterable_
+* _Observable_/_Subject_
+* [@preact/signals](https://www.npmjs.com/package/@preact/signals)
+
+Update happens when any param changes:
+
+```html
+<div id="done">{{ loading ? '...' : result }}</div>
+
+<script type="module">
+  import templize from 'templize'
+  import { signal } from '@preact/signals'
+
+  const loading = signal(false), result.value = signal(false)
+  templize(document.querySelector('#done'), { loading, result })
+  
+  setTimeout(() => (loading.value = true, result.value = 'done'), 1000)
+
+  // <div id="done">...</div>
+  // ... 1s after
+  // <div id="done">done</div>
+</script>
+```
+
+This way, for example, _@preact/signals_ or _rxjs_ can be streamed directly to element attribute or content.
+
+Note: observers don't require disposal, since they're connected in weak fashion. Once element is disposed, observables are disconnected.
+
 
 ## Expressions
 
@@ -48,12 +90,12 @@ _Templize_ enables expressions via default **expression processor**:
 </header>
 
 <script>
-  import templize from 'templize'
-  const titleParams = templize(
+  import templize from 'templize';
+
+  templize(
     document.querySelector('#title'),
     { user: { name: 'Hare Krishna', email: 'krishn@hari.om' }}
   )
-  titleParams.user.name = 'Hare Rama'
 </script>
 ```
 
@@ -62,7 +104,7 @@ It supports the following field expressions with common syntax:
 Part | Expression
 ---|---
 Value | `{{ foo }}`
-Property | `{{ foo.bar?.baz }}`, `{{ foo["bar"] }}`
+Property | `{{ foo.bar?.baz }}`, `{{ foo[bar] }}`
 Call | `{{ foo.bar(baz, qux) }}`
 Boolean | `{{ !foo && bar \|\| baz }}`
 Ternary | `{{ foo ? bar : baz }}`
@@ -84,36 +126,11 @@ Processor makes assumptions regarding how attribute parts set values.
 
 Other attributes are handled as strings.
 
-### Reactivity
-
-Initial state can define async/reactive values: _Promise_/_Thenable_, _AsyncIterable_, _Observable_/_Subject_.<br/>
-
-Update happens when any param changes:
-
-```html
-<div id="done">{{ done || '...' }}</div>
-
-<script type="module">
-  import templize from 'templize'
-
-  const done = new Promise(ok => setTimeout(() => ok('Done!'), 1000))
-
-  templize(document.querySelector('#done'), { done })
-
-  // <div id="done">...</div>
-
-  // ... 1s after
-  // <div id="done">done</div>
-</script>
-```
-
-This way, for example, _rxjs_ can be streamed directly to element attribute or content.
-
-Note: observers don't require disposal, since they're connected in weak fashion.
 
 ## Directives
 
 _Templize_ recognizes shortcut directives via `:<attr>` (similar to _vue_).
+
 
 ### Loops
 

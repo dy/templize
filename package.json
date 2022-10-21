@@ -1,7 +1,7 @@
 {
   "name": "templize",
   "version": "2.4.0",
-  "description": "Template parts for any elements",
+  "description": "Reactive template parts for any HTML elements",
   "bugs": {
     "url": "https://github.com/spectjs/templize/issues"
   },
