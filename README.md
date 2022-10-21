@@ -109,7 +109,7 @@ Primitives | `{{ "foo" }}`, `{{ true }}`, `{{ 0.1 }}`
 Comparison | `{{ foo == 1 }}`, `{{ bar >= 2 }}`
 Math | `{{ a * 2 + b / 3 }}`
 Pipe | `{{ bar \| foo }}` → `{{ foo(bar) }}`
-Functions | `{{ e => foo() }}`, `{{ async e => { await foo(); bar(); } }}`
+<!-- Functions | `{{ e => foo() }}`, `{{ async e => { await foo(); bar(); } }}` -->
 <!-- Loop | `{{ item, idx in list }}` | `params.d` | Used for `:for` directive only -->
 <!-- Spread | `{{ ...foo }}` | `params.foo` | Used to pass multiple attributes or nodes -->
 
