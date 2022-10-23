@@ -52,6 +52,7 @@
     "sube": "^2.2.1",
     "subscript": "^7.3.1",
     "swapdom": "^1.1.1",
-    "template-parts": "^1.0.3"
+    "template-parts": "^1.0.4",
+    "templize": "^2.4.3"
   }
 }
