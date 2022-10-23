@@ -32,7 +32,7 @@
   "scripts": {
     "test": "node --expose-gc --allow-natives-syntax -r ./test/register.cjs test/index.js",
     "build": "rollup ./templize.js -p @rollup/plugin-node-resolve --file templize.min.js --format esm",
-    "minify": "terser templize.min.js -o templize.min.js --module -c passes=3 -m"
+    "min": "terser templize.min.js -o templize.min.js --module -c passes=3 -m"
   },
   "devDependencies": {
     "@preact/signals": "^1.1.2",
@@ -52,6 +52,6 @@
     "sube": "^2.2.1",
     "subscript": "^7.3.1",
     "swapdom": "^1.1.1",
-    "template-parts": "^1.0.0"
+    "template-parts": "^1.0.3"
   }
 }
