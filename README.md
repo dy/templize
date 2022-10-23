@@ -245,9 +245,9 @@ document.defineTemplateType('my-template-type', processor)
 
 * [template-parts](https://github.com/spectjs/template-parts) − compact template parts ponyfill.
 * [subscript](https://github.com/spectjs/subscript) − fast and tiny expressions parser.
-* [sube](https://github.com/specths/sube) − subscribe to any reactive source.
-* [element-props](https://github.com/specths/element-props) − normalized element properties setter.
-<!-- * [swapdom](https://github.com/specths/swapdom) − fast and tiny dom swapping algo. -->
+* [sube](https://github.com/spectjs/sube) − subscribe to any reactive source.
+* [element-props](https://github.com/spectjs/element-props) − normalized element properties setter.
+<!-- * [swapdom](https://github.com/spectjs/swapdom) − fast and tiny dom swapping algo. -->
 
 ## Buddies
 
