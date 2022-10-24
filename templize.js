@@ -1,8 +1,8 @@
-import subscript, { parse as parseExpr, compile, set } from 'subscript'
+import { parse as parseExpr, compile, set } from 'subscript'
 import { cur, idx, skip, err, expr } from 'subscript/parse.js'
 import sube, { observable } from 'sube'
 import { prop } from 'element-props'
-import { parse, NodeTemplatePart, TemplateInstance } from 'template-parts'
+import { parse, TemplateInstance } from 'template-parts'
 
 // wrapper over templize with shortcut directives and defaulting to expressionProcessor
 export default (el, state, proc=processor) => {
