@@ -60,7 +60,7 @@ Update happens when any param changes:
   import templize from 'templize'
   import { signal } from '@preact/signals'
 
-  const loading = signal(false), result.value = signal(false)
+  const loading = signal(false), result = signal(false)
   templize(document.querySelector('#done'), { loading, result })
   
   setTimeout(() => (loading.value = true, result.value = 'done'), 1000)
